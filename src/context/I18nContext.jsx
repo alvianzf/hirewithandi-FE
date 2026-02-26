@@ -171,7 +171,7 @@ const translations = {
     addOne: '+ Tambah',
 
     // Language
-    language: 'Bahasa Indonesia',
+    language: 'Indonesia Indonesia',
 
     // JFP
     jobFitPercentage: 'Job Fit %',

@@ -64,7 +64,7 @@ export default function Header({ activeView, setActiveView, onAddJob, totalJobs 
               className="appearance-none rounded-xl bg-neutral-800/80 pl-4 pr-10 py-3 text-sm font-medium text-neutral-200 cursor-pointer border border-white/[0.08] transition-colors hover:bg-neutral-700 focus:outline-none focus:ring-2 focus:ring-yellow-400/50"
             >
               <option value="en">🇸🇬 English</option>
-              <option value="id">🇮🇩 Bahasa</option>
+              <option value="id">🇮🇩 Indonesia</option>
               <option value="id_corp">👔 Jaksel</option>
               <option value="sg">🇸🇬 Singlish</option>
             </select>

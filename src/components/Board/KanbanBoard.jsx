@@ -27,14 +27,21 @@ export default function KanbanBoard({ onCardClick, onAddToColumn }) {
   // Convert vertical mouse wheel to horizontal scroll
   const handleWheel = useCallback((e) => {
     if (!scrollRef.current) return
-    
-    // Allow vertical scrolling inside columns if they overflow
+
     const columnScroll = e.target.closest('.column-scroll')
-    if (columnScroll && columnScroll.scrollHeight > columnScroll.clientHeight) {
-      // We're hovering over a column that can scroll vertically. Don't intercept.
-      return
+    if (columnScroll) {
+      const canScrollDown = columnScroll.scrollTop + columnScroll.clientHeight < columnScroll.scrollHeight
+      const canScrollUp = columnScroll.scrollTop > 0
+      const scrollingDown = e.deltaY > 0
+      const scrollingUp = e.deltaY < 0
+
+      // If the column has vertical overflow and can still scroll in that direction, let it scroll naturally
+      if ((scrollingDown && canScrollDown) || (scrollingUp && canScrollUp)) {
+        return
+      }
     }
 
+    // Otherwise redirect to horizontal board scroll
     if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
       e.preventDefault()
       scrollRef.current.scrollLeft += e.deltaY

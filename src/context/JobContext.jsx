@@ -68,6 +68,7 @@ function jobReducer(state, action) {
         finalOffer: action.payload.finalOffer || '',
         benefits: action.payload.benefits || '',
         nonMonetaryBenefits: action.payload.nonMonetaryBenefits || '',
+        jobFitPercentage: action.payload.jobFitPercentage !== undefined ? action.payload.jobFitPercentage : '',
         dateApplied: action.payload.dateApplied || now,
         dateAdded: now,
         status: action.payload.status || 'wishlist',

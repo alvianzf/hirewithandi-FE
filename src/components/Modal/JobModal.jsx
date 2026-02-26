@@ -65,18 +65,38 @@ export default function JobModal({ isOpen, onClose, editingJob, defaultStatus = 
     setForm(prev => ({ ...prev, [field]: value }))
   }
 
+  const handleJobFitChange = (value) => {
+    // allow only digits, up to 3 chars
+    if (/^\d{0,3}$/.test(value)) {
+      handleChange('jobFitPercentage', value)
+    }
+  }
+
+  const handleJobFitBlur = () => {
+    const parsed = parseInt(form.jobFitPercentage, 10)
+    if (isNaN(parsed)) {
+      handleChange('jobFitPercentage', '')
+    } else {
+      handleChange('jobFitPercentage', String(Math.min(100, Math.max(0, parsed))))
+    }
+  }
+
   const handleSubmit = (e) => {
     e.preventDefault()
     if (!form.company.trim()) return
 
+    const jobFit = form.jobFitPercentage !== '' ? parseInt(form.jobFitPercentage, 10) : ''
+
     if (isEditing) {
       editJob(editingJob.id, {
         ...form,
+        jobFitPercentage: isNaN(jobFit) ? '' : jobFit,
         dateApplied: form.dateApplied ? new Date(form.dateApplied).toISOString() : null,
       })
     } else {
       addJob({
         ...form,
+        jobFitPercentage: isNaN(jobFit) ? '' : jobFit,
         dateApplied: form.dateApplied ? new Date(form.dateApplied).toISOString() : null,
       })
     }
@@ -249,16 +269,16 @@ export default function JobModal({ isOpen, onClose, editingJob, defaultStatus = 
               <label className="mb-2 block text-sm font-medium text-neutral-300">{t('jobFitPercentage')}</label>
               <div className="relative">
                 <input
-                  type="number"
-                  min="0"
-                  max="100"
+                  type="text"
+                  inputMode="numeric"
                   value={form.jobFitPercentage}
-                  onChange={e => handleChange('jobFitPercentage', e.target.value ? Math.min(100, Math.max(0, parseInt(e.target.value))) : '')}
+                  onChange={e => handleJobFitChange(e.target.value)}
+                  onBlur={handleJobFitBlur}
                   placeholder="0-100"
                   className={`${inputClass} pr-10`}
                 />
                 <span className={`pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-sm font-bold ${
-                  form.jobFitPercentage !== '' && form.jobFitPercentage < 80 ? 'text-red-400' : form.jobFitPercentage >= 80 ? 'text-green-400' : 'text-neutral-500'
+                  form.jobFitPercentage !== '' && parseInt(form.jobFitPercentage, 10) < 80 ? 'text-red-400' : form.jobFitPercentage !== '' && parseInt(form.jobFitPercentage, 10) >= 80 ? 'text-green-400' : 'text-neutral-500'
                 }`}>%</span>
               </div>
             </div>

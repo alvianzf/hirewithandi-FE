@@ -31,6 +31,26 @@ export default function DashboardView() {
   const workTypes = { remote: 0, onsite: 0, hybrid: 0 }
   allJobs.forEach(j => { if (j.workType) workTypes[j.workType]++ })
 
+  // Shared helper: parse a salary string into a number, handling K/M/B/T/Jt suffixes
+  const parseSalaryNumber = (salaryStr) => {
+    if (!salaryStr) return null
+    const s = salaryStr.toUpperCase()
+    // Extract all number+suffix tokens like "120K", "10JT", "1.5M", "80000"
+    const tokens = s.match(/[\d,.]+\s*(?:K|M|B|T|JT)?/gi) || []
+    const nums = tokens.map(token => {
+      const t = token.toUpperCase().trim()
+      const numPart = parseFloat(t.replace(/[^0-9.]/g, ''))
+      if (isNaN(numPart)) return NaN
+      if (t.includes('JT')) return numPart * 1e6
+      if (t.endsWith('T'))  return numPart * 1e12
+      if (t.endsWith('B'))  return numPart * 1e9
+      if (t.endsWith('M'))  return numPart * 1e6
+      if (t.endsWith('K'))  return numPart * 1e3
+      return numPart
+    }).filter(n => !isNaN(n) && n > 0)
+    return nums
+  }
+
   // Separate salaries by IDR and USD
   const parseCurrencySalaries = (jobsArray) => {
     const idr = []
@@ -41,22 +61,12 @@ export default function DashboardView() {
       
       const s = j.salary.toUpperCase()
       const isUsd = s.includes('USD') || s.includes('$')
-      const isIdr = s.includes('IDR') || s.includes('RP') || (!isUsd && s.match(/[\d,.]+(JT|M)/i))
       
-      // Extract numbers (removing commas, Rp, $, etc)
-      // E.g. Rp10,000,000 -> 10000000
-      // 10jt -> 10000000
-      let numStr = s.replace(/[^0-9.,]/g, '')
-      if (s.toLowerCase().includes('jt')) {
-        let n = parseFloat(numStr)
-        if (!isNaN(n)) numStr = (n * 1000000).toString()
-      }
-      
-      const num = parseFloat(numStr.replace(/,/g, ''))
-      
-      if (!isNaN(num) && num > 0) {
-        if (isUsd) usd.push(num)
-        else idr.push(num) // Default to IDR if not explicitly USD
+      const nums = parseSalaryNumber(j.salary)
+      if (nums.length > 0) {
+        const maxVal = Math.max(...nums)
+        if (isUsd) usd.push(maxVal)
+        else idr.push(maxVal)
       }
     })
     
@@ -88,16 +98,7 @@ export default function DashboardView() {
       const s = j.salary.toUpperCase()
       const isUsd = s.includes('USD') || s.includes('$')
       
-      // Try to find the max number in the string (e.g. "Rp 10.000.000 - Rp 15.000.000" -> 15000000)
-      const nums = (s.match(/[\d,.]+(?:JT|M)?/gi) || []).map(numStr => {
-        let cleanMatch = numStr.replace(/[^0-9.,]/g, '')
-        let n = parseFloat(cleanMatch.replace(/,/g, ''))
-        if (numStr.toLowerCase().includes('jt')) {
-             n = n * 1000000
-        }
-        return n
-      }).filter(n => !isNaN(n))
-      
+      const nums = parseSalaryNumber(j.salary)
       if (nums.length > 0) {
         const maxVal = Math.max(...nums)
         if (isUsd) usdLost += maxVal

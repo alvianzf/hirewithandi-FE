@@ -34,8 +34,8 @@ export default function JobCard({ job, index, onClick }) {
           {...provided.draggableProps}
           {...provided.dragHandleProps}
           onClick={() => onClick(job)}
-          className={`group cursor-pointer rounded-2xl border border-white/[0.08] bg-neutral-900/90 p-6 transition-all hover:border-white/[0.15] hover:bg-neutral-800/80 ${
-            snapshot.isDragging ? 'rotate-2 scale-105 shadow-2xl shadow-yellow-400/10 ring-2 ring-yellow-400/30' : ''
+          className={`group cursor-pointer rounded-2xl border border-white/[0.08] bg-neutral-900/40 backdrop-blur-md p-6 transition-all hover:border-white/[0.15] hover:bg-neutral-800/50 hover:backdrop-blur-lg ${
+            snapshot.isDragging ? 'rotate-2 scale-105 shadow-2xl shadow-yellow-400/10 ring-2 ring-yellow-400/30 bg-neutral-800/60 backdrop-blur-xl' : ''
           }`}
         >
           {/* Status color strip */}

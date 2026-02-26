@@ -6,9 +6,17 @@ import { useUserProfile } from '../../context/UserProfileContext'
 
 export default function Header({ activeView, setActiveView, onAddJob, totalJobs }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [mobileLangOpen, setMobileLangOpen] = useState(false)
   const { t, locale, toggleLocale, changeLocale } = useI18n()
   const { logout } = useAuth()
   const { profile } = useUserProfile()
+
+  const languages = [
+    { id: 'en', label: '🇬🇧 English' },
+    { id: 'id', label: '🇮🇩 Indonesia' },
+    { id: 'id_corp', label: '👔 Jaksel' },
+    { id: 'sg', label: '🇸🇬 Singlish' },
+  ]
 
   const views = [
     { id: 'dashboard', label: t('dashboard'), icon: BarChart3 },
@@ -150,18 +158,37 @@ export default function Header({ activeView, setActiveView, onAddJob, totalJobs 
       {/* Mobile Extra Menu (Language & Logout) */}
       {mobileMenuOpen && (
         <div className="flex flex-col gap-3 border-t border-white/[0.08] px-8 py-4 sm:hidden">
-          <div className="flex items-center justify-between">
-            <span className="text-sm font-medium text-neutral-400">{t('language')}</span>
-            <select
-              value={locale}
-              onChange={e => changeLocale(e.target.value)}
-              className="appearance-none rounded-xl bg-neutral-800/80 px-4 py-2.5 text-sm font-medium text-neutral-200 border border-white/[0.08] focus:outline-none focus:ring-2 focus:ring-yellow-400/50"
-            >
-              <option value="en">🇬🇧 English</option>
-              <option value="id">🇮🇩 Indonesia</option>
-              <option value="id_corp">👔 Jaksel</option>
-              <option value="sg">🇸🇬 Singlish</option>
-            </select>
+          <div className="flex flex-col gap-2">
+            <span className="text-sm font-medium text-neutral-400 px-1">{t('language')}</span>
+            <div className="relative w-full">
+              <button
+                onClick={() => setMobileLangOpen(!mobileLangOpen)}
+                className="flex w-full items-center justify-between rounded-xl bg-neutral-800/80 px-4 py-3.5 text-base font-medium text-neutral-200 border border-white/[0.08] focus:outline-none focus:ring-2 focus:ring-yellow-400/50"
+              >
+                <span>{languages.find(l => l.id === locale)?.label}</span>
+                <ChevronDown className={`h-5 w-5 text-neutral-400 transition-transform ${mobileLangOpen ? 'rotate-180' : ''}`} />
+              </button>
+              
+              {mobileLangOpen && (
+                <div className="mt-2 w-full overflow-hidden rounded-xl border border-white/[0.08] bg-neutral-900/95 backdrop-blur-md shadow-xl">
+                  {languages.map(lang => (
+                    <button
+                      key={lang.id}
+                      onClick={() => {
+                        changeLocale(lang.id)
+                        setMobileLangOpen(false)
+                      }}
+                      className={`flex w-full items-center justify-between px-5 py-4 text-base transition-colors hover:bg-neutral-800 ${
+                        locale === lang.id ? 'bg-neutral-800/50 text-yellow-400 font-medium' : 'text-neutral-300'
+                      }`}
+                    >
+                      <span>{lang.label}</span>
+                      {locale === lang.id && <div className="h-2.5 w-2.5 rounded-full bg-yellow-400"></div>}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
           <button
             onClick={logout}

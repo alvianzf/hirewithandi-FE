@@ -50,6 +50,9 @@ export default function JobCard({ job, index, onClick }) {
             {job.position && (
               <p className="mt-1 text-xs font-medium text-neutral-400 leading-snug">{job.position}</p>
             )}
+            {job.notes && (
+              <p className="mt-2 text-[11px] text-neutral-500 leading-relaxed line-clamp-2">{job.notes}</p>
+            )}
           </div>
 
           {/* Salary + Work Type row */}

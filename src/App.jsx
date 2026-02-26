@@ -7,9 +7,14 @@ import GanttView from './components/Timeline/TimelineView'
 import TableView from './components/Table/TableView'
 import DashboardView from './components/Dashboard/DashboardView'
 import JobModal from './components/Modal/JobModal'
+import { AuthProvider, useAuth } from './context/AuthContext'
+import { UserProfileProvider } from './context/UserProfileContext'
+import LoginPage from './components/Auth/LoginPage'
+import ProfilePage from './components/UserProfile/ProfilePage'
 
 function AppContent() {
   const { totalJobs } = useJobs()
+  const { user } = useAuth()
   const [activeView, setActiveView] = useState('dashboard')
   const [modalOpen, setModalOpen] = useState(false)
   const [editingJob, setEditingJob] = useState(null)
@@ -37,6 +42,10 @@ function AppContent() {
     setEditingJob(null)
   }
 
+  if (!user) {
+    return <LoginPage />
+  }
+
   return (
     <div className="flex h-full flex-col">
       <Header
@@ -58,6 +67,9 @@ function AppContent() {
       {activeView === 'table' && (
         <TableView onCardClick={handleCardClick} />
       )}
+      {activeView === 'profile' && (
+        <ProfilePage />
+      )}
 
       <JobModal
         isOpen={modalOpen}
@@ -72,9 +84,13 @@ function AppContent() {
 export default function App() {
   return (
     <I18nProvider>
-      <JobProvider>
-        <AppContent />
-      </JobProvider>
+      <AuthProvider>
+        <UserProfileProvider>
+          <JobProvider>
+            <AppContent />
+          </JobProvider>
+        </UserProfileProvider>
+      </AuthProvider>
     </I18nProvider>
   )
 }

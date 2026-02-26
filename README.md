@@ -12,8 +12,8 @@ A comprehensive and visually appealing job application tracking system designed 
   - Track key metrics like days since the first application, last interview, and last rejection.
   - Monitor the status of your latest job application.
 - **Bilingual Support (i18n)**: Seamlessly toggle between English and Bahasa Indonesia.
-- **Mobile Responsive Design**: Fully polished mobile experience with adjusted spacing, hidden tooltips, and optimized layouts.
 - **Local Storage**: Data is safely stored in your browser's local storage for privacy and speed.
+- **User Identity & Profile**: Simple client-side auth (Name + Email) and a customizable User Profile with avatar upload, bio, and organization tracking.
 
 ## Prerequisites
 

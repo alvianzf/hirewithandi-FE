@@ -88,6 +88,23 @@ const translations = {
     // JFP
     jobFitPercentage: 'Job Fit %',
     jfpPlaceholder: '0-100',
+
+    // User Profile & Auth
+    login: 'Login',
+    logout: 'Logout',
+    profile: 'Profile',
+    signIn: 'Sign In',
+    signInDescription: 'Track your job applications and land your dream role.',
+    name: 'Name',
+    email: 'Email',
+    role: 'Current Role / Title',
+    organization: 'Organization',
+    linkedIn: 'LinkedIn URL',
+    bio: 'Bio',
+    uploadPhoto: 'Upload Photo',
+    removePhoto: 'Remove',
+    profileSaved: 'Profile saved successfully!',
+    saveProfile: 'Save Changes',
   },
   id: {
     // Header
@@ -176,6 +193,23 @@ const translations = {
     // JFP
     jobFitPercentage: 'Job Fit %',
     jfpPlaceholder: '0-100',
+
+    // User Profile & Auth
+    login: 'Masuk',
+    logout: 'Keluar',
+    profile: 'Profil',
+    signIn: 'Masuk',
+    signInDescription: 'Lacak lamaran kerja dan dapatkan pekerjaan impianmu.',
+    name: 'Nama',
+    email: 'Email',
+    role: 'Peran / Jabatan Saat Ini',
+    organization: 'Organisasi / Perusahaan',
+    linkedIn: 'URL LinkedIn',
+    bio: 'Bio',
+    uploadPhoto: 'Unggah Foto',
+    removePhoto: 'Hapus',
+    profileSaved: 'Profil berhasil disimpan!',
+    saveProfile: 'Simpan Perubahan',
   },
   id_corp: {
     // Header
@@ -264,6 +298,23 @@ const translations = {
     // JFP
     jobFitPercentage: 'Alignment %',
     jfpPlaceholder: '0-100',
+
+    // User Profile & Auth
+    login: 'Log In',
+    logout: 'Sign Out',
+    profile: 'Profile',
+    signIn: 'Log In',
+    signInDescription: 'Track pipeline lu dan close the deal.',
+    name: 'Nama',
+    email: 'Email Kerja',
+    role: 'Current Role',
+    organization: 'Company',
+    linkedIn: 'LinkedIn Profile',
+    bio: 'Elevator Pitch',
+    uploadPhoto: 'Update DP',
+    removePhoto: 'Drop DP',
+    profileSaved: 'Data profile up to date!',
+    saveProfile: 'Update Data',
   },
   sg: {
     // Header
@@ -352,6 +403,23 @@ const translations = {
     // JFP
     jobFitPercentage: 'Can On Not %',
     jfpPlaceholder: '0-100',
+
+    // User Profile & Auth
+    login: 'Login Lah',
+    logout: 'Chabut',
+    profile: 'My Face',
+    signIn: 'Sign In',
+    signInDescription: 'Track your jobs steady steady pom pi pi.',
+    name: 'Your Name',
+    email: 'Your Email',
+    role: 'Doing What Now',
+    organization: 'Company',
+    linkedIn: 'LinkedIn Link',
+    bio: 'About Me',
+    uploadPhoto: 'Show Face',
+    removePhoto: 'Hide Face',
+    profileSaved: 'Profile steady liao!',
+    saveProfile: 'Save Everything',
   },
 }
 

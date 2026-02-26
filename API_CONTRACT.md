@@ -1,155 +1,104 @@
-# API Contract & Data Model
+# API Contract & Data Schema
 
-This document outlines the data structures and proposed API contracts for backend developers looking to build a remote synchronization backend for the HireWithAndi Job Tracker.
+_(Note: HiredWithAndi currently operates entirely client-side using `localStorage`. This document outlines the local state schema that acts as our "database".)_
 
-Currently, the frontend uses LocalStorage with the key `HiredWithAndi_data`. The state consists of:
+## 1. Job Tracker Schema (`hwa_jobs` or equivalent storage key)
 
-- `jobs`: A dictionary/map of Job objects by ID.
-- `columnOrder`: An array of column IDs.
-- `columns`: A dictionary mapping column IDs to arrays of Job IDs.
+The primary state for job applications is stored as a serialized JSON object containing columns for the Kanban board and the dictionary of jobs.
 
-To build a backend, we recommend standardizing around a RESTful API.
+### `Job` Object
 
-## Data Models
-
-### 1. Job Object
-
-This is the primary entity representing a job application.
-
-```typescript
-interface Job {
-  id: string; // Unique identifier (UUID recommended)
-  company: string; // Company name
-  position: string; // Job title/position
-  url: string; // URL to the job posting
-  salary: string; // Expected/offered salary
-  notes: string; // Custom notes
-  workType: string; // 'remote' | 'onsite' | 'hybrid'
-  location: string; // Job location
-  finalOffer: string; // Final monetary offer (populated when offered)
-  benefits: string; // Monetary/insurance benefits
-  nonMonetaryBenefits: string; // Non-monetary perks
-  dateApplied: string; // ISO 8601 DateTime
-  dateAdded: string; // ISO 8601 DateTime
-  status: JobStatus; // Current status
-  statusChangedAt: string; // ISO 8601 DateTime of last status change
-  history: JobHistoryEntry[]; // Array of status changes
-}
-
-type JobStatus =
-  | "wishlist"
-  | "applied"
-  | "hr_interview"
-  | "technical_interview"
-  | "additional_interview"
-  | "offered"
-  | "rejected_company"
-  | "rejected_applicant";
-
-interface JobHistoryEntry {
-  status: JobStatus;
-  enteredAt: string; // ISO 8601 DateTime
-  leftAt: string | null; // ISO 8601 DateTime or null if currently in this status
+```json
+{
+  "id": "string (unique identifier)",
+  "company": "string",
+  "position": "string",
+  "url": "string (optional job posting URL)",
+  "salary": "string (optional monthly salary range)",
+  "notes": "string (optional)",
+  "workType": "string (enum: 'remote', 'onsite', 'hybrid')",
+  "location": "string (optional)",
+  "finalOffer": "string (optional, populated when in 'offered' status)",
+  "benefits": "string (optional, populated when in 'offered' status)",
+  "nonMonetaryBenefits": "string (optional, populated when in 'offered' status)",
+  "jobFitPercentage": "number (0-100)",
+  "dateApplied": "string (ISO 8601 Date)",
+  "dateAdded": "string (ISO 8601 Date)",
+  "status": "string (enum matching column IDs)",
+  "statusChangedAt": "string (ISO 8601 Date)",
+  "history": [
+    {
+      "status": "string (enum matching column IDs)",
+      "enteredAt": "string (ISO 8601 Date)",
+      "leftAt": "string (ISO 8601 Date) | null"
+    }
+  ]
 }
 ```
 
-### 2. Board State Object
+### Main Jobs State (`JobContext`)
 
-If the backend will also save the exact column ordering (useful for syncing exact visual layout).
-
-```typescript
-interface BoardState {
-  columnOrder: string[];
-  columns: Record<string, string[]>; // Map of Column ID -> Array of Job IDs
+```json
+{
+  "jobs": {
+    "job_id_1": {
+      /* Job Object */
+    },
+    "job_id_2": {
+      /* Job Object */
+    }
+  },
+  "columns": {
+    "wishlist": ["job_id_1"],
+    "applied": ["job_id_2"],
+    "hr_interview": [],
+    "technical_interview": [],
+    "additional_interview": [],
+    "offered": [],
+    "rejected_company": [],
+    "rejected_applicant": []
+  }
 }
 ```
 
 ---
 
-## REST Endpoints (Proposed)
+## 2. Authentication Schema (`hwa_auth`)
 
-### 1. Standard Job CRUD
+Stores basic identity information.
 
-#### `GET /api/jobs`
+```json
+{
+  "name": "string",
+  "email": "string",
+  "createdAt": "string (ISO 8601 Date)"
+}
+```
 
-Fetches all jobs for the authenticated user.
+---
 
-- **Response `200 OK`**:
-  ```json
-  {
-    "data": [
-      {
-        /* Job Object */
-      },
-      {
-        /* Job Object */
-      }
-    ]
-  }
-  ```
+## 3. User Profile Schema (`hwa_profile`)
 
-#### `GET /api/jobs/:id`
+Stores the extended user profile including the base64 encoded avatar.
 
-Fetch a specific job.
+```json
+{
+  "name": "string",
+  "email": "string",
+  "bio": "string",
+  "role": "string",
+  "organization": "string",
+  "location": "string",
+  "linkedIn": "string (URL)",
+  "avatarUrl": "string (Base64 Data URL) | null"
+}
+```
 
-#### `POST /api/jobs`
+---
 
-Create a newly tracked job.
+## 4. Initialization (I18n Context)
 
-- **Request Body**:
-  ```json
-  {
-    "company": "Tech Corp",
-    "position": "Frontend Developer",
-    "url": "https://example.com/job",
-    "salary": "$100,000",
-    "notes": "Looks interesting",
-    "workType": "remote",
-    "location": "New York",
-    "status": "wishlist",
-    "dateApplied": "2026-02-26T15:46:31.000Z"
-  }
-  ```
-- **Response `201 Created`**: Returns the fully formed `Job` object including generated `id`, `dateAdded`, `dateApplied`, `history`, etc.
+Language preferences are stored separately:
 
-#### `PATCH /api/jobs/:id`
-
-Partial update a job. Can be used for modifying details or updating the status. If `status` is updated, the backend is expected to append to the `history` array and update `statusChangedAt` automatically.
-
-- **Request Body**:
-  ```json
-  {
-    "status": "hr_interview",
-    "notes": "Passed technical screening"
-  }
-  ```
-- **Response `200 OK`**: Returns the updated `Job` object.
-
-#### `DELETE /api/jobs/:id`
-
-Deletes a tracked job.
-
-- **Response `204 No Content`**
-
-### 2. Board State Management (Optional)
-
-If you wish to maintain sync of the drag-and-drop order independent of statuses:
-
-#### `GET /api/board/state`
-
-Returns the user's board configuration.
-
-#### `PUT /api/board/state`
-
-Updates the entire board layout.
-
-- **Request Body**:
-  ```json
-  {
-    "columnOrder": ["wishlist", "applied", "hr_interview", ...],
-    "columns": {
-      "wishlist": ["job-id-1", "job-id-2"],
-      "applied": ["job-id-3"]
-    }
-  }
-  ```
+**Key**: `HiredWithAndi_locale`
+**Value**: `string (enum: 'en', 'id', 'id_corp', 'sg')`

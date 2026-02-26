@@ -386,7 +386,7 @@ export default function DashboardView() {
             
             {allSals.idr.length === 0 && allSals.usd.length === 0 && (
               <p className="text-xs text-neutral-500 py-4 text-center border border-dashed border-white/10 rounded-xl">
-                No salary data yet. Add salary ranges to your applications.
+                No salary data yet. Add monthly salary ranges to your applications.
               </p>
             )}
 

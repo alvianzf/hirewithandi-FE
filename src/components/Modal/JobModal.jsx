@@ -22,6 +22,7 @@ export default function JobModal({ isOpen, onClose, editingJob, defaultStatus = 
     finalOffer: '',
     benefits: '',
     nonMonetaryBenefits: '',
+    jobFitPercentage: '',
   })
 
   useEffect(() => {
@@ -39,6 +40,7 @@ export default function JobModal({ isOpen, onClose, editingJob, defaultStatus = 
         finalOffer: editingJob.finalOffer || '',
         benefits: editingJob.benefits || '',
         nonMonetaryBenefits: editingJob.nonMonetaryBenefits || '',
+        jobFitPercentage: editingJob.jobFitPercentage || '',
       })
     } else {
       setForm({
@@ -54,6 +56,7 @@ export default function JobModal({ isOpen, onClose, editingJob, defaultStatus = 
         finalOffer: '',
         benefits: '',
         nonMonetaryBenefits: '',
+        jobFitPercentage: '',
       })
     }
   }, [editingJob, isOpen, defaultStatus])
@@ -209,8 +212,8 @@ export default function JobModal({ isOpen, onClose, editingJob, defaultStatus = 
             </div>
           )}
 
-          {/* Status + Date */}
-          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
+          {/* Status + Date + JFP */}
+          <div className="grid grid-cols-1 gap-5 sm:grid-cols-3">
             <div>
               <label className="mb-2 block text-sm font-medium text-neutral-300">{t('status')}</label>
               <div className="relative">
@@ -241,6 +244,23 @@ export default function JobModal({ isOpen, onClose, editingJob, defaultStatus = 
                 onChange={e => handleChange('dateApplied', e.target.value)}
                 className={inputClass}
               />
+            </div>
+            <div>
+              <label className="mb-2 block text-sm font-medium text-neutral-300">{t('jobFitPercentage')}</label>
+              <div className="relative">
+                <input
+                  type="number"
+                  min="0"
+                  max="100"
+                  value={form.jobFitPercentage}
+                  onChange={e => handleChange('jobFitPercentage', e.target.value ? Math.min(100, Math.max(0, parseInt(e.target.value))) : '')}
+                  placeholder="0-100"
+                  className={`${inputClass} pr-10`}
+                />
+                <span className={`pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-sm font-bold ${
+                  form.jobFitPercentage !== '' && form.jobFitPercentage < 80 ? 'text-red-400' : form.jobFitPercentage >= 80 ? 'text-green-400' : 'text-neutral-500'
+                }`}>%</span>
+              </div>
             </div>
           </div>
 

@@ -1,5 +1,5 @@
 import { Draggable } from '@hello-pangea/dnd'
-import { Calendar, Clock, ExternalLink, MapPin, Globe, Building2, ArrowLeftRight, ChevronDown } from 'lucide-react'
+import { Calendar, Clock, ExternalLink, MapPin, Globe, Building2, ArrowLeftRight, ChevronDown, Target } from 'lucide-react'
 import { daysSince, formatDateShort, daysLabel } from '../../utils/helpers'
 import { COLUMNS, COLUMN_MAP } from '../../utils/constants'
 import { useI18n } from '../../context/I18nContext'
@@ -73,6 +73,18 @@ export default function JobCard({ job, index, onClick }) {
           {job.status === 'offered' && job.finalOffer && (
             <div className="mb-5 rounded-xl border border-green-500/20 bg-green-500/[0.05] p-4">
               <p className="text-xs font-bold text-green-400">💰 {t('finalOffer')}: {job.finalOffer}</p>
+            </div>
+          )}
+
+          {/* JFP badge */}
+          {job.jobFitPercentage != null && job.jobFitPercentage !== '' && (
+            <div className={`mb-4 inline-flex items-center gap-2 rounded-xl px-3 py-1.5 text-xs font-bold ${
+              job.jobFitPercentage < 80
+                ? 'bg-red-500/10 text-red-400 border border-red-500/20'
+                : 'bg-green-500/10 text-green-400 border border-green-500/20'
+            }`}>
+              <Target className="h-3.5 w-3.5" />
+              JFP: {job.jobFitPercentage}%
             </div>
           )}
 

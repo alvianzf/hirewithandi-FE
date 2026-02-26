@@ -158,6 +158,19 @@ export default function DashboardView() {
     return `$${n.toFixed(0)}`
   }
 
+  // JFP metrics
+  const jfpValues = allJobs.map(j => j.jobFitPercentage).filter(v => v != null && v !== '' && !isNaN(v)).map(Number)
+  const jfpStats = jfpValues.length > 0 ? {
+    min: Math.min(...jfpValues),
+    max: Math.max(...jfpValues),
+    avg: Math.round(jfpValues.reduce((a, b) => a + b, 0) / jfpValues.length),
+    median: (() => {
+      const sorted = [...jfpValues].sort((a, b) => a - b)
+      const mid = Math.floor(sorted.length / 2)
+      return sorted.length % 2 !== 0 ? sorted[mid] : Math.round((sorted[mid - 1] + sorted[mid]) / 2)
+    })(),
+  } : null
+
   if (total === 0) {
     return (
       <div className="view-transition flex flex-1 items-center justify-center">
@@ -308,7 +321,7 @@ export default function DashboardView() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+        <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
           {/* Salary insights */}
           <div className="rounded-3xl border border-white/[0.08] bg-white/[0.02] p-8">
             <h3 className="mb-6 text-[15px] font-bold text-white flex items-center gap-2.5">
@@ -380,6 +393,47 @@ export default function DashboardView() {
             )}
           </div>
 
+          {/* JFP Insights */}
+          <div className="rounded-3xl border border-white/[0.08] bg-white/[0.02] p-8">
+            <h3 className="mb-6 text-[15px] font-bold text-white flex items-center gap-2.5">
+              <Target className="h-5 w-5 text-yellow-400" />
+              Job Fit Percentage
+            </h3>
+            {jfpStats ? (
+              <div className="space-y-5">
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="text-center rounded-xl bg-white/[0.02] p-4 border border-white/[0.03]">
+                    <p className="text-[10px] text-neutral-500 mb-1">Median</p>
+                    <p className={`text-2xl font-bold ${jfpStats.median < 80 ? 'text-red-400' : 'text-green-400'}`}>{jfpStats.median}%</p>
+                  </div>
+                  <div className="text-center rounded-xl bg-white/[0.02] p-4 border border-yellow-400/10 shadow-[0_0_15px_rgba(250,204,21,0.05)]">
+                    <p className="text-[10px] text-neutral-500 mb-1">Average</p>
+                    <p className={`text-2xl font-bold ${jfpStats.avg < 80 ? 'text-red-400' : 'text-yellow-400'}`}>{jfpStats.avg}%</p>
+                  </div>
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="text-center rounded-xl bg-white/[0.02] p-4 border border-white/[0.03]">
+                    <p className="text-[10px] text-neutral-500 mb-1">Lowest</p>
+                    <p className={`text-xl font-bold ${jfpStats.min < 80 ? 'text-red-400' : 'text-green-400'}`}>{jfpStats.min}%</p>
+                  </div>
+                  <div className="text-center rounded-xl bg-white/[0.02] p-4 border border-white/[0.03]">
+                    <p className="text-[10px] text-neutral-500 mb-1">Highest</p>
+                    <p className="text-xl font-bold text-green-400">{jfpStats.max}%</p>
+                  </div>
+                </div>
+                <div className="text-xs text-neutral-500 text-center">
+                  Based on {jfpValues.length} job{jfpValues.length !== 1 ? 's' : ''} with JFP data
+                </div>
+              </div>
+            ) : (
+              <p className="text-xs text-neutral-500 py-4 text-center border border-dashed border-white/10 rounded-xl">
+                No JFP data yet. Add Job Fit % to your applications.
+              </p>
+            )}
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
           {/* Activity insights */}
           <div className="rounded-3xl border border-white/[0.08] bg-white/[0.02] p-8">
             <h3 className="mb-6 text-[15px] font-bold text-white flex items-center gap-2.5">

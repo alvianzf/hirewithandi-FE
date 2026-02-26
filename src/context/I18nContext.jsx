@@ -83,6 +83,10 @@ const translations = {
 
     // Language
     language: 'Language',
+
+    // JFP
+    jobFitPercentage: 'Job Fit %',
+    jfpPlaceholder: '0-100',
   },
   id: {
     // Header
@@ -166,6 +170,10 @@ const translations = {
 
     // Language
     language: 'Bahasa Indonesia',
+
+    // JFP
+    jobFitPercentage: 'Job Fit %',
+    jfpPlaceholder: '0-100',
   },
 }
 

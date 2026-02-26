@@ -18,7 +18,8 @@ const translations = {
     technical_interview: 'Technical Interview',
     additional_interview: 'Additional Interview',
     offered: 'Offered',
-    rejected: 'Rejected',
+    rejected_company: 'Rejected by Company',
+    rejected_applicant: 'Rejected by Applicant',
 
     // Job Card
     daysHere: '{days} here',
@@ -105,7 +106,8 @@ const translations = {
     technical_interview: 'Interview Teknis',
     additional_interview: 'Interview Tambahan',
     offered: 'Ditawari',
-    rejected: 'Ditolak',
+    rejected_company: 'Ditolak Perusahaan',
+    rejected_applicant: 'Ditolak Pelamar',
 
     // Job Card
     daysHere: '{days} di sini',
@@ -175,6 +177,182 @@ const translations = {
     jobFitPercentage: 'Job Fit %',
     jfpPlaceholder: '0-100',
   },
+  id_corp: {
+    // Header
+    appName: 'HireWithAndi',
+    jobsTracked: '{count} pipeline terjaga',
+    addJob: 'Tambah',
+    dashboard: 'Dasbor',
+    board: 'Board',
+    gantt: 'Gantt Chart',
+    table: 'Tabel',
+
+    // Columns
+    wishlist: 'Wishlist (KPI)',
+    applied: 'Terkirim (SLA start)',
+    hr_interview: 'HR Screening',
+    technical_interview: 'Tech Assessment',
+    additional_interview: 'Final Alignment',
+    offered: 'Offering (Win)',
+    rejected_company: 'Not Culture Fit',
+    rejected_applicant: 'Declined (Budget Issue)',
+
+    // Job Card
+    daysHere: '{days} aging',
+    today: 'Hari ini',
+    day: '1 hari',
+    days: '{count} hari',
+    viewPosting: 'Cek JD',
+
+    // Modal
+    newApplication: 'Input Pipeline Baru',
+    editApplication: 'Edit Data Pipeline',
+    company: 'Company',
+    companyPlaceholder: 'contoh: Gojek',
+    position: 'Role',
+    positionPlaceholder: 'contoh: VP of Engineering',
+    jobUrl: 'Link Loker',
+    salaryRange: 'Ekspektasi THP',
+    salaryPlaceholder: 'contoh: Rp 50jt - 60jt',
+    status: 'Status Saat Ini',
+    dateApplied: 'Tanggal Submit',
+    notes: 'MoM / Catatan',
+    notesPlaceholder: 'Highlight dari screening...',
+    openJobPosting: 'Buka JD aslinya',
+    cancel: 'Cancel',
+    saveChanges: 'Update Data',
+    addApplication: 'Simpan ke Pipeline',
+    deleteConfirm: 'Yakin mau drop pipeline ini?',
+
+    // Work Type
+    workType: 'Setup Kerja',
+    remote: 'WFA',
+    onsite: 'WFO',
+    hybrid: 'Hybrid (Agile)',
+    location: 'Base Location',
+    locationPlaceholder: 'contoh: SCBD, Jakarta',
+
+    // Offer Details
+    offerDetails: 'Term Sheet Details',
+    finalOffer: 'Final THP',
+    finalOfferPlaceholder: 'contoh: Rp 45.000.000/bulan',
+    benefits: 'Monetary Perks',
+    benefitsPlaceholder: 'contoh: Asuransi mandiri, allowance...',
+    nonMonetaryBenefits: 'Non-Monetary Perks',
+    nonMonetaryPlaceholder: 'contoh: WFA full, gym access...',
+
+    // Table
+    filter: 'Filter',
+    all: 'Semua',
+    daysSinceApplied: 'Aging Sejak',
+    inStage: 'Di Stage',
+    actions: 'Action Item',
+
+    // Timeline
+    noApplicationsYet: 'Pipeline kosongan',
+    addFirstJob: 'Input satu pipeline buat mancing data',
+    daysAgo: '{days} yg lalu',
+    daysInStage: '{days} aging di stage',
+
+    // Empty states
+    noJobsHere: 'Belum ada pipeline masuk',
+    addOne: '+ Add Data',
+
+    // Language
+    language: 'Indo Jaksel',
+
+    // JFP
+    jobFitPercentage: 'Alignment %',
+    jfpPlaceholder: '0-100',
+  },
+  sg: {
+    // Header
+    appName: 'HireWithAndi',
+    jobsTracked: '{count} job{s} tracked lah',
+    addJob: 'Add Job',
+    dashboard: 'Dashboard',
+    board: 'Board',
+    gantt: 'Gantt',
+    table: 'Table',
+
+    // Columns
+    wishlist: 'Wishlist Only',
+    applied: 'Applied Already',
+    hr_interview: 'HR Talk',
+    technical_interview: 'Tech Test',
+    additional_interview: 'Wait Long Long',
+    offered: 'Got Offer!',
+    rejected_company: 'They Don\'t Want',
+    rejected_applicant: 'I Don\'t Want',
+
+    // Job Card
+    daysHere: '{days} here sia',
+    today: 'Today',
+    day: '1 day',
+    days: '{count} days',
+    viewPosting: 'See posting',
+
+    // Modal
+    newApplication: 'Apply New One',
+    editApplication: 'Change Application',
+    company: 'Company',
+    companyPlaceholder: 'e.g. Grab',
+    position: 'Position',
+    positionPlaceholder: 'e.g. Software Engineer',
+    jobUrl: 'Job URL',
+    salaryRange: 'Salary Range',
+    salaryPlaceholder: 'e.g. $6k - $8k',
+    status: 'Status',
+    dateApplied: 'Date Applied',
+    notes: 'Notes',
+    notesPlaceholder: 'Any notes also can...',
+    openJobPosting: 'Open posting lah',
+    cancel: 'Cancel',
+    saveChanges: 'Save Changes',
+    addApplication: 'Add Application',
+    deleteConfirm: 'Sure want to delete?',
+
+    // Work Type
+    workType: 'Work Type',
+    remote: 'Remote',
+    onsite: 'Office',
+    hybrid: 'Hybrid',
+    location: 'Location',
+    locationPlaceholder: 'e.g. Singapore',
+
+    // Offer Details
+    offerDetails: 'Offer Details Walao',
+    finalOffer: 'Final Offer',
+    finalOfferPlaceholder: 'e.g. $8,000/month',
+    benefits: 'Benefits',
+    benefitsPlaceholder: 'e.g. Insurance, AWS...',
+    nonMonetaryBenefits: 'Other Perks',
+    nonMonetaryPlaceholder: 'e.g. WFH, Flexi hours...',
+
+    // Table
+    filter: 'Filter',
+    all: 'All',
+    daysSinceApplied: 'Days Since',
+    inStage: 'In Stage',
+    actions: 'Actions',
+
+    // Timeline
+    noApplicationsYet: 'No applications yet lor',
+    addFirstJob: 'Add first job to see timeline',
+    daysAgo: '{days} ago',
+    daysInStage: '{days} in stage',
+
+    // Empty states
+    noJobsHere: 'Nothing here leh',
+    addOne: '+ Add one lah',
+
+    // Language
+    language: 'Singlish',
+
+    // JFP
+    jobFitPercentage: 'Can On Not %',
+    jfpPlaceholder: '0-100',
+  },
 }
 
 const I18nContext = createContext(null)
@@ -190,7 +368,7 @@ export function I18nProvider({ children }) {
 
   const toggleLocale = useCallback(() => {
     setLocale(prev => {
-      const next = prev === 'en' ? 'id' : 'en'
+      const next = prev === 'en' ? 'id' : prev === 'id' ? 'id_corp' : prev === 'id_corp' ? 'sg' : 'en'
       try { localStorage.setItem('hirewithandi_locale', next) } catch {}
       return next
     })

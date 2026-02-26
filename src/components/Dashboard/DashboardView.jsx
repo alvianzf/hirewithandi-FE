@@ -109,7 +109,8 @@ export default function DashboardView() {
     return { idrLost, usdLost }
   }
 
-  const { idrLost, usdLost } = calculateOpportunityLost(byStatus.rejected)
+  const rejectedJobsAll = [...(byStatus.rejected_company || []), ...(byStatus.rejected_applicant || [])]
+  const { idrLost, usdLost } = calculateOpportunityLost(rejectedJobsAll)
 
   // Average days in pipeline
   const daysInPipeline = allJobs.map(j => daysSince(j.dateApplied)).filter(d => d > 0)
@@ -130,7 +131,7 @@ export default function DashboardView() {
   // Stale jobs (stuck > 14 days)
   const staleJobs = allJobs.filter(j =>
     daysSince(j.statusChangedAt) >= 14 &&
-    j.status !== 'offered' && j.status !== 'rejected'
+    j.status !== 'offered' && j.status !== 'rejected_company' && j.status !== 'rejected_applicant'
   )
 
   // Most active week
@@ -143,6 +144,19 @@ export default function DashboardView() {
     weekMap[key] = (weekMap[key] || 0) + 1
   })
   const mostActiveWeek = Object.entries(weekMap).sort((a, b) => b[1] - a[1])[0]
+
+  // Timeline & Days From metrics
+  const sortedByDate = [...allJobs].sort((a, b) => new Date(a.dateApplied) - new Date(b.dateApplied))
+  const firstJobDate = sortedByDate.length > 0 ? sortedByDate[0].dateApplied : null
+  const daysSinceFirstJob = firstJobDate ? daysSince(firstJobDate) : null
+
+  const interviewJobs = allJobs.filter(j => ['hr_interview', 'technical_interview', 'additional_interview'].includes(j.status)).sort((a, b) => new Date(b.statusChangedAt || b.dateAdded) - new Date(a.statusChangedAt || a.dateAdded))
+  const daysSinceLastInterview = interviewJobs.length > 0 ? daysSince(interviewJobs[0].statusChangedAt || interviewJobs[0].dateAdded) : null
+
+  const rejectedJobs = allJobs.filter(j => ['rejected_company', 'rejected_applicant'].includes(j.status)).sort((a, b) => new Date(b.statusChangedAt || b.dateAdded) - new Date(a.statusChangedAt || a.dateAdded))
+  const daysSinceLastRejected = rejectedJobs.length > 0 ? daysSince(rejectedJobs[0].statusChangedAt || rejectedJobs[0].dateAdded) : null
+
+  const latestJobObj = sortedByDate.length > 0 ? sortedByDate[sortedByDate.length - 1] : null
 
   const formatIDR = (n) => {
     if (n >= 1e12) return `Rp ${(n / 1e12).toFixed(n % 1e12 === 0 ? 0 : 1)}T`
@@ -477,9 +491,52 @@ export default function DashboardView() {
                         • {j.company} — {daysSince(j.statusChangedAt)} days in {colLabel(j.status)}
                       </p>
                     ))}
-                    {staleJobs.length > 3 && (
-                      <p className="text-[11px] text-neutral-500">+{staleJobs.length - 3} more</p>
-                    )}
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Timeline Analytics */}
+          <div className="rounded-3xl border border-white/[0.08] bg-white/[0.02] p-8">
+            <h3 className="mb-6 text-[15px] font-bold text-white flex items-center gap-2.5">
+              <Clock className="h-5 w-5 text-yellow-400" />
+              Timeline Analytics
+            </h3>
+            <div className="space-y-4">
+              <div className="flex items-center justify-between rounded-xl bg-white/[0.03] px-4 py-3.5">
+                <span className="text-[13px] text-neutral-400">First Job Tracked</span>
+                <span className="text-[13px] font-bold text-white">
+                  {daysSinceFirstJob !== null ? `${daysSinceFirstJob} days ago` : 'N/A'}
+                </span>
+              </div>
+              
+              <div className="flex items-center justify-between rounded-xl bg-white/[0.03] px-4 py-3.5">
+                <span className="text-[13px] text-neutral-400">Last Interview</span>
+                <span className="text-[13px] font-bold text-cyan-400">
+                  {daysSinceLastInterview !== null ? `${daysSinceLastInterview} days ago` : 'N/A'}
+                </span>
+              </div>
+              
+              <div className="flex items-center justify-between rounded-xl bg-white/[0.03] px-4 py-3.5">
+                <span className="text-[13px] text-neutral-400">Last Rejection</span>
+                <span className="text-[13px] font-bold text-red-400">
+                  {daysSinceLastRejected !== null ? `${daysSinceLastRejected} days ago` : 'N/A'}
+                </span>
+              </div>
+
+              {latestJobObj && (
+                <div className="mt-6 rounded-xl border border-white/[0.06] bg-black/40 p-4">
+                  <p className="text-[11px] text-neutral-500 mb-2 uppercase tracking-wider font-semibold">Latest Application</p>
+                  <p className="text-sm font-bold text-white truncate">{latestJobObj.company}</p>
+                  <div className="mt-2 flex items-center justify-between">
+                    <span className="text-xs text-neutral-400 truncate pr-2">{latestJobObj.position}</span>
+                    <span 
+                      className="text-[10px] font-bold px-2 py-1 flex-shrink-0"
+                      style={{ color: COLUMN_MAP[latestJobObj.status]?.color }}
+                    >
+                      {colLabel(latestJobObj.status)}
+                    </span>
                   </div>
                 </div>
               )}

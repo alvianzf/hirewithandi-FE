@@ -63,8 +63,10 @@ export default function Header({ activeView, setActiveView, onAddJob, totalJobs 
               onChange={e => changeLocale(e.target.value)}
               className="appearance-none rounded-xl bg-neutral-800/80 pl-4 pr-10 py-3 text-sm font-medium text-neutral-200 cursor-pointer border border-white/[0.08] transition-colors hover:bg-neutral-700 focus:outline-none focus:ring-2 focus:ring-yellow-400/50"
             >
-              <option value="en">🇺🇸 English</option>
+              <option value="en">🇸🇬 English</option>
               <option value="id">🇮🇩 Bahasa</option>
+              <option value="id_corp">👔 Jaksel</option>
+              <option value="sg">🇸🇬 Singlish</option>
             </select>
             <ChevronDown className="pointer-events-none absolute right-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-neutral-400" />
           </div>
@@ -74,7 +76,7 @@ export default function Header({ activeView, setActiveView, onAddJob, totalJobs 
             className="flex items-center justify-center rounded-xl bg-neutral-800/80 border border-white/[0.08] px-3 py-2.5 text-lg transition-colors hover:bg-neutral-700 sm:hidden"
             title={t('language')}
           >
-            {locale === 'en' ? '🇺🇸' : '🇮🇩'}
+            {locale === 'en' ? '🇸🇬' : locale === 'id' ? '🇮🇩' : locale === 'id_corp' ? '👔' : '🇸🇬 Sing'}
           </button>
 
           <button

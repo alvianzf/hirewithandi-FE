@@ -9,6 +9,28 @@ function loadState() {
     const data = localStorage.getItem(STORAGE_KEY)
     if (data) {
       const parsed = JSON.parse(data)
+      
+      // Auto-migrate old 'rejected' to 'rejected_company'
+      if (parsed.columns.rejected !== undefined) {
+        parsed.columns.rejected_company = [
+          ...(parsed.columns.rejected_company || []),
+          ...parsed.columns.rejected
+        ]
+        delete parsed.columns.rejected
+        
+        // Update job status strings inside jobs object
+        Object.values(parsed.jobs).forEach(job => {
+          if (job.status === 'rejected') {
+            job.status = 'rejected_company'
+          }
+          if (job.history) {
+            job.history.forEach(h => {
+              if (h.status === 'rejected') h.status = 'rejected_company'
+            })
+          }
+        })
+      }
+
       for (const col of INITIAL_STATE.columnOrder) {
         if (!parsed.columns[col]) parsed.columns[col] = []
       }

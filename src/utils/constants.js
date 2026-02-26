@@ -9,7 +9,12 @@ export const COLUMNS = [
     color: "#ec4899",
   },
   { id: "offered", label: "Offered", color: "#4ADE80" },
-  { id: "rejected", label: "Rejected", color: "#EF4444" },
+  { id: "rejected_company", label: "Rejected by Company", color: "#EF4444" },
+  {
+    id: "rejected_applicant",
+    label: "Rejected by Applicant",
+    color: "#B91C1C",
+  },
 ];
 
 export const COLUMN_MAP = Object.fromEntries(COLUMNS.map((c) => [c.id, c]));

@@ -17,6 +17,12 @@ export const COLUMNS = [
   },
 ];
 
+export const FINAL_STATUSES = [
+  "rejected_company",
+  "rejected_applicant",
+  "offered",
+];
+
 export const COLUMN_MAP = Object.fromEntries(COLUMNS.map((c) => [c.id, c]));
 
 export const WORK_TYPES = [

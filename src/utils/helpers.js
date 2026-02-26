@@ -2,12 +2,35 @@ export function generateId() {
   return Date.now().toString(36) + Math.random().toString(36).substr(2, 9);
 }
 
-export function daysSince(dateString) {
+import { FINAL_STATUSES } from "./constants";
+
+export function daysSince(dateString, endDateString = null) {
   if (!dateString) return 0;
   const date = new Date(dateString);
-  const now = new Date();
-  const diffTime = now.getTime() - date.getTime();
+  const end = endDateString ? new Date(endDateString) : new Date();
+  const diffTime = end.getTime() - date.getTime();
   return Math.max(0, Math.floor(diffTime / (1000 * 60 * 60 * 24)));
+}
+
+export function calculateActiveDays(job) {
+  if (!job || !job.history || job.history.length === 0) {
+    const isFinalState = FINAL_STATUSES.includes(job.status);
+    return daysSince(
+      job.dateApplied || job.dateAdded,
+      isFinalState ? job.statusChangedAt : null,
+    );
+  }
+
+  let totalMs = 0;
+  job.history.forEach((h) => {
+    if (!FINAL_STATUSES.includes(h.status)) {
+      const start = new Date(h.enteredAt).getTime();
+      const end = h.leftAt ? new Date(h.leftAt).getTime() : Date.now();
+      totalMs += end - start;
+    }
+  });
+
+  return Math.max(0, Math.floor(totalMs / (1000 * 60 * 60 * 24)));
 }
 
 export function formatDate(dateString) {

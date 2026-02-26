@@ -1,7 +1,7 @@
 import { useState, useRef, useCallback } from 'react'
 import { useJobs } from '../../context/JobContext'
-import { COLUMNS, COLUMN_MAP } from '../../utils/constants'
-import { formatDate, daysSince } from '../../utils/helpers'
+import { COLUMNS, COLUMN_MAP, FINAL_STATUSES } from '../../utils/constants'
+import { formatDate, daysSince, calculateActiveDays } from '../../utils/helpers'
 import { useI18n } from '../../context/I18nContext'
 import { Calendar } from 'lucide-react'
 
@@ -33,8 +33,9 @@ export default function GanttView({ onCardClick }) {
   const maxDate = new Date(Math.max(now.getTime(), Math.max(...dates) + 7 * 24 * 60 * 60 * 1000))
 
   // Extend min back a few days and max forward
+  // Extend min back a few days and max forward (based on current date to show the padding)
   minDate.setDate(minDate.getDate() - 3)
-  maxDate.setDate(maxDate.getDate() + 5)
+  maxDate.setDate(now.getDate() + 5)
 
   const totalDays = Math.ceil((maxDate - minDate) / (1000 * 60 * 60 * 24))
   const dayWidth = 40 // pixels per day
@@ -215,10 +216,18 @@ export default function GanttView({ onCardClick }) {
             {/* Gantt bars */}
             {sortedJobs.map((job, i) => {
               const col = COLUMN_MAP[job.status]
+              const isFinalState = FINAL_STATUSES.includes(job.status)
+              const jobEndDate = isFinalState ? new Date(job.statusChangedAt) : now
+
               const startX = getXPosition(job.dateApplied || job.dateAdded)
-              const endX = getXPosition(now)
+              let endX = getXPosition(now) // Gantt visual end is now continuously updated
+              
+              if (isFinalState) {
+                  endX = getXPosition(jobEndDate)
+              }
+              
               const barWidth = Math.max(endX - startX, dayWidth * 0.5)
-              const daysTotal = daysSince(job.dateApplied)
+              const daysTotal = calculateActiveDays(job)
 
               return (
                 <div
@@ -256,9 +265,9 @@ export default function GanttView({ onCardClick }) {
                       {job.history.map((h, hi) => {
                         const hCol = COLUMN_MAP[h.status]
                         const hStart = new Date(h.enteredAt)
-                        const hEnd = h.leftAt ? new Date(h.leftAt) : now
+                        const hEnd = h.leftAt ? new Date(h.leftAt) : (isFinalState ? jobEndDate : now)
                         const hDuration = (hEnd - hStart) / (1000 * 60 * 60 * 24)
-                        const totalDuration = (now - new Date(job.dateApplied || job.dateAdded)) / (1000 * 60 * 60 * 24)
+                        const totalDuration = ((isFinalState ? jobEndDate : now) - new Date(job.dateApplied || job.dateAdded)) / (1000 * 60 * 60 * 24)
                         const widthPercent = totalDuration > 0 ? (hDuration / totalDuration) * 100 : 100
 
                         return (

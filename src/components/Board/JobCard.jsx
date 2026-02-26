@@ -1,7 +1,7 @@
 import { Draggable } from '@hello-pangea/dnd'
 import { Calendar, Clock, ExternalLink, MapPin, Globe, Building2, ArrowLeftRight, ChevronDown, Target } from 'lucide-react'
-import { daysSince, formatDateShort, daysLabel } from '../../utils/helpers'
-import { COLUMNS, COLUMN_MAP } from '../../utils/constants'
+import { calculateActiveDays, daysSince, formatDateShort, daysLabel } from '../../utils/helpers'
+import { COLUMNS, COLUMN_MAP, FINAL_STATUSES } from '../../utils/constants'
 import { useI18n } from '../../context/I18nContext'
 import { useJobs } from '../../context/JobContext'
 
@@ -14,8 +14,9 @@ const WORK_TYPE_ICONS = {
 export default function JobCard({ job, index, onClick }) {
   const { t, colLabel } = useI18n()
   const { editJob } = useJobs()
-  const daysApplied = daysSince(job.dateApplied)
-  const daysInCol = daysSince(job.statusChangedAt)
+  const isFinalState = FINAL_STATUSES.includes(job.status)
+  const daysApplied = calculateActiveDays(job)
+  const daysInCol = isFinalState ? 0 : daysSince(job.statusChangedAt)
   const colMeta = COLUMN_MAP[job.status]
 
   const handleStatusChange = (e) => {

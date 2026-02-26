@@ -25,7 +25,7 @@ export default function Header({ activeView, setActiveView, onAddJob, totalJobs 
           </div>
           <div>
             <h1 className="text-lg font-bold leading-tight tracking-tight text-white">
-              Hire<span className="text-yellow-400">With</span>Andi
+              Hired<span className="text-yellow-400">With</span>Andi
             </h1>
             <p className="hidden text-xs text-neutral-500 md:block">
               {jobsText}

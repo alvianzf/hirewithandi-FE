@@ -167,11 +167,11 @@ export default function DashboardView() {
   }
 
   return (
-    <div className="view-transition flex-1 overflow-y-auto px-4 py-6 md:px-8">
-      <div className="mx-auto max-w-5xl space-y-6">
+    <div className="view-transition flex-1 overflow-y-auto px-6 py-8 md:px-10">
+      <div className="mx-auto max-w-6xl space-y-8">
 
         {/* Top KPI cards */}
-        <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
+        <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
           <StatCard
             icon={<Briefcase className="h-5 w-5" />}
             label={t('all')}
@@ -202,12 +202,12 @@ export default function DashboardView() {
         </div>
 
         {/* Conversion funnel */}
-        <div className="rounded-2xl border border-white/[0.06] bg-white/[0.02] p-5">
-          <h3 className="mb-4 text-sm font-bold text-white flex items-center gap-2">
-            <Activity className="h-4 w-4 text-yellow-400" />
+        <div className="rounded-3xl border border-white/[0.08] bg-white/[0.02] p-8">
+          <h3 className="mb-6 text-[15px] font-bold text-white flex items-center gap-2.5">
+            <Activity className="h-5 w-5 text-yellow-400" />
             Conversion Funnel
           </h3>
-          <div className="space-y-3">
+          <div className="space-y-4">
             {[
               { label: t('all'), count: total, pct: 100, color: '#FFD700' },
               { label: colLabel('applied'), count: applied, pct: total > 0 ? (applied / total * 100) : 0, color: '#3b82f6' },
@@ -234,19 +234,19 @@ export default function DashboardView() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
           {/* Status breakdown */}
-          <div className="rounded-2xl border border-white/[0.06] bg-white/[0.02] p-5">
-            <h3 className="mb-4 text-sm font-bold text-white flex items-center gap-2">
-              <PieChart className="h-4 w-4 text-yellow-400" />
+          <div className="rounded-3xl border border-white/[0.08] bg-white/[0.02] p-8">
+            <h3 className="mb-6 text-[15px] font-bold text-white flex items-center gap-2.5">
+              <PieChart className="h-5 w-5 text-yellow-400" />
               Status Breakdown
             </h3>
-            <div className="space-y-2.5">
+            <div className="space-y-3.5">
               {COLUMNS.map(col => {
                 const count = byStatus[col.id].length
                 const pct = total > 0 ? (count / total * 100) : 0
                 return (
-                  <div key={col.id} className="flex items-center gap-3">
+                  <div key={col.id} className="flex items-center gap-4">
                     <div className="h-2.5 w-2.5 rounded-full flex-shrink-0" style={{ backgroundColor: col.color }} />
                     <span className="flex-1 text-xs text-neutral-300 truncate">{colLabel(col.id)}</span>
                     <span className="text-xs font-medium text-neutral-400">{count}</span>
@@ -264,12 +264,12 @@ export default function DashboardView() {
           </div>
 
           {/* Work type distribution */}
-          <div className="rounded-2xl border border-white/[0.06] bg-white/[0.02] p-5">
-            <h3 className="mb-4 text-sm font-bold text-white flex items-center gap-2">
-              <Globe className="h-4 w-4 text-yellow-400" />
+          <div className="rounded-3xl border border-white/[0.08] bg-white/[0.02] p-8">
+            <h3 className="mb-6 text-[15px] font-bold text-white flex items-center gap-2.5">
+              <Globe className="h-5 w-5 text-yellow-400" />
               {t('workType')} Distribution
             </h3>
-            <div className="space-y-4">
+            <div className="space-y-5">
               {[
                 { key: 'remote', icon: '🌍', color: '#3b82f6' },
                 { key: 'onsite', icon: '🏢', color: '#f59e0b' },
@@ -300,9 +300,9 @@ export default function DashboardView() {
 
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
           {/* Salary insights */}
-          <div className="rounded-2xl border border-white/[0.06] bg-white/[0.02] p-6">
-            <h3 className="mb-5 text-sm font-bold text-white flex items-center gap-2">
-              <DollarSign className="h-4 w-4 text-yellow-400" />
+          <div className="rounded-3xl border border-white/[0.08] bg-white/[0.02] p-8">
+            <h3 className="mb-6 text-[15px] font-bold text-white flex items-center gap-2.5">
+              <DollarSign className="h-5 w-5 text-yellow-400" />
               Salary Insights
             </h3>
             
@@ -371,32 +371,32 @@ export default function DashboardView() {
           </div>
 
           {/* Activity insights */}
-          <div className="rounded-2xl border border-white/[0.06] bg-white/[0.02] p-5">
-            <h3 className="mb-4 text-sm font-bold text-white flex items-center gap-2">
-              <BarChart3 className="h-4 w-4 text-yellow-400" />
+          <div className="rounded-3xl border border-white/[0.08] bg-white/[0.02] p-8">
+            <h3 className="mb-6 text-[15px] font-bold text-white flex items-center gap-2.5">
+              <BarChart3 className="h-5 w-5 text-yellow-400" />
               Activity Insights
             </h3>
-            <div className="space-y-3">
+            <div className="space-y-4">
               {mostActiveWeek && (
-                <div className="flex items-center justify-between rounded-xl bg-white/[0.03] px-3 py-2.5">
+                <div className="flex items-center justify-between rounded-xl bg-white/[0.03] px-4 py-3.5">
                   <span className="text-xs text-neutral-400">Most Active Week</span>
                   <span className="text-xs font-medium text-white">
                     {new Date(mostActiveWeek[0]).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} — {mostActiveWeek[1]} apps
                   </span>
                 </div>
               )}
-              <div className="flex items-center justify-between rounded-xl bg-white/[0.03] px-3 py-2.5">
-                <span className="text-xs text-neutral-400">Interview Rate</span>
-                <span className="text-xs font-bold text-cyan-400">{interviewRate}%</span>
+              <div className="flex items-center justify-between rounded-xl bg-white/[0.03] px-4 py-3.5">
+                <span className="text-[13px] text-neutral-400">Interview Rate</span>
+                <span className="text-[13px] font-bold text-cyan-400">{interviewRate}%</span>
               </div>
-              <div className="flex items-center justify-between rounded-xl bg-white/[0.03] px-3 py-2.5">
-                <span className="text-xs text-neutral-400">Offer Rate</span>
-                <span className="text-xs font-bold text-green-400">{offerRate}%</span>
+              <div className="flex items-center justify-between rounded-xl bg-white/[0.03] px-4 py-3.5">
+                <span className="text-[13px] text-neutral-400">Offer Rate</span>
+                <span className="text-[13px] font-bold text-green-400">{offerRate}%</span>
               </div>
 
               {/* Stale applications */}
               {staleJobs.length > 0 && (
-                <div className="rounded-xl border border-amber-500/10 bg-amber-500/[0.03] p-3">
+                <div className="rounded-xl border border-amber-500/10 bg-amber-500/[0.03] p-4">
                   <div className="flex items-center gap-2 mb-1">
                     <AlertTriangle className="h-4 w-4 text-amber-400" />
                     <span className="text-xs font-semibold text-amber-400">
@@ -423,19 +423,19 @@ export default function DashboardView() {
         </div>
 
         {/* Avg time per stage */}
-        <div className="rounded-2xl border border-white/[0.06] bg-white/[0.02] p-5">
-          <h3 className="mb-4 text-sm font-bold text-white flex items-center gap-2">
-            <Clock className="h-4 w-4 text-yellow-400" />
+        <div className="rounded-3xl border border-white/[0.08] bg-white/[0.02] p-8">
+          <h3 className="mb-6 text-[15px] font-bold text-white flex items-center gap-2.5">
+            <Clock className="h-5 w-5 text-yellow-400" />
             Average Time per Stage
           </h3>
-          <div className="flex flex-wrap gap-3">
+          <div className="flex flex-wrap gap-4">
             {COLUMNS.map(col => {
               const avg = avgDaysPerStage[col.id]
               const count = byStatus[col.id].length
               return (
                 <div
                   key={col.id}
-                  className="flex-1 min-w-[100px] rounded-xl border border-white/[0.04] bg-white/[0.02] p-3 text-center"
+                  className="flex-1 min-w-[120px] rounded-2xl border border-white/[0.04] bg-white/[0.02] p-4 text-center"
                 >
                   <div
                     className="mx-auto mb-2 h-2 w-2 rounded-full"
@@ -456,13 +456,13 @@ export default function DashboardView() {
 
 function StatCard({ icon, label, value, color, sub }) {
   return (
-    <div className="rounded-2xl border border-white/[0.06] bg-white/[0.02] p-4">
-      <div className="flex items-center gap-2 mb-2">
+    <div className="rounded-3xl border border-white/[0.08] bg-white/[0.02] p-6 lg:p-7 transition-colors hover:bg-white/[0.04]">
+      <div className="flex items-center gap-2.5 mb-3">
         <div className="text-neutral-500" style={{ color }}>{icon}</div>
-        <span className="text-xs font-medium text-neutral-400">{label}</span>
+        <span className="text-[13px] font-semibold text-neutral-400">{label}</span>
       </div>
-      <p className="text-2xl font-bold text-white">{value}</p>
-      {sub && <p className="mt-0.5 text-[11px] text-neutral-500">{sub}</p>}
+      <p className="text-3xl font-bold text-white mt-1">{value}</p>
+      {sub && <p className="mt-1.5 text-xs text-neutral-500 font-medium">{sub}</p>}
     </div>
   )
 }

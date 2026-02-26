@@ -111,13 +111,13 @@ export default function TableView({ onCardClick }) {
         <table className="w-full">
           <thead>
             <tr className="border-b border-white/[0.06] bg-white/[0.02]">
-              <th className="px-4 py-3"><SortHeader field="company">{t('company')}</SortHeader></th>
-              <th className="px-4 py-3"><SortHeader field="position">{t('position')}</SortHeader></th>
-              <th className="px-4 py-3"><SortHeader field="status">{t('status')}</SortHeader></th>
-              <th className="px-4 py-3">{t('workType')}</th>
-              <th className="px-4 py-3"><SortHeader field="dateApplied">{t('dateApplied')}</SortHeader></th>
-              <th className="px-4 py-3"><SortHeader field="daysApplied">{t('daysSinceApplied')}</SortHeader></th>
-              <th className="px-4 py-3"><SortHeader field="daysInCol">{t('inStage')}</SortHeader></th>
+              <th className="px-6 py-4"><SortHeader field="company">{t('company')}</SortHeader></th>
+              <th className="px-6 py-4"><SortHeader field="position">{t('position')}</SortHeader></th>
+              <th className="px-6 py-4"><SortHeader field="status">{t('status')}</SortHeader></th>
+              <th className="px-6 py-4">{t('workType')}</th>
+              <th className="px-6 py-4"><SortHeader field="dateApplied">{t('dateApplied')}</SortHeader></th>
+              <th className="px-6 py-4"><SortHeader field="daysApplied">{t('daysSinceApplied')}</SortHeader></th>
+              <th className="px-6 py-4"><SortHeader field="daysInCol">{t('inStage')}</SortHeader></th>
             </tr>
           </thead>
           <tbody>
@@ -129,20 +129,20 @@ export default function TableView({ onCardClick }) {
                 <tr
                   key={job.id}
                   onClick={() => onCardClick(job)}
-                  className="cursor-pointer border-b border-white/[0.04] transition-colors hover:bg-white/[0.03]"
+                  className="cursor-pointer border-b border-white/[0.04] transition-colors hover:bg-white/[0.04]"
                 >
-                  <td className="px-4 py-3">
-                    <span className="text-sm font-medium text-white">{job.company}</span>
+                  <td className="px-6 py-4">
+                    <span className="text-[15px] font-bold text-white">{job.company}</span>
                   </td>
-                  <td className="px-4 py-3">
-                    <span className="text-sm text-neutral-300">{job.position || '—'}</span>
+                  <td className="px-6 py-4">
+                    <span className="text-sm font-medium text-neutral-300">{job.position || '—'}</span>
                   </td>
-                  <td className="px-4 py-3">
+                  <td className="px-6 py-4">
                     <div className="relative" onClick={e => e.stopPropagation()}>
                       <select
                         value={job.status}
                         onChange={e => handleStatusChange(job, e.target.value)}
-                        className="appearance-none rounded-full border-0 py-1 pl-3 pr-7 text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-yellow-400"
+                        className="appearance-none rounded-full border-0 py-1.5 pl-4 pr-8 text-[13px] font-bold focus:outline-none focus:ring-2 focus:ring-yellow-400"
                         style={{
                           backgroundColor: `${col?.color}15`,
                           color: col?.color,
@@ -154,30 +154,30 @@ export default function TableView({ onCardClick }) {
                       </select>
                     </div>
                   </td>
-                  <td className="px-4 py-3">
-                    <span className="text-xs text-neutral-400">
+                  <td className="px-6 py-4">
+                    <span className="text-[13px] font-medium text-neutral-400">
                       {job.workType ? `${WORK_TYPE_ICONS[job.workType]} ${t(job.workType)}` : '—'}
                     </span>
                   </td>
-                  <td className="px-4 py-3">
-                    <span className="flex items-center gap-1 text-xs text-neutral-500">
-                      <Calendar className="h-3 w-3" />
+                  <td className="px-6 py-4">
+                    <span className="flex items-center gap-2 text-[13px] font-medium text-neutral-400">
+                      <Calendar className="h-4 w-4 text-neutral-500" />
                       {formatDate(job.dateApplied)}
                     </span>
                   </td>
-                  <td className="px-4 py-3">
-                    <span className="flex items-center gap-1 text-xs text-neutral-500">
-                      <Clock className="h-3 w-3" />
+                  <td className="px-6 py-4">
+                    <span className="flex items-center gap-2 text-[13px] font-medium text-neutral-400">
+                      <Clock className="h-4 w-4 text-neutral-500" />
                       {daysLabel(applied)}
                     </span>
                   </td>
-                  <td className="px-4 py-3">
+                  <td className="px-6 py-4">
                     <span
-                      className={`flex items-center gap-1 text-xs font-medium ${
-                        inCol >= 14 ? 'text-red-400' : inCol >= 7 ? 'text-amber-400' : 'text-neutral-500'
+                      className={`flex items-center gap-2 text-[13px] font-bold ${
+                        inCol >= 14 ? 'text-red-400' : inCol >= 7 ? 'text-amber-400' : 'text-neutral-400'
                       }`}
                     >
-                      <MapPin className="h-3 w-3" />
+                      <MapPin className="h-4 w-4" />
                       {daysLabel(inCol)}
                     </span>
                   </td>

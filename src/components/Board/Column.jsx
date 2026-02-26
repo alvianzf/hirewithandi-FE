@@ -7,12 +7,12 @@ export default function Column({ columnId, label, color, jobs, onCardClick, onAd
   const { colLabel } = useI18n()
 
   return (
-    <div className="kanban-column flex w-72 flex-shrink-0 flex-col rounded-2xl border border-white/[0.04] bg-white/[0.02] md:w-64 lg:w-72">
+    <div className="kanban-column flex w-[320px] flex-shrink-0 flex-col rounded-3xl border border-white/[0.08] bg-white/[0.01] shadow-xl md:w-[300px] lg:w-[320px]">
       {/* Column Header */}
-      <div className="flex items-center justify-between px-4 pt-4 pb-2">
-        <div className="flex items-center gap-2.5">
+      <div className="flex items-center justify-between px-5 pt-5 pb-3">
+        <div className="flex items-center gap-3">
           <div
-            className="h-2.5 w-2.5 rounded-full shadow-sm"
+            className="h-3 w-3 rounded-full shadow-sm"
             style={{ backgroundColor: color, boxShadow: `0 0 8px ${color}40` }}
           />
           <h2 className="text-sm font-semibold text-neutral-200">{colLabel(columnId)}</h2>
@@ -35,10 +35,10 @@ export default function Column({ columnId, label, color, jobs, onCardClick, onAd
           <div
             ref={provided.innerRef}
             {...provided.droppableProps}
-            className={`flex-1 space-y-2 overflow-y-auto px-2 pb-2 pt-1 transition-colors ${
-              snapshot.isDraggingOver ? 'bg-yellow-400/[0.03] rounded-xl' : ''
+            className={`flex-1 space-y-4 overflow-y-auto px-4 pb-4 pt-2 transition-colors ${
+              snapshot.isDraggingOver ? 'bg-yellow-400/[0.03] rounded-2xl' : ''
             }`}
-            style={{ minHeight: 60 }}
+            style={{ minHeight: 80 }}
           >
             {jobs.map((job, index) => (
               <JobCard key={job.id} job={job} index={index} onClick={onCardClick} />
@@ -47,11 +47,11 @@ export default function Column({ columnId, label, color, jobs, onCardClick, onAd
 
             {/* Empty state */}
             {jobs.length === 0 && !snapshot.isDraggingOver && (
-              <div className="flex flex-col items-center justify-center py-8 text-center">
-                <p className="text-xs text-neutral-600">No jobs here</p>
+              <div className="flex flex-col items-center justify-center py-10 text-center">
+                <p className="text-sm font-medium text-neutral-500">No jobs here</p>
                 <button
                   onClick={() => onAddToColumn(columnId)}
-                  className="mt-2 text-xs text-yellow-400/60 transition-colors hover:text-yellow-400"
+                  className="mt-3 rounded-lg bg-white/[0.04] px-4 py-2 text-xs font-bold text-neutral-300 transition-colors hover:bg-white/[0.1] hover:text-white"
                 >
                   + Add one
                 </button>

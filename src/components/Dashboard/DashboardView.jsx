@@ -144,12 +144,16 @@ export default function DashboardView() {
   const mostActiveWeek = Object.entries(weekMap).sort((a, b) => b[1] - a[1])[0]
 
   const formatIDR = (n) => {
-    if (n >= 1000000) return `Rp ${(n / 1000000).toFixed(n % 1000000 === 0 ? 0 : 1)}Jt`
+    if (n >= 1e12) return `Rp ${(n / 1e12).toFixed(n % 1e12 === 0 ? 0 : 1)}T`
+    if (n >= 1e9) return `Rp ${(n / 1e9).toFixed(n % 1e9 === 0 ? 0 : 1)}M`
+    if (n >= 1e6) return `Rp ${(n / 1e6).toFixed(n % 1e6 === 0 ? 0 : 1)}Jt`
     if (n >= 1000) return `Rp ${(n / 1000).toFixed(0)}K`
     return `Rp ${n.toFixed(0)}`
   }
   
   const formatUSD = (n) => {
+    if (n >= 1e9) return `$${(n / 1e9).toFixed(n % 1e9 === 0 ? 0 : 1)}B`
+    if (n >= 1e6) return `$${(n / 1e6).toFixed(n % 1e6 === 0 ? 0 : 1)}M`
     if (n >= 1000) return `$${(n / 1000).toFixed(1)}K`
     return `$${n.toFixed(0)}`
   }
@@ -167,11 +171,11 @@ export default function DashboardView() {
   }
 
   return (
-    <div className="view-transition flex-1 overflow-y-auto px-6 py-8 md:px-10">
-      <div className="mx-auto max-w-6xl space-y-8">
+    <div className="view-transition flex-1 overflow-y-auto px-10 py-12 md:px-16 lg:px-20">
+      <div className="mx-auto max-w-7xl space-y-12">
 
         {/* Top KPI cards */}
-        <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
+        <div className="grid grid-cols-2 gap-8 md:grid-cols-4">
           <StatCard
             icon={<Briefcase className="h-5 w-5" />}
             label={t('all')}
@@ -234,7 +238,7 @@ export default function DashboardView() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+        <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
           {/* Status breakdown */}
           <div className="rounded-3xl border border-white/[0.08] bg-white/[0.02] p-8">
             <h3 className="mb-6 text-[15px] font-bold text-white flex items-center gap-2.5">
@@ -456,7 +460,7 @@ export default function DashboardView() {
 
 function StatCard({ icon, label, value, color, sub }) {
   return (
-    <div className="rounded-3xl border border-white/[0.08] bg-white/[0.02] p-6 lg:p-7 transition-colors hover:bg-white/[0.04]">
+    <div className="rounded-3xl border border-white/[0.08] bg-white/[0.02] p-7 lg:p-8 transition-colors hover:bg-white/[0.04]">
       <div className="flex items-center gap-2.5 mb-3">
         <div className="text-neutral-500" style={{ color }}>{icon}</div>
         <span className="text-[13px] font-semibold text-neutral-400">{label}</span>

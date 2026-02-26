@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { X, Trash2, ExternalLink } from 'lucide-react'
-import { COLUMNS, WORK_TYPES } from '../../utils/constants'
+import { COLUMNS, COLUMN_MAP, WORK_TYPES } from '../../utils/constants'
 import { useJobs } from '../../context/JobContext'
 import { useI18n } from '../../context/I18nContext'
 
@@ -89,16 +89,16 @@ export default function JobModal({ isOpen, onClose, editingJob, defaultStatus = 
 
   if (!isOpen) return null
 
-  const inputClass = 'w-full rounded-xl border border-white/[0.08] bg-white/[0.04] px-4 py-2.5 text-sm text-white placeholder-neutral-500 transition-colors focus:border-yellow-400/50 focus:outline-none focus:ring-1 focus:ring-yellow-400/50'
+  const inputClass = 'w-full rounded-xl border border-white/[0.08] bg-white/[0.04] px-5 py-3.5 text-sm text-white placeholder-neutral-500 transition-colors focus:border-yellow-400/50 focus:outline-none focus:ring-1 focus:ring-yellow-400/50'
 
   return (
-    <div className="modal-overlay fixed inset-0 z-50 flex items-end justify-center bg-black/70 backdrop-blur-sm sm:items-center sm:p-4" onClick={onClose}>
+    <div className="modal-overlay fixed inset-0 z-50 flex items-end justify-center bg-black/70 backdrop-blur-sm sm:items-center sm:p-6" onClick={onClose}>
       <div
-        className="modal-content w-full max-w-lg rounded-t-2xl border border-white/[0.08] bg-neutral-900 shadow-2xl sm:rounded-2xl"
+        className="modal-content w-full max-w-xl rounded-t-3xl border border-white/[0.08] bg-neutral-900 shadow-2xl sm:rounded-3xl"
         onClick={e => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="flex items-center justify-between border-b border-white/[0.08] px-5 py-4">
+        <div className="flex items-center justify-between border-b border-white/[0.08] px-8 py-6">
           <h2 className="text-lg font-bold text-white">
             {isEditing ? t('editApplication') : t('newApplication')}
           </h2>
@@ -122,10 +122,10 @@ export default function JobModal({ isOpen, onClose, editingJob, defaultStatus = 
         </div>
 
         {/* Form */}
-        <form onSubmit={handleSubmit} className="max-h-[70vh] space-y-4 overflow-y-auto p-5">
+        <form onSubmit={handleSubmit} className="max-h-[70vh] space-y-6 overflow-y-auto p-8">
           {/* Company */}
           <div>
-            <label className="mb-1.5 block text-sm font-medium text-neutral-300">{t('company')} *</label>
+            <label className="mb-2 block text-sm font-medium text-neutral-300">{t('company')} *</label>
             <input
               type="text"
               value={form.company}
@@ -139,7 +139,7 @@ export default function JobModal({ isOpen, onClose, editingJob, defaultStatus = 
 
           {/* Position */}
           <div>
-            <label className="mb-1.5 block text-sm font-medium text-neutral-300">{t('position')}</label>
+            <label className="mb-2 block text-sm font-medium text-neutral-300">{t('position')}</label>
             <input
               type="text"
               value={form.position}
@@ -150,9 +150,9 @@ export default function JobModal({ isOpen, onClose, editingJob, defaultStatus = 
           </div>
 
           {/* URL + Salary */}
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
             <div>
-              <label className="mb-1.5 block text-sm font-medium text-neutral-300">{t('jobUrl')}</label>
+              <label className="mb-2 block text-sm font-medium text-neutral-300">{t('jobUrl')}</label>
               <input
                 type="url"
                 value={form.url}
@@ -162,7 +162,7 @@ export default function JobModal({ isOpen, onClose, editingJob, defaultStatus = 
               />
             </div>
             <div>
-              <label className="mb-1.5 block text-sm font-medium text-neutral-300">{t('salaryRange')}</label>
+              <label className="mb-2 block text-sm font-medium text-neutral-300">{t('salaryRange')}</label>
               <input
                 type="text"
                 value={form.salary}
@@ -175,14 +175,14 @@ export default function JobModal({ isOpen, onClose, editingJob, defaultStatus = 
 
           {/* Work Type */}
           <div>
-            <label className="mb-1.5 block text-sm font-medium text-neutral-300">{t('workType')}</label>
-            <div className="flex gap-2">
+            <label className="mb-2 block text-sm font-medium text-neutral-300">{t('workType')}</label>
+            <div className="flex gap-3">
               {WORK_TYPES.map(wt => (
                 <button
                   key={wt.id}
                   type="button"
                   onClick={() => handleChange('workType', wt.id)}
-                  className={`flex flex-1 items-center justify-center gap-1.5 rounded-xl border px-3 py-2.5 text-sm font-medium transition-all ${
+                  className={`flex flex-1 items-center justify-center gap-2 rounded-xl border px-4 py-3 text-sm font-medium transition-all ${
                     form.workType === wt.id
                       ? 'border-yellow-400/50 bg-yellow-400/10 text-yellow-400'
                       : 'border-white/[0.08] bg-white/[0.02] text-neutral-400 hover:border-white/[0.15] hover:text-neutral-300'
@@ -198,7 +198,7 @@ export default function JobModal({ isOpen, onClose, editingJob, defaultStatus = 
           {/* Location (shown for on-site and hybrid) */}
           {(form.workType === 'onsite' || form.workType === 'hybrid') && (
             <div>
-              <label className="mb-1.5 block text-sm font-medium text-neutral-300">{t('location')}</label>
+              <label className="mb-2 block text-sm font-medium text-neutral-300">{t('location')}</label>
               <input
                 type="text"
                 value={form.location}
@@ -210,18 +210,28 @@ export default function JobModal({ isOpen, onClose, editingJob, defaultStatus = 
           )}
 
           {/* Status + Date */}
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
             <div>
-              <label className="mb-1.5 block text-sm font-medium text-neutral-300">{t('status')}</label>
-              <select
-                value={form.status}
-                onChange={e => handleChange('status', e.target.value)}
-                className={`${inputClass} appearance-none`}
-              >
-                {COLUMNS.map(col => (
-                  <option key={col.id} value={col.id}>{colLabel(col.id)}</option>
-                ))}
-              </select>
+              <label className="mb-2 block text-sm font-medium text-neutral-300">{t('status')}</label>
+              <div className="relative">
+                <select
+                  value={form.status}
+                  onChange={e => handleChange('status', e.target.value)}
+                  className="w-full appearance-none rounded-xl border-0 px-5 py-3.5 pr-10 text-sm font-bold cursor-pointer focus:outline-none focus:ring-2 focus:ring-yellow-400/50 transition-colors"
+                  style={{
+                    backgroundColor: `${COLUMN_MAP[form.status]?.color}18`,
+                    color: COLUMN_MAP[form.status]?.color,
+                  }}
+                >
+                  {COLUMNS.map(col => (
+                    <option key={col.id} value={col.id}>{colLabel(col.id)}</option>
+                  ))}
+                </select>
+                <div
+                  className="pointer-events-none absolute left-4 top-1/2 h-3 w-3 -translate-y-1/2 rounded-full"
+                  style={{ backgroundColor: COLUMN_MAP[form.status]?.color }}
+                />
+              </div>
             </div>
             <div>
               <label className="mb-1.5 block text-sm font-medium text-neutral-300">{t('dateApplied')}</label>
@@ -236,7 +246,7 @@ export default function JobModal({ isOpen, onClose, editingJob, defaultStatus = 
 
           {/* Offer Details — shown when status is 'offered' */}
           {form.status === 'offered' && (
-            <div className="space-y-4 rounded-xl border border-green-500/20 bg-green-500/[0.03] p-4">
+            <div className="space-y-5 rounded-2xl border border-green-500/20 bg-green-500/[0.03] p-6">
               <h3 className="text-sm font-bold text-green-400">{t('offerDetails')} 🎉</h3>
               <div>
                 <label className="mb-1.5 block text-sm font-medium text-neutral-300">{t('finalOffer')}</label>
@@ -289,7 +299,7 @@ export default function JobModal({ isOpen, onClose, editingJob, defaultStatus = 
               href={form.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-2 rounded-xl bg-white/[0.03] px-4 py-2.5 text-sm text-yellow-400 transition-colors hover:bg-white/[0.06]"
+              className="flex items-center gap-2 rounded-xl bg-white/[0.03] px-5 py-3 text-sm text-yellow-400 transition-colors hover:bg-white/[0.06]"
             >
               <ExternalLink className="h-4 w-4" />
               {t('openJobPosting')}
@@ -297,17 +307,17 @@ export default function JobModal({ isOpen, onClose, editingJob, defaultStatus = 
           )}
 
           {/* Actions */}
-          <div className="flex gap-3 pt-2">
+          <div className="flex gap-4 pt-6">
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 rounded-xl border border-white/[0.08] px-4 py-2.5 text-sm font-medium text-neutral-300 transition-colors hover:bg-neutral-800"
+              className="flex-1 rounded-xl border border-white/[0.08] px-5 py-3.5 text-sm font-medium text-neutral-300 transition-colors hover:bg-neutral-800"
             >
               {t('cancel')}
             </button>
             <button
               type="submit"
-              className="flex-1 rounded-xl bg-yellow-400 px-4 py-2.5 text-sm font-bold text-black shadow-lg shadow-yellow-400/20 transition-all hover:bg-yellow-300 hover:shadow-yellow-400/40"
+              className="flex-1 rounded-xl bg-yellow-400 px-5 py-3.5 text-sm font-bold text-black shadow-lg shadow-yellow-400/20 transition-all hover:bg-yellow-300 hover:shadow-yellow-400/40"
             >
               {isEditing ? t('saveChanges') : t('addApplication')}
             </button>

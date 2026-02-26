@@ -165,7 +165,7 @@ const translations = {
     addOne: '+ Tambah',
 
     // Language
-    language: 'Bahasa',
+    language: 'Bahasa Indonesia',
   },
 }
 
@@ -188,6 +188,11 @@ export function I18nProvider({ children }) {
     })
   }, [])
 
+  const changeLocale = useCallback((newLocale) => {
+    setLocale(newLocale)
+    try { localStorage.setItem('hirewithandi_locale', newLocale) } catch {}
+  }, [])
+
   const t = useCallback((key, params = {}) => {
     let str = translations[locale]?.[key] || translations.en[key] || key
     Object.entries(params).forEach(([k, v]) => {
@@ -202,7 +207,7 @@ export function I18nProvider({ children }) {
   }, [locale])
 
   return (
-    <I18nContext.Provider value={{ locale, toggleLocale, t, colLabel }}>
+    <I18nContext.Provider value={{ locale, toggleLocale, changeLocale, t, colLabel }}>
       {children}
     </I18nContext.Provider>
   )

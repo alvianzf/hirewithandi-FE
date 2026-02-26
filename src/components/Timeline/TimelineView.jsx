@@ -98,9 +98,9 @@ export default function GanttView({ onCardClick }) {
   return (
     <div className="view-transition flex flex-1 flex-col overflow-hidden">
       {/* Legend */}
-      <div className="flex flex-wrap items-center gap-3 border-b border-white/[0.06] px-4 py-2 md:px-6">
+      <div className="flex flex-wrap items-center gap-4 border-b border-white/[0.06] px-8 py-3.5 md:px-12">
         {COLUMNS.map(col => (
-          <div key={col.id} className="flex items-center gap-1.5">
+          <div key={col.id} className="flex items-center gap-2">
             <div className="h-2.5 w-2.5 rounded-sm" style={{ backgroundColor: col.color }} />
             <span className="text-[11px] text-neutral-400">{colLabel(col.id)}</span>
           </div>
@@ -112,14 +112,14 @@ export default function GanttView({ onCardClick }) {
         {/* Left labels */}
         <div className="sticky left-0 z-10 flex-shrink-0 border-r border-white/[0.06] bg-black">
           {/* Header spacer */}
-          <div className="h-[60px] border-b border-white/[0.06] px-3 flex items-end pb-2">
+          <div className="h-[60px] border-b border-white/[0.06] px-4 flex items-end pb-2">
             <span className="text-[11px] font-semibold text-neutral-500 uppercase tracking-wider">{t('company')}</span>
           </div>
           {/* Job labels */}
           {sortedJobs.map((job, i) => (
             <div
               key={job.id}
-              className="flex items-center gap-2 border-b border-white/[0.03] px-3 cursor-pointer hover:bg-white/[0.03] transition-colors"
+              className="flex items-center gap-3 border-b border-white/[0.03] px-4 cursor-pointer hover:bg-white/[0.03] transition-colors"
               style={{ height: rowHeight }}
               onClick={() => onCardClick(job)}
             >
@@ -127,7 +127,7 @@ export default function GanttView({ onCardClick }) {
                 className="h-2 w-2 rounded-full flex-shrink-0"
                 style={{ backgroundColor: COLUMN_MAP[job.status]?.color }}
               />
-              <div className="min-w-0 max-w-[160px]">
+              <div className="min-w-0 max-w-[180px]">
                 <p className="truncate text-xs font-medium text-white">{job.company}</p>
                 {job.position && (
                   <p className="truncate text-[10px] text-neutral-500">{job.position}</p>
@@ -271,7 +271,7 @@ export default function GanttView({ onCardClick }) {
           {/* Tooltip */}
           {hoveredJob && (
             <div
-              className="pointer-events-none absolute z-50 w-72 rounded-xl border border-white/[0.1] bg-neutral-900 p-4 shadow-2xl shadow-black/60"
+              className="pointer-events-none absolute z-50 w-80 rounded-2xl border border-white/[0.1] bg-neutral-900 p-5 shadow-2xl shadow-black/60"
               style={{
                 left: Math.min(tooltipPos.x, chartWidth - 300),
                 top: tooltipPos.y,

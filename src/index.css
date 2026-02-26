@@ -27,46 +27,75 @@
   --color-rejected: #EF4444;
 }
 
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+@layer base {
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  html, body, #root {
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+  }
+
+  body {
+    background-color: var(--color-bg-primary);
+    color: var(--color-text-primary);
+    font-family: var(--font-sans);
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-bg-tertiary);
+    border-radius: 3px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #333;
+  }
+
+  /* Select option styling for dark bg */
+  select option {
+    background: #111;
+    color: #fff;
+  }
 }
 
-html, body, #root {
-  height: 100%;
-  width: 100%;
-  overflow: hidden;
-}
+@layer components {
+  /* Smooth transitions */
+  .view-transition {
+    animation: fadeIn 0.2s ease-out;
+  }
 
-body {
-  background-color: var(--color-bg-primary);
-  color: var(--color-text-primary);
-  font-family: var(--font-sans);
-}
+  .modal-overlay {
+    animation: fadeIn 0.15s ease-out;
+  }
 
-/* Custom scrollbar */
-::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
-}
+  .modal-content {
+    animation: slideUp 0.25s ease-out;
+  }
 
-::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-::-webkit-scrollbar-thumb {
-  background: var(--color-bg-tertiary);
-  border-radius: 3px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: #333;
-}
-
-/* Smooth transitions */
-.view-transition {
-  animation: fadeIn 0.2s ease-out;
+  /* Column snap scrolling for mobile */
+  @media (max-width: 768px) {
+    .kanban-scroll {
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+    }
+    .kanban-column {
+      scroll-snap-align: start;
+    }
+  }
 }
 
 @keyframes fadeIn {
@@ -77,29 +106,4 @@ body {
 @keyframes slideUp {
   from { opacity: 0; transform: translateY(20px); }
   to { opacity: 1; transform: translateY(0); }
-}
-
-.modal-overlay {
-  animation: fadeIn 0.15s ease-out;
-}
-
-.modal-content {
-  animation: slideUp 0.25s ease-out;
-}
-
-/* Column snap scrolling for mobile */
-@media (max-width: 768px) {
-  .kanban-scroll {
-    scroll-snap-type: x mandatory;
-    -webkit-overflow-scrolling: touch;
-  }
-  .kanban-column {
-    scroll-snap-align: start;
-  }
-}
-
-/* Select option styling for dark bg */
-select option {
-  background: #111;
-  color: #fff;
 }

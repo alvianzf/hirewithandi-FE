@@ -9,7 +9,7 @@ export default function Column({ columnId, label, color, jobs, onCardClick, onAd
   return (
     <div className="kanban-column flex w-[320px] flex-shrink-0 flex-col rounded-3xl border border-white/[0.08] bg-white/[0.01] shadow-xl md:w-[300px] lg:w-[320px]">
       {/* Column Header */}
-      <div className="flex items-center justify-between px-5 pt-5 pb-3">
+      <div className="flex items-center justify-between px-6 pt-6 pb-4">
         <div className="flex items-center gap-3">
           <div
             className="h-3 w-3 rounded-full shadow-sm"
@@ -22,10 +22,10 @@ export default function Column({ columnId, label, color, jobs, onCardClick, onAd
         </div>
         <button
           onClick={() => onAddToColumn(columnId)}
-          className="rounded-lg p-1.5 text-neutral-600 transition-colors hover:bg-white/[0.06] hover:text-neutral-300"
+          className="rounded-lg p-2 text-neutral-600 transition-colors hover:bg-white/[0.06] hover:text-neutral-300"
           title={`Add to ${colLabel(columnId)}`}
         >
-          <Plus className="h-3.5 w-3.5" />
+          <Plus className="h-4 w-4" />
         </button>
       </div>
 
@@ -35,7 +35,7 @@ export default function Column({ columnId, label, color, jobs, onCardClick, onAd
           <div
             ref={provided.innerRef}
             {...provided.droppableProps}
-            className={`flex-1 space-y-4 overflow-y-auto px-4 pb-4 pt-2 transition-colors ${
+            className={`flex-1 space-y-4 overflow-y-auto px-5 pb-5 pt-3 transition-colors ${
               snapshot.isDraggingOver ? 'bg-yellow-400/[0.03] rounded-2xl' : ''
             }`}
             style={{ minHeight: 80 }}
@@ -51,7 +51,7 @@ export default function Column({ columnId, label, color, jobs, onCardClick, onAd
                 <p className="text-sm font-medium text-neutral-500">No jobs here</p>
                 <button
                   onClick={() => onAddToColumn(columnId)}
-                  className="mt-3 rounded-lg bg-white/[0.04] px-4 py-2 text-xs font-bold text-neutral-300 transition-colors hover:bg-white/[0.1] hover:text-white"
+                  className="mt-3 rounded-xl bg-white/[0.04] px-5 py-2.5 text-xs font-bold text-neutral-300 transition-colors hover:bg-white/[0.1] hover:text-white"
                 >
                   + Add one
                 </button>

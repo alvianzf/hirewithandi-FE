@@ -70,14 +70,14 @@ export default function TableView({ onCardClick }) {
   }
 
   return (
-    <div className="view-transition flex-1 overflow-y-auto px-4 py-4 md:px-6">
+    <div className="view-transition flex-1 overflow-y-auto px-8 py-6 md:px-12">
       {/* Filter bar */}
-      <div className="mb-4 flex items-center gap-3 flex-wrap">
+      <div className="mb-6 flex items-center gap-4 flex-wrap">
         <span className="text-xs font-medium text-neutral-500">{t('filter')}:</span>
-        <div className="flex flex-wrap gap-1.5">
+        <div className="flex flex-wrap gap-2">
           <button
             onClick={() => setFilterStatus('all')}
-            className={`rounded-lg px-2.5 py-1 text-xs font-medium transition-colors ${
+            className={`rounded-lg px-3.5 py-1.5 text-xs font-medium transition-colors ${
               filterStatus === 'all'
                 ? 'bg-neutral-800 text-yellow-400'
                 : 'text-neutral-500 hover:bg-neutral-900 hover:text-neutral-300'
@@ -92,7 +92,7 @@ export default function TableView({ onCardClick }) {
               <button
                 key={col.id}
                 onClick={() => setFilterStatus(col.id)}
-                className={`rounded-lg px-2.5 py-1 text-xs font-medium transition-colors ${
+                className={`rounded-lg px-3.5 py-1.5 text-xs font-medium transition-colors ${
                   filterStatus === col.id
                     ? 'text-white'
                     : 'text-neutral-500 hover:text-neutral-300'
@@ -107,17 +107,17 @@ export default function TableView({ onCardClick }) {
       </div>
 
       {/* Desktop table */}
-      <div className="hidden overflow-hidden rounded-xl border border-white/[0.06] md:block">
+      <div className="hidden overflow-hidden rounded-2xl border border-white/[0.06] md:block">
         <table className="w-full">
           <thead>
             <tr className="border-b border-white/[0.06] bg-white/[0.02]">
-              <th className="px-6 py-4"><SortHeader field="company">{t('company')}</SortHeader></th>
-              <th className="px-6 py-4"><SortHeader field="position">{t('position')}</SortHeader></th>
-              <th className="px-6 py-4"><SortHeader field="status">{t('status')}</SortHeader></th>
-              <th className="px-6 py-4">{t('workType')}</th>
-              <th className="px-6 py-4"><SortHeader field="dateApplied">{t('dateApplied')}</SortHeader></th>
-              <th className="px-6 py-4"><SortHeader field="daysApplied">{t('daysSinceApplied')}</SortHeader></th>
-              <th className="px-6 py-4"><SortHeader field="daysInCol">{t('inStage')}</SortHeader></th>
+              <th className="px-8 py-5"><SortHeader field="company">{t('company')}</SortHeader></th>
+              <th className="px-8 py-5"><SortHeader field="position">{t('position')}</SortHeader></th>
+              <th className="px-8 py-5"><SortHeader field="status">{t('status')}</SortHeader></th>
+              <th className="px-8 py-5">{t('workType')}</th>
+              <th className="px-8 py-5"><SortHeader field="dateApplied">{t('dateApplied')}</SortHeader></th>
+              <th className="px-8 py-5"><SortHeader field="daysApplied">{t('daysSinceApplied')}</SortHeader></th>
+              <th className="px-8 py-5"><SortHeader field="daysInCol">{t('inStage')}</SortHeader></th>
             </tr>
           </thead>
           <tbody>
@@ -131,13 +131,13 @@ export default function TableView({ onCardClick }) {
                   onClick={() => onCardClick(job)}
                   className="cursor-pointer border-b border-white/[0.04] transition-colors hover:bg-white/[0.04]"
                 >
-                  <td className="px-6 py-4">
+                  <td className="px-8 py-5">
                     <span className="text-[15px] font-bold text-white">{job.company}</span>
                   </td>
-                  <td className="px-6 py-4">
+                  <td className="px-8 py-5">
                     <span className="text-sm font-medium text-neutral-300">{job.position || '—'}</span>
                   </td>
-                  <td className="px-6 py-4">
+                  <td className="px-8 py-5">
                     <div className="relative" onClick={e => e.stopPropagation()}>
                       <select
                         value={job.status}
@@ -154,24 +154,24 @@ export default function TableView({ onCardClick }) {
                       </select>
                     </div>
                   </td>
-                  <td className="px-6 py-4">
+                  <td className="px-8 py-5">
                     <span className="text-[13px] font-medium text-neutral-400">
                       {job.workType ? `${WORK_TYPE_ICONS[job.workType]} ${t(job.workType)}` : '—'}
                     </span>
                   </td>
-                  <td className="px-6 py-4">
+                  <td className="px-8 py-5">
                     <span className="flex items-center gap-2 text-[13px] font-medium text-neutral-400">
                       <Calendar className="h-4 w-4 text-neutral-500" />
                       {formatDate(job.dateApplied)}
                     </span>
                   </td>
-                  <td className="px-6 py-4">
+                  <td className="px-8 py-5">
                     <span className="flex items-center gap-2 text-[13px] font-medium text-neutral-400">
                       <Clock className="h-4 w-4 text-neutral-500" />
                       {daysLabel(applied)}
                     </span>
                   </td>
-                  <td className="px-6 py-4">
+                  <td className="px-8 py-5">
                     <span
                       className={`flex items-center gap-2 text-[13px] font-bold ${
                         inCol >= 14 ? 'text-red-400' : inCol >= 7 ? 'text-amber-400' : 'text-neutral-400'
@@ -189,7 +189,7 @@ export default function TableView({ onCardClick }) {
       </div>
 
       {/* Mobile card list */}
-      <div className="space-y-3 md:hidden">
+      <div className="space-y-4 md:hidden">
         {sorted.map(job => {
           const col = COLUMN_MAP[job.status]
           const applied = daysSince(job.dateApplied)
@@ -198,7 +198,7 @@ export default function TableView({ onCardClick }) {
             <div
               key={job.id}
               onClick={() => onCardClick(job)}
-              className="cursor-pointer rounded-xl border border-white/[0.06] bg-white/[0.02] p-4 transition-all hover:border-white/[0.12]"
+              className="cursor-pointer rounded-2xl border border-white/[0.06] bg-white/[0.02] p-5 transition-all hover:border-white/[0.12]"
             >
               <div className="flex items-start justify-between gap-2">
                 <div>

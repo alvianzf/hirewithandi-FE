@@ -1,10 +1,12 @@
 import { useState, useEffect } from 'react'
 import { X, Trash2, ExternalLink } from 'lucide-react'
-import { COLUMNS } from '../../utils/constants'
+import { COLUMNS, WORK_TYPES } from '../../utils/constants'
 import { useJobs } from '../../context/JobContext'
+import { useI18n } from '../../context/I18nContext'
 
 export default function JobModal({ isOpen, onClose, editingJob, defaultStatus = 'wishlist' }) {
   const { addJob, editJob, deleteJob } = useJobs()
+  const { t, colLabel } = useI18n()
   const isEditing = !!editingJob
 
   const [form, setForm] = useState({
@@ -15,6 +17,11 @@ export default function JobModal({ isOpen, onClose, editingJob, defaultStatus = 
     notes: '',
     status: 'wishlist',
     dateApplied: new Date().toISOString().slice(0, 10),
+    workType: 'remote',
+    location: '',
+    finalOffer: '',
+    benefits: '',
+    nonMonetaryBenefits: '',
   })
 
   useEffect(() => {
@@ -27,6 +34,11 @@ export default function JobModal({ isOpen, onClose, editingJob, defaultStatus = 
         notes: editingJob.notes || '',
         status: editingJob.status || 'wishlist',
         dateApplied: editingJob.dateApplied ? editingJob.dateApplied.slice(0, 10) : '',
+        workType: editingJob.workType || 'remote',
+        location: editingJob.location || '',
+        finalOffer: editingJob.finalOffer || '',
+        benefits: editingJob.benefits || '',
+        nonMonetaryBenefits: editingJob.nonMonetaryBenefits || '',
       })
     } else {
       setForm({
@@ -37,9 +49,14 @@ export default function JobModal({ isOpen, onClose, editingJob, defaultStatus = 
         notes: '',
         status: defaultStatus || 'wishlist',
         dateApplied: new Date().toISOString().slice(0, 10),
+        workType: 'remote',
+        location: '',
+        finalOffer: '',
+        benefits: '',
+        nonMonetaryBenefits: '',
       })
     }
-  }, [editingJob, isOpen])
+  }, [editingJob, isOpen, defaultStatus])
 
   const handleChange = (field, value) => {
     setForm(prev => ({ ...prev, [field]: value }))
@@ -64,7 +81,7 @@ export default function JobModal({ isOpen, onClose, editingJob, defaultStatus = 
   }
 
   const handleDelete = () => {
-    if (window.confirm('Are you sure you want to delete this job?')) {
+    if (window.confirm(t('deleteConfirm'))) {
       deleteJob(editingJob.id)
       onClose()
     }
@@ -72,16 +89,18 @@ export default function JobModal({ isOpen, onClose, editingJob, defaultStatus = 
 
   if (!isOpen) return null
 
+  const inputClass = 'w-full rounded-xl border border-white/[0.08] bg-white/[0.04] px-4 py-2.5 text-sm text-white placeholder-neutral-500 transition-colors focus:border-yellow-400/50 focus:outline-none focus:ring-1 focus:ring-yellow-400/50'
+
   return (
-    <div className="modal-overlay fixed inset-0 z-50 flex items-end justify-center bg-black/60 backdrop-blur-sm sm:items-center sm:p-4" onClick={onClose}>
+    <div className="modal-overlay fixed inset-0 z-50 flex items-end justify-center bg-black/70 backdrop-blur-sm sm:items-center sm:p-4" onClick={onClose}>
       <div
-        className="modal-content w-full max-w-lg rounded-t-2xl bg-slate-800 shadow-2xl sm:rounded-2xl"
+        className="modal-content w-full max-w-lg rounded-t-2xl border border-white/[0.08] bg-neutral-900 shadow-2xl sm:rounded-2xl"
         onClick={e => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="flex items-center justify-between border-b border-slate-700/50 px-5 py-4">
+        <div className="flex items-center justify-between border-b border-white/[0.08] px-5 py-4">
           <h2 className="text-lg font-bold text-white">
-            {isEditing ? 'Edit Application' : 'New Application'}
+            {isEditing ? t('editApplication') : t('newApplication')}
           </h2>
           <div className="flex items-center gap-2">
             {isEditing && (
@@ -95,7 +114,7 @@ export default function JobModal({ isOpen, onClose, editingJob, defaultStatus = 
             )}
             <button
               onClick={onClose}
-              className="rounded-lg p-2 text-slate-400 transition-colors hover:bg-slate-700 hover:text-white"
+              className="rounded-lg p-2 text-neutral-400 transition-colors hover:bg-neutral-800 hover:text-white"
             >
               <X className="h-4 w-4" />
             </button>
@@ -106,13 +125,13 @@ export default function JobModal({ isOpen, onClose, editingJob, defaultStatus = 
         <form onSubmit={handleSubmit} className="max-h-[70vh] space-y-4 overflow-y-auto p-5">
           {/* Company */}
           <div>
-            <label className="mb-1.5 block text-sm font-medium text-slate-300">Company *</label>
+            <label className="mb-1.5 block text-sm font-medium text-neutral-300">{t('company')} *</label>
             <input
               type="text"
               value={form.company}
               onChange={e => handleChange('company', e.target.value)}
-              placeholder="e.g. Google"
-              className="w-full rounded-xl border border-slate-600 bg-slate-700/50 px-4 py-2.5 text-sm text-white placeholder-slate-400 transition-colors focus:border-violet-500 focus:outline-none focus:ring-1 focus:ring-violet-500"
+              placeholder={t('companyPlaceholder')}
+              className={inputClass}
               required
               autoFocus
             />
@@ -120,74 +139,147 @@ export default function JobModal({ isOpen, onClose, editingJob, defaultStatus = 
 
           {/* Position */}
           <div>
-            <label className="mb-1.5 block text-sm font-medium text-slate-300">Position</label>
+            <label className="mb-1.5 block text-sm font-medium text-neutral-300">{t('position')}</label>
             <input
               type="text"
               value={form.position}
               onChange={e => handleChange('position', e.target.value)}
-              placeholder="e.g. Frontend Engineer"
-              className="w-full rounded-xl border border-slate-600 bg-slate-700/50 px-4 py-2.5 text-sm text-white placeholder-slate-400 transition-colors focus:border-violet-500 focus:outline-none focus:ring-1 focus:ring-violet-500"
+              placeholder={t('positionPlaceholder')}
+              className={inputClass}
             />
           </div>
 
-          {/* URL + Salary row */}
+          {/* URL + Salary */}
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div>
-              <label className="mb-1.5 block text-sm font-medium text-slate-300">Job URL</label>
+              <label className="mb-1.5 block text-sm font-medium text-neutral-300">{t('jobUrl')}</label>
               <input
                 type="url"
                 value={form.url}
                 onChange={e => handleChange('url', e.target.value)}
                 placeholder="https://..."
-                className="w-full rounded-xl border border-slate-600 bg-slate-700/50 px-4 py-2.5 text-sm text-white placeholder-slate-400 transition-colors focus:border-violet-500 focus:outline-none focus:ring-1 focus:ring-violet-500"
+                className={inputClass}
               />
             </div>
             <div>
-              <label className="mb-1.5 block text-sm font-medium text-slate-300">Salary Range</label>
+              <label className="mb-1.5 block text-sm font-medium text-neutral-300">{t('salaryRange')}</label>
               <input
                 type="text"
                 value={form.salary}
                 onChange={e => handleChange('salary', e.target.value)}
-                placeholder="e.g. $80k - $120k"
-                className="w-full rounded-xl border border-slate-600 bg-slate-700/50 px-4 py-2.5 text-sm text-white placeholder-slate-400 transition-colors focus:border-violet-500 focus:outline-none focus:ring-1 focus:ring-violet-500"
+                placeholder={t('salaryPlaceholder')}
+                className={inputClass}
               />
             </div>
           </div>
 
-          {/* Status + Date row */}
+          {/* Work Type */}
+          <div>
+            <label className="mb-1.5 block text-sm font-medium text-neutral-300">{t('workType')}</label>
+            <div className="flex gap-2">
+              {WORK_TYPES.map(wt => (
+                <button
+                  key={wt.id}
+                  type="button"
+                  onClick={() => handleChange('workType', wt.id)}
+                  className={`flex flex-1 items-center justify-center gap-1.5 rounded-xl border px-3 py-2.5 text-sm font-medium transition-all ${
+                    form.workType === wt.id
+                      ? 'border-yellow-400/50 bg-yellow-400/10 text-yellow-400'
+                      : 'border-white/[0.08] bg-white/[0.02] text-neutral-400 hover:border-white/[0.15] hover:text-neutral-300'
+                  }`}
+                >
+                  <span>{wt.icon}</span>
+                  {t(wt.id)}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Location (shown for on-site and hybrid) */}
+          {(form.workType === 'onsite' || form.workType === 'hybrid') && (
+            <div>
+              <label className="mb-1.5 block text-sm font-medium text-neutral-300">{t('location')}</label>
+              <input
+                type="text"
+                value={form.location}
+                onChange={e => handleChange('location', e.target.value)}
+                placeholder={t('locationPlaceholder')}
+                className={inputClass}
+              />
+            </div>
+          )}
+
+          {/* Status + Date */}
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div>
-              <label className="mb-1.5 block text-sm font-medium text-slate-300">Status</label>
+              <label className="mb-1.5 block text-sm font-medium text-neutral-300">{t('status')}</label>
               <select
                 value={form.status}
                 onChange={e => handleChange('status', e.target.value)}
-                className="w-full appearance-none rounded-xl border border-slate-600 bg-slate-700/50 px-4 py-2.5 text-sm text-white transition-colors focus:border-violet-500 focus:outline-none focus:ring-1 focus:ring-violet-500"
+                className={`${inputClass} appearance-none`}
               >
                 {COLUMNS.map(col => (
-                  <option key={col.id} value={col.id}>{col.label}</option>
+                  <option key={col.id} value={col.id}>{colLabel(col.id)}</option>
                 ))}
               </select>
             </div>
             <div>
-              <label className="mb-1.5 block text-sm font-medium text-slate-300">Date Applied</label>
+              <label className="mb-1.5 block text-sm font-medium text-neutral-300">{t('dateApplied')}</label>
               <input
                 type="date"
                 value={form.dateApplied}
                 onChange={e => handleChange('dateApplied', e.target.value)}
-                className="w-full rounded-xl border border-slate-600 bg-slate-700/50 px-4 py-2.5 text-sm text-white transition-colors focus:border-violet-500 focus:outline-none focus:ring-1 focus:ring-violet-500"
+                className={inputClass}
               />
             </div>
           </div>
 
+          {/* Offer Details — shown when status is 'offered' */}
+          {form.status === 'offered' && (
+            <div className="space-y-4 rounded-xl border border-green-500/20 bg-green-500/[0.03] p-4">
+              <h3 className="text-sm font-bold text-green-400">{t('offerDetails')} 🎉</h3>
+              <div>
+                <label className="mb-1.5 block text-sm font-medium text-neutral-300">{t('finalOffer')}</label>
+                <input
+                  type="text"
+                  value={form.finalOffer}
+                  onChange={e => handleChange('finalOffer', e.target.value)}
+                  placeholder={t('finalOfferPlaceholder')}
+                  className={inputClass}
+                />
+              </div>
+              <div>
+                <label className="mb-1.5 block text-sm font-medium text-neutral-300">{t('benefits')}</label>
+                <textarea
+                  value={form.benefits}
+                  onChange={e => handleChange('benefits', e.target.value)}
+                  placeholder={t('benefitsPlaceholder')}
+                  rows={2}
+                  className={`${inputClass} resize-none`}
+                />
+              </div>
+              <div>
+                <label className="mb-1.5 block text-sm font-medium text-neutral-300">{t('nonMonetaryBenefits')}</label>
+                <textarea
+                  value={form.nonMonetaryBenefits}
+                  onChange={e => handleChange('nonMonetaryBenefits', e.target.value)}
+                  placeholder={t('nonMonetaryPlaceholder')}
+                  rows={2}
+                  className={`${inputClass} resize-none`}
+                />
+              </div>
+            </div>
+          )}
+
           {/* Notes */}
           <div>
-            <label className="mb-1.5 block text-sm font-medium text-slate-300">Notes</label>
+            <label className="mb-1.5 block text-sm font-medium text-neutral-300">{t('notes')}</label>
             <textarea
               value={form.notes}
               onChange={e => handleChange('notes', e.target.value)}
-              placeholder="Add any notes about this application..."
+              placeholder={t('notesPlaceholder')}
               rows={3}
-              className="w-full resize-none rounded-xl border border-slate-600 bg-slate-700/50 px-4 py-2.5 text-sm text-white placeholder-slate-400 transition-colors focus:border-violet-500 focus:outline-none focus:ring-1 focus:ring-violet-500"
+              className={`${inputClass} resize-none`}
             />
           </div>
 
@@ -197,10 +289,10 @@ export default function JobModal({ isOpen, onClose, editingJob, defaultStatus = 
               href={form.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-2 rounded-xl bg-slate-700/30 px-4 py-2.5 text-sm text-violet-400 transition-colors hover:bg-slate-700/50"
+              className="flex items-center gap-2 rounded-xl bg-white/[0.03] px-4 py-2.5 text-sm text-yellow-400 transition-colors hover:bg-white/[0.06]"
             >
               <ExternalLink className="h-4 w-4" />
-              Open job posting
+              {t('openJobPosting')}
             </a>
           )}
 
@@ -209,15 +301,15 @@ export default function JobModal({ isOpen, onClose, editingJob, defaultStatus = 
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 rounded-xl border border-slate-600 px-4 py-2.5 text-sm font-medium text-slate-300 transition-colors hover:bg-slate-700"
+              className="flex-1 rounded-xl border border-white/[0.08] px-4 py-2.5 text-sm font-medium text-neutral-300 transition-colors hover:bg-neutral-800"
             >
-              Cancel
+              {t('cancel')}
             </button>
             <button
               type="submit"
-              className="flex-1 rounded-xl bg-gradient-to-r from-violet-500 to-blue-500 px-4 py-2.5 text-sm font-semibold text-white shadow-lg shadow-violet-500/25 transition-all hover:shadow-violet-500/40 hover:brightness-110"
+              className="flex-1 rounded-xl bg-yellow-400 px-4 py-2.5 text-sm font-bold text-black shadow-lg shadow-yellow-400/20 transition-all hover:bg-yellow-300 hover:shadow-yellow-400/40"
             >
-              {isEditing ? 'Save Changes' : 'Add Application'}
+              {isEditing ? t('saveChanges') : t('addApplication')}
             </button>
           </div>
         </form>

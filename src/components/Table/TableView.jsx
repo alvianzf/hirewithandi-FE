@@ -2,10 +2,14 @@ import { useState } from 'react'
 import { useJobs } from '../../context/JobContext'
 import { COLUMNS, COLUMN_MAP } from '../../utils/constants'
 import { formatDate, daysSince, daysLabel } from '../../utils/helpers'
-import { ArrowUpDown, Calendar, Clock, MapPin, ChevronDown, Table2 } from 'lucide-react'
+import { ArrowUpDown, Calendar, Clock, MapPin, Table2 } from 'lucide-react'
+import { useI18n } from '../../context/I18nContext'
+
+const WORK_TYPE_ICONS = { remote: '🌍', onsite: '🏢', hybrid: '🔄' }
 
 export default function TableView({ onCardClick }) {
   const { allJobs, editJob } = useJobs()
+  const { t, colLabel } = useI18n()
   const [sortField, setSortField] = useState('dateApplied')
   const [sortDir, setSortDir] = useState('desc')
   const [filterStatus, setFilterStatus] = useState('all')
@@ -46,10 +50,10 @@ export default function TableView({ onCardClick }) {
   const SortHeader = ({ field, children, className = '' }) => (
     <button
       onClick={() => toggleSort(field)}
-      className={`flex items-center gap-1 text-left text-xs font-semibold uppercase tracking-wider text-slate-400 transition-colors hover:text-white ${className}`}
+      className={`flex items-center gap-1 text-left text-xs font-semibold uppercase tracking-wider text-neutral-500 transition-colors hover:text-white ${className}`}
     >
       {children}
-      <ArrowUpDown className={`h-3 w-3 ${sortField === field ? 'text-violet-400' : 'text-slate-600'}`} />
+      <ArrowUpDown className={`h-3 w-3 ${sortField === field ? 'text-yellow-400' : 'text-neutral-700'}`} />
     </button>
   )
 
@@ -57,9 +61,9 @@ export default function TableView({ onCardClick }) {
     return (
       <div className="view-transition flex flex-1 items-center justify-center">
         <div className="text-center">
-          <Table2 className="mx-auto h-12 w-12 text-slate-600" />
-          <p className="mt-3 text-sm text-slate-500">No applications yet</p>
-          <p className="mt-1 text-xs text-slate-600">Add your first job to see the table</p>
+          <Table2 className="mx-auto h-12 w-12 text-neutral-700" />
+          <p className="mt-3 text-sm text-neutral-500">{t('noApplicationsYet')}</p>
+          <p className="mt-1 text-xs text-neutral-600">{t('addFirstJob')}</p>
         </div>
       </div>
     )
@@ -68,18 +72,18 @@ export default function TableView({ onCardClick }) {
   return (
     <div className="view-transition flex-1 overflow-y-auto px-4 py-4 md:px-6">
       {/* Filter bar */}
-      <div className="mb-4 flex items-center gap-3">
-        <span className="text-xs font-medium text-slate-400">Filter:</span>
+      <div className="mb-4 flex items-center gap-3 flex-wrap">
+        <span className="text-xs font-medium text-neutral-500">{t('filter')}:</span>
         <div className="flex flex-wrap gap-1.5">
           <button
             onClick={() => setFilterStatus('all')}
             className={`rounded-lg px-2.5 py-1 text-xs font-medium transition-colors ${
               filterStatus === 'all'
-                ? 'bg-slate-700 text-white'
-                : 'text-slate-400 hover:bg-slate-800 hover:text-slate-300'
+                ? 'bg-neutral-800 text-yellow-400'
+                : 'text-neutral-500 hover:bg-neutral-900 hover:text-neutral-300'
             }`}
           >
-            All ({allJobs.length})
+            {t('all')} ({allJobs.length})
           </button>
           {COLUMNS.map(col => {
             const count = allJobs.filter(j => j.status === col.id).length
@@ -91,11 +95,11 @@ export default function TableView({ onCardClick }) {
                 className={`rounded-lg px-2.5 py-1 text-xs font-medium transition-colors ${
                   filterStatus === col.id
                     ? 'text-white'
-                    : 'text-slate-400 hover:text-slate-300'
+                    : 'text-neutral-500 hover:text-neutral-300'
                 }`}
-                style={filterStatus === col.id ? { backgroundColor: `${col.color}30`, color: col.color } : {}}
+                style={filterStatus === col.id ? { backgroundColor: `${col.color}20`, color: col.color } : {}}
               >
-                {col.label} ({count})
+                {colLabel(col.id)} ({count})
               </button>
             )
           })}
@@ -103,16 +107,17 @@ export default function TableView({ onCardClick }) {
       </div>
 
       {/* Desktop table */}
-      <div className="hidden overflow-hidden rounded-xl border border-slate-700/50 md:block">
+      <div className="hidden overflow-hidden rounded-xl border border-white/[0.06] md:block">
         <table className="w-full">
           <thead>
-            <tr className="border-b border-slate-700/50 bg-slate-800/60">
-              <th className="px-4 py-3"><SortHeader field="company">Company</SortHeader></th>
-              <th className="px-4 py-3"><SortHeader field="position">Position</SortHeader></th>
-              <th className="px-4 py-3"><SortHeader field="status">Status</SortHeader></th>
-              <th className="px-4 py-3"><SortHeader field="dateApplied">Applied</SortHeader></th>
-              <th className="px-4 py-3"><SortHeader field="daysApplied">Days Since</SortHeader></th>
-              <th className="px-4 py-3"><SortHeader field="daysInCol">In Stage</SortHeader></th>
+            <tr className="border-b border-white/[0.06] bg-white/[0.02]">
+              <th className="px-4 py-3"><SortHeader field="company">{t('company')}</SortHeader></th>
+              <th className="px-4 py-3"><SortHeader field="position">{t('position')}</SortHeader></th>
+              <th className="px-4 py-3"><SortHeader field="status">{t('status')}</SortHeader></th>
+              <th className="px-4 py-3">{t('workType')}</th>
+              <th className="px-4 py-3"><SortHeader field="dateApplied">{t('dateApplied')}</SortHeader></th>
+              <th className="px-4 py-3"><SortHeader field="daysApplied">{t('daysSinceApplied')}</SortHeader></th>
+              <th className="px-4 py-3"><SortHeader field="daysInCol">{t('inStage')}</SortHeader></th>
             </tr>
           </thead>
           <tbody>
@@ -124,39 +129,44 @@ export default function TableView({ onCardClick }) {
                 <tr
                   key={job.id}
                   onClick={() => onCardClick(job)}
-                  className="cursor-pointer border-b border-slate-700/30 transition-colors hover:bg-slate-800/60"
+                  className="cursor-pointer border-b border-white/[0.04] transition-colors hover:bg-white/[0.03]"
                 >
                   <td className="px-4 py-3">
                     <span className="text-sm font-medium text-white">{job.company}</span>
                   </td>
                   <td className="px-4 py-3">
-                    <span className="text-sm text-slate-300">{job.position || '—'}</span>
+                    <span className="text-sm text-neutral-300">{job.position || '—'}</span>
                   </td>
                   <td className="px-4 py-3">
                     <div className="relative" onClick={e => e.stopPropagation()}>
                       <select
                         value={job.status}
                         onChange={e => handleStatusChange(job, e.target.value)}
-                        className="appearance-none rounded-full border-0 py-1 pl-3 pr-7 text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-violet-500"
+                        className="appearance-none rounded-full border-0 py-1 pl-3 pr-7 text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-yellow-400"
                         style={{
-                          backgroundColor: `${col?.color}20`,
+                          backgroundColor: `${col?.color}15`,
                           color: col?.color,
                         }}
                       >
                         {COLUMNS.map(c => (
-                          <option key={c.id} value={c.id}>{c.label}</option>
+                          <option key={c.id} value={c.id}>{colLabel(c.id)}</option>
                         ))}
                       </select>
                     </div>
                   </td>
                   <td className="px-4 py-3">
-                    <span className="flex items-center gap-1 text-xs text-slate-400">
+                    <span className="text-xs text-neutral-400">
+                      {job.workType ? `${WORK_TYPE_ICONS[job.workType]} ${t(job.workType)}` : '—'}
+                    </span>
+                  </td>
+                  <td className="px-4 py-3">
+                    <span className="flex items-center gap-1 text-xs text-neutral-500">
                       <Calendar className="h-3 w-3" />
                       {formatDate(job.dateApplied)}
                     </span>
                   </td>
                   <td className="px-4 py-3">
-                    <span className="flex items-center gap-1 text-xs text-slate-400">
+                    <span className="flex items-center gap-1 text-xs text-neutral-500">
                       <Clock className="h-3 w-3" />
                       {daysLabel(applied)}
                     </span>
@@ -164,7 +174,7 @@ export default function TableView({ onCardClick }) {
                   <td className="px-4 py-3">
                     <span
                       className={`flex items-center gap-1 text-xs font-medium ${
-                        inCol >= 14 ? 'text-red-400' : inCol >= 7 ? 'text-amber-400' : 'text-slate-400'
+                        inCol >= 14 ? 'text-red-400' : inCol >= 7 ? 'text-amber-400' : 'text-neutral-500'
                       }`}
                     >
                       <MapPin className="h-3 w-3" />
@@ -188,41 +198,42 @@ export default function TableView({ onCardClick }) {
             <div
               key={job.id}
               onClick={() => onCardClick(job)}
-              className="cursor-pointer rounded-xl border border-slate-700/50 bg-slate-800/60 p-4 transition-all hover:border-slate-600"
+              className="cursor-pointer rounded-xl border border-white/[0.06] bg-white/[0.02] p-4 transition-all hover:border-white/[0.12]"
             >
               <div className="flex items-start justify-between gap-2">
                 <div>
                   <h3 className="text-sm font-semibold text-white">{job.company}</h3>
-                  {job.position && <p className="text-xs text-slate-400">{job.position}</p>}
+                  {job.position && <p className="text-xs text-neutral-400">{job.position}</p>}
                 </div>
                 <span
                   className="flex-shrink-0 rounded-full px-2 py-0.5 text-[10px] font-semibold"
-                  style={{ backgroundColor: `${col?.color}20`, color: col?.color }}
+                  style={{ backgroundColor: `${col?.color}15`, color: col?.color }}
                 >
-                  {col?.label}
+                  {colLabel(job.status)}
                 </span>
               </div>
-              <div className="mt-3 flex flex-wrap gap-3 text-[11px] text-slate-400">
+              <div className="mt-3 flex flex-wrap gap-3 text-[11px] text-neutral-500">
                 <span className="flex items-center gap-1">
                   <Calendar className="h-3 w-3" />
                   {formatDate(job.dateApplied)}
                 </span>
                 <span className="flex items-center gap-1">
                   <Clock className="h-3 w-3" />
-                  {daysLabel(applied)} since applied
+                  {daysLabel(applied)}
                 </span>
+                {job.workType && (
+                  <span>{WORK_TYPE_ICONS[job.workType]} {t(job.workType)}</span>
+                )}
                 {inCol > 0 && (
-                  <span
-                    className={`flex items-center gap-1 font-medium ${
-                      inCol >= 14 ? 'text-red-400' : inCol >= 7 ? 'text-amber-400' : ''
-                    }`}
-                  >
+                  <span className={`flex items-center gap-1 font-medium ${
+                    inCol >= 14 ? 'text-red-400' : inCol >= 7 ? 'text-amber-400' : ''
+                  }`}>
                     <MapPin className="h-3 w-3" />
-                    {daysLabel(inCol)} in stage
+                    {daysLabel(inCol)}
                   </span>
                 )}
               </div>
-              {job.salary && <p className="mt-2 text-xs font-medium text-emerald-400">{job.salary}</p>}
+              {job.salary && <p className="mt-2 text-xs font-medium text-green-400">{job.salary}</p>}
             </div>
           )
         })}

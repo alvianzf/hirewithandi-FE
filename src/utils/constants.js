@@ -1,5 +1,5 @@
 export const COLUMNS = [
-  { id: "wishlist", label: "Wishlist", color: "#8b5cf6" },
+  { id: "wishlist", label: "Wishlist", color: "#FFD700" },
   { id: "applied", label: "Applied", color: "#3b82f6" },
   { id: "hr_interview", label: "HR Interview", color: "#06b6d4" },
   { id: "technical_interview", label: "Technical Interview", color: "#f59e0b" },
@@ -8,11 +8,17 @@ export const COLUMNS = [
     label: "Additional Interview",
     color: "#ec4899",
   },
-  { id: "offered", label: "Offered", color: "#10b981" },
-  { id: "rejected", label: "Rejected", color: "#ef4444" },
+  { id: "offered", label: "Offered", color: "#4ADE80" },
+  { id: "rejected", label: "Rejected", color: "#EF4444" },
 ];
 
 export const COLUMN_MAP = Object.fromEntries(COLUMNS.map((c) => [c.id, c]));
+
+export const WORK_TYPES = [
+  { id: "remote", label: "Remote", icon: "🌍" },
+  { id: "onsite", label: "On-site", icon: "🏢" },
+  { id: "hybrid", label: "Hybrid", icon: "🔄" },
+];
 
 export const STORAGE_KEY = "hirewithandi_data";
 

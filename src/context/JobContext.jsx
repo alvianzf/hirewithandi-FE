@@ -1,4 +1,4 @@
-import { createContext, useContext, useReducer, useEffect } from 'react'
+import { createContext, useContext, useReducer } from 'react'
 import { STORAGE_KEY, INITIAL_STATE } from '../utils/constants'
 import { generateId } from '../utils/helpers'
 
@@ -9,7 +9,6 @@ function loadState() {
     const data = localStorage.getItem(STORAGE_KEY)
     if (data) {
       const parsed = JSON.parse(data)
-      // Ensure all column keys exist
       for (const col of INITIAL_STATE.columnOrder) {
         if (!parsed.columns[col]) parsed.columns[col] = []
       }
@@ -42,6 +41,11 @@ function jobReducer(state, action) {
         url: action.payload.url || '',
         salary: action.payload.salary || '',
         notes: action.payload.notes || '',
+        workType: action.payload.workType || 'remote',
+        location: action.payload.location || '',
+        finalOffer: action.payload.finalOffer || '',
+        benefits: action.payload.benefits || '',
+        nonMonetaryBenefits: action.payload.nonMonetaryBenefits || '',
         dateApplied: action.payload.dateApplied || now,
         dateAdded: now,
         status: action.payload.status || 'wishlist',
@@ -63,7 +67,6 @@ function jobReducer(state, action) {
 
       const updatedJob = { ...existingJob, ...updates }
 
-      // If status changed, update history
       if (updates.status && updates.status !== existingJob.status) {
         const now = new Date().toISOString()
         const history = existingJob.history.map(h =>
@@ -73,7 +76,6 @@ function jobReducer(state, action) {
         updatedJob.history = history
         updatedJob.statusChangedAt = now
 
-        // Move between columns
         const oldCol = existingJob.status
         const newCol = updates.status
         const oldColJobs = state.columns[oldCol].filter(jid => jid !== id)
@@ -110,7 +112,6 @@ function jobReducer(state, action) {
       const now = new Date().toISOString()
 
       if (sourceCol === destCol) {
-        // Reorder within same column
         const colJobs = [...state.columns[sourceCol]]
         colJobs.splice(sourceIndex, 1)
         colJobs.splice(destIndex, 0, jobId)
@@ -119,9 +120,8 @@ function jobReducer(state, action) {
           columns: { ...state.columns, [sourceCol]: colJobs },
         }
       } else {
-        // Move between columns
-        const sourcJobs = [...state.columns[sourceCol]]
-        sourcJobs.splice(sourceIndex, 1)
+        const srcJobs = [...state.columns[sourceCol]]
+        srcJobs.splice(sourceIndex, 1)
         const destJobs = [...state.columns[destCol]]
         destJobs.splice(destIndex, 0, jobId)
 
@@ -137,7 +137,7 @@ function jobReducer(state, action) {
             ...state.jobs,
             [jobId]: { ...existingJob, status: destCol, statusChangedAt: now, history },
           },
-          columns: { ...state.columns, [sourceCol]: sourcJobs, [destCol]: destJobs },
+          columns: { ...state.columns, [sourceCol]: srcJobs, [destCol]: destJobs },
         }
       }
       break

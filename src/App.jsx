@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { JobProvider, useJobs } from './context/JobContext'
+import { I18nProvider } from './context/I18nContext'
 import Header from './components/Layout/Header'
 import KanbanBoard from './components/Board/KanbanBoard'
 import TimelineView from './components/Timeline/TimelineView'
@@ -66,8 +67,10 @@ function AppContent() {
 
 export default function App() {
   return (
-    <JobProvider>
-      <AppContent />
-    </JobProvider>
+    <I18nProvider>
+      <JobProvider>
+        <AppContent />
+      </JobProvider>
+    </I18nProvider>
   )
 }

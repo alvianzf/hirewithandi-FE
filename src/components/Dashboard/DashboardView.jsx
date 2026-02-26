@@ -21,7 +21,7 @@ export default function DashboardView() {
   const applied = total - byStatus.wishlist.length
   const interviewed = byStatus.hr_interview.length + byStatus.technical_interview.length + byStatus.additional_interview.length + byStatus.offered.length
   const offered = byStatus.offered.length
-  const rejected = byStatus.rejected.length
+  const rejected = (byStatus.rejected_company?.length || 0) + (byStatus.rejected_applicant?.length || 0)
 
   const interviewRate = applied > 0 ? ((interviewed / applied) * 100).toFixed(1) : 0
   const offerRate = applied > 0 ? ((offered / applied) * 100).toFixed(1) : 0

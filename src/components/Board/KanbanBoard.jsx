@@ -22,7 +22,7 @@ export default function KanbanBoard({ onCardClick, onAddToColumn }) {
 
   return (
     <DragDropContext onDragEnd={handleDragEnd}>
-      <div className="kanban-scroll flex flex-1 gap-3 overflow-x-auto px-4 py-4 md:px-6">
+      <div className="kanban-scroll flex flex-1 gap-4 overflow-x-auto px-6 py-6 lg:px-8">
         {COLUMNS.map(col => {
           const jobIds = state.columns[col.id] || []
           const jobs = jobIds.map(id => state.jobs[id]).filter(Boolean)

@@ -3,7 +3,7 @@ import { X, Trash2, ExternalLink } from 'lucide-react'
 import { COLUMNS } from '../../utils/constants'
 import { useJobs } from '../../context/JobContext'
 
-export default function JobModal({ isOpen, onClose, editingJob }) {
+export default function JobModal({ isOpen, onClose, editingJob, defaultStatus = 'wishlist' }) {
   const { addJob, editJob, deleteJob } = useJobs()
   const isEditing = !!editingJob
 
@@ -35,7 +35,7 @@ export default function JobModal({ isOpen, onClose, editingJob }) {
         url: '',
         salary: '',
         notes: '',
-        status: 'wishlist',
+        status: defaultStatus || 'wishlist',
         dateApplied: new Date().toISOString().slice(0, 10),
       })
     }

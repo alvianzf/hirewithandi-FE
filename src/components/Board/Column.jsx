@@ -35,7 +35,7 @@ export default function Column({ columnId, label, color, jobs, onCardClick, onAd
           <div
             ref={provided.innerRef}
             {...provided.droppableProps}
-            className={`flex-1 space-y-4 overflow-y-auto px-5 pb-5 pt-3 transition-colors ${
+            className={`column-scroll flex-1 space-y-4 overflow-y-auto px-5 pb-5 pt-3 transition-colors ${
               snapshot.isDraggingOver ? 'bg-yellow-400/[0.03] rounded-2xl' : ''
             }`}
             style={{ minHeight: 80 }}

@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react'
+import { useState, useRef, useCallback } from 'react'
 import { useJobs } from '../../context/JobContext'
 import { COLUMNS, COLUMN_MAP } from '../../utils/constants'
 import { formatDate, daysSince } from '../../utils/helpers'
@@ -108,7 +108,17 @@ export default function GanttView({ onCardClick }) {
       </div>
 
       {/* Chart */}
-      <div className="flex flex-1 overflow-auto" ref={containerRef}>
+      <div
+        className="flex flex-1 overflow-auto"
+        ref={containerRef}
+        onWheel={(e) => {
+          if (!containerRef.current) return
+          if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
+            e.preventDefault()
+            containerRef.current.scrollLeft += e.deltaY
+          }
+        }}
+      >
         {/* Left labels */}
         <div className="sticky left-0 z-10 flex-shrink-0 border-r border-white/[0.06] bg-black">
           {/* Header spacer */}

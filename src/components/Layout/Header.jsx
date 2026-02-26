@@ -17,10 +17,10 @@ export default function Header({ activeView, setActiveView, onAddJob, totalJobs 
 
   return (
     <header className="flex-shrink-0 border-b border-white/[0.08] bg-black/90 backdrop-blur-md">
-      <div className="flex items-center justify-between px-8 py-5 md:px-12 lg:px-16">
+      <div className="flex items-center justify-between px-4 py-4 sm:px-8 md:px-12 lg:px-16">
         {/* Logo */}
-        <div className="flex items-center gap-4">
-          <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-br from-yellow-400 to-yellow-600 shadow-lg shadow-yellow-500/20">
+        <div className="flex items-center gap-3 sm:gap-4">
+          <div className="flex h-9 w-9 sm:h-11 sm:w-11 items-center justify-center rounded-2xl bg-gradient-to-br from-yellow-400 to-yellow-600 shadow-lg shadow-yellow-500/20">
             <Briefcase className="h-4.5 w-4.5 text-black" />
           </div>
           <div>
@@ -56,23 +56,30 @@ export default function Header({ activeView, setActiveView, onAddJob, totalJobs 
         </div>
 
         {/* Right actions */}
-        <div className="flex items-center gap-4">
-          {/* Language dropdown with flags */}
-          <div className="relative">
+        <div className="flex items-center gap-2 sm:gap-4">
+          <div className="relative hidden sm:block">
             <select
               value={locale}
               onChange={e => changeLocale(e.target.value)}
               className="appearance-none rounded-xl bg-neutral-800/80 pl-4 pr-10 py-3 text-sm font-medium text-neutral-200 cursor-pointer border border-white/[0.08] transition-colors hover:bg-neutral-700 focus:outline-none focus:ring-2 focus:ring-yellow-400/50"
             >
               <option value="en">🇺🇸 English</option>
-              <option value="id">🇮🇩 Bahasa Indonesia</option>
+              <option value="id">🇮🇩 Bahasa</option>
             </select>
             <ChevronDown className="pointer-events-none absolute right-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-neutral-400" />
           </div>
+          {/* Mobile: compact flag-only toggle */}
+          <button
+            onClick={toggleLocale}
+            className="flex items-center justify-center rounded-xl bg-neutral-800/80 border border-white/[0.08] px-3 py-2.5 text-lg transition-colors hover:bg-neutral-700 sm:hidden"
+            title={t('language')}
+          >
+            {locale === 'en' ? '🇺🇸' : '🇮🇩'}
+          </button>
 
           <button
             onClick={onAddJob}
-            className="flex items-center gap-2 rounded-xl bg-yellow-400 px-6 py-3 text-sm font-bold text-black shadow-lg shadow-yellow-400/20 transition-all hover:bg-yellow-300 hover:shadow-yellow-400/40 active:scale-[0.97]"
+            className="flex items-center gap-2 rounded-xl bg-yellow-400 px-3 py-2.5 sm:px-6 sm:py-3 text-sm font-bold text-black shadow-lg shadow-yellow-400/20 transition-all hover:bg-yellow-300 hover:shadow-yellow-400/40 active:scale-[0.97]"
           >
             <Plus className="h-4 w-4" />
             <span className="hidden sm:inline">{t('addJob')}</span>

@@ -155,7 +155,7 @@ export default function Header({ activeView, setActiveView, onAddJob, totalJobs 
             <select
               value={locale}
               onChange={e => changeLocale(e.target.value)}
-              className="appearance-none rounded-xl bg-neutral-800/80 px-4 py-2 text-sm font-medium text-neutral-200 border border-white/[0.08] focus:outline-none"
+              className="appearance-none rounded-xl bg-neutral-800/80 px-4 py-2.5 text-sm font-medium text-neutral-200 border border-white/[0.08] focus:outline-none focus:ring-2 focus:ring-yellow-400/50"
             >
               <option value="en">🇬🇧 English</option>
               <option value="id">🇮🇩 Indonesia</option>

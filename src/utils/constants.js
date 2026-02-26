@@ -25,7 +25,7 @@ export const WORK_TYPES = [
   { id: "hybrid", label: "Hybrid", icon: "🔄" },
 ];
 
-export const STORAGE_KEY = "hirewithandi_data";
+export const STORAGE_KEY = "HiredWithAndi_data";
 
 export const INITIAL_STATE = {
   jobs: {},

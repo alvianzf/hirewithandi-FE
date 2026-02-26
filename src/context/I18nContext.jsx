@@ -3,7 +3,7 @@ import { createContext, useContext, useState, useCallback } from 'react'
 const translations = {
   en: {
     // Header
-    appName: 'HireWithAndi',
+    appName: 'HiredWithAndi',
     jobsTracked: '{count} job{s} tracked',
     addJob: 'Add Job',
     dashboard: 'Dashboard',
@@ -91,7 +91,7 @@ const translations = {
   },
   id: {
     // Header
-    appName: 'HireWithAndi',
+    appName: 'HiredWithAndi',
     jobsTracked: '{count} lamaran dilacak',
     addJob: 'Tambah',
     dashboard: 'Dasbor',
@@ -179,7 +179,7 @@ const translations = {
   },
   id_corp: {
     // Header
-    appName: 'HireWithAndi',
+    appName: 'HiredWithAndi',
     jobsTracked: '{count} pipeline terjaga',
     addJob: 'Tambah',
     dashboard: 'Dasbor',
@@ -267,7 +267,7 @@ const translations = {
   },
   sg: {
     // Header
-    appName: 'HireWithAndi',
+    appName: 'HiredWithAndi',
     jobsTracked: '{count} job{s} tracked lah',
     addJob: 'Add Job',
     dashboard: 'Dashboard',
@@ -360,7 +360,7 @@ const I18nContext = createContext(null)
 export function I18nProvider({ children }) {
   const [locale, setLocale] = useState(() => {
     try {
-      return localStorage.getItem('hirewithandi_locale') || 'en'
+      return localStorage.getItem('HiredWithAndi_locale') || 'en'
     } catch {
       return 'en'
     }
@@ -369,14 +369,14 @@ export function I18nProvider({ children }) {
   const toggleLocale = useCallback(() => {
     setLocale(prev => {
       const next = prev === 'en' ? 'id' : prev === 'id' ? 'id_corp' : prev === 'id_corp' ? 'sg' : 'en'
-      try { localStorage.setItem('hirewithandi_locale', next) } catch {}
+      try { localStorage.setItem('HiredWithAndi_locale', next) } catch {}
       return next
     })
   }, [])
 
   const changeLocale = useCallback((newLocale) => {
     setLocale(newLocale)
-    try { localStorage.setItem('hirewithandi_locale', newLocale) } catch {}
+    try { localStorage.setItem('HiredWithAndi_locale', newLocale) } catch {}
   }, [])
 
   const t = useCallback((key, params = {}) => {

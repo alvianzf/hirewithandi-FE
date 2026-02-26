@@ -30,7 +30,7 @@ The primary state for job applications is stored as a serialized JSON object con
     {
       "status": "string (enum matching column IDs)",
       "enteredAt": "string (ISO 8601 Date)",
-      "leftAt": "string (ISO 8601 Date) | null"
+      "leftAt": "string (ISO 8601 Date) | null" // Used to calculate accurate continuous active duration, excluding time spent in final states
     }
   ]
 }

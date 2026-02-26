@@ -11,6 +11,7 @@ A comprehensive and visually appealing job application tracking system designed 
   - Visualize application history through a functional Gantt chart.
   - Track key metrics like days since the first application, last interview, and last rejection.
   - Monitor the status of your latest job application.
+  - **Active Duration Tracking**: Time spent in final states (Offered, Rejected) is intelligently paused for more accurate timeline metrics.
 - **Bilingual Support (i18n)**: Seamlessly toggle between English and Bahasa Indonesia.
 - **Local Storage**: Data is safely stored in your browser's local storage for privacy and speed.
 - **User Identity & Profile**: Simple client-side auth (Name + Email) and a customizable User Profile with avatar upload, bio, and organization tracking.

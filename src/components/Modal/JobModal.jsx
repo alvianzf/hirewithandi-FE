@@ -217,7 +217,7 @@ export default function JobModal({ isOpen, onClose, editingJob, defaultStatus = 
                 <select
                   value={form.status}
                   onChange={e => handleChange('status', e.target.value)}
-                  className="w-full appearance-none rounded-xl border-0 px-5 py-3.5 pr-10 text-sm font-bold cursor-pointer focus:outline-none focus:ring-2 focus:ring-yellow-400/50 transition-colors"
+                  className="w-full appearance-none rounded-xl border-0 pl-10 pr-10 py-3.5 text-sm font-bold cursor-pointer focus:outline-none focus:ring-2 focus:ring-yellow-400/50 transition-colors"
                   style={{
                     backgroundColor: `${COLUMN_MAP[form.status]?.color}18`,
                     color: COLUMN_MAP[form.status]?.color,

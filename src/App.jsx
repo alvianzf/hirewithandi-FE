@@ -3,13 +3,14 @@ import { JobProvider, useJobs } from './context/JobContext'
 import { I18nProvider } from './context/I18nContext'
 import Header from './components/Layout/Header'
 import KanbanBoard from './components/Board/KanbanBoard'
-import TimelineView from './components/Timeline/TimelineView'
+import GanttView from './components/Timeline/TimelineView'
 import TableView from './components/Table/TableView'
+import DashboardView from './components/Dashboard/DashboardView'
 import JobModal from './components/Modal/JobModal'
 
 function AppContent() {
   const { totalJobs } = useJobs()
-  const [activeView, setActiveView] = useState('board')
+  const [activeView, setActiveView] = useState('dashboard')
   const [modalOpen, setModalOpen] = useState(false)
   const [editingJob, setEditingJob] = useState(null)
   const [defaultStatus, setDefaultStatus] = useState('wishlist')
@@ -45,11 +46,14 @@ function AppContent() {
         totalJobs={totalJobs}
       />
 
+      {activeView === 'dashboard' && (
+        <DashboardView />
+      )}
       {activeView === 'board' && (
         <KanbanBoard onCardClick={handleCardClick} onAddToColumn={handleAddToColumn} />
       )}
-      {activeView === 'timeline' && (
-        <TimelineView onCardClick={handleCardClick} />
+      {activeView === 'gantt' && (
+        <GanttView onCardClick={handleCardClick} />
       )}
       {activeView === 'table' && (
         <TableView onCardClick={handleCardClick} />

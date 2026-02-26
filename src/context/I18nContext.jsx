@@ -6,8 +6,9 @@ const translations = {
     appName: 'HireWithAndi',
     jobsTracked: '{count} job{s} tracked',
     addJob: 'Add Job',
+    dashboard: 'Dashboard',
     board: 'Board',
-    timeline: 'Timeline',
+    gantt: 'Gantt',
     table: 'Table',
 
     // Columns
@@ -88,8 +89,9 @@ const translations = {
     appName: 'HireWithAndi',
     jobsTracked: '{count} lamaran dilacak',
     addJob: 'Tambah',
+    dashboard: 'Dasbor',
     board: 'Papan',
-    timeline: 'Linimasa',
+    gantt: 'Gantt',
     table: 'Tabel',
 
     // Columns

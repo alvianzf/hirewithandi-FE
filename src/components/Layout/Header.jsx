@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Briefcase, LayoutGrid, Clock, Table2, Plus, X, Menu, Globe } from 'lucide-react'
+import { Briefcase, LayoutGrid, GanttChart, Table2, Plus, X, Menu, Globe, BarChart3 } from 'lucide-react'
 import { useI18n } from '../../context/I18nContext'
 
 export default function Header({ activeView, setActiveView, onAddJob, totalJobs }) {
@@ -7,8 +7,9 @@ export default function Header({ activeView, setActiveView, onAddJob, totalJobs 
   const { t, locale, toggleLocale } = useI18n()
 
   const views = [
+    { id: 'dashboard', label: t('dashboard'), icon: BarChart3 },
     { id: 'board', label: t('board'), icon: LayoutGrid },
-    { id: 'timeline', label: t('timeline'), icon: Clock },
+    { id: 'gantt', label: t('gantt'), icon: GanttChart },
     { id: 'table', label: t('table'), icon: Table2 },
   ]
 

@@ -250,17 +250,23 @@ export default function DashboardView() {
                 const count = byStatus[col.id].length
                 const pct = total > 0 ? (count / total * 100) : 0
                 return (
-                  <div key={col.id} className="flex items-center gap-4">
-                    <div className="h-2.5 w-2.5 rounded-full flex-shrink-0" style={{ backgroundColor: col.color }} />
-                    <span className="flex-1 text-xs text-neutral-300 truncate">{colLabel(col.id)}</span>
-                    <span className="text-xs font-medium text-neutral-400">{count}</span>
-                    <div className="w-20 h-2 rounded-full bg-white/[0.04] overflow-hidden">
+                  <div key={col.id} className="space-y-1.5">
+                    <div className="flex items-center justify-between gap-3">
+                      <div className="flex items-center gap-2.5 min-w-0">
+                        <div className="h-2.5 w-2.5 rounded-full flex-shrink-0" style={{ backgroundColor: col.color }} />
+                        <span className="text-xs text-neutral-300 truncate">{colLabel(col.id)}</span>
+                      </div>
+                      <div className="flex items-center gap-2 flex-shrink-0">
+                        <span className="text-xs font-medium text-neutral-400">{count}</span>
+                        <span className="text-[11px] text-neutral-500">{pct.toFixed(0)}%</span>
+                      </div>
+                    </div>
+                    <div className="h-2 w-full rounded-full bg-white/[0.04] overflow-hidden ml-5">
                       <div
                         className="h-full rounded-full"
-                        style={{ width: `${pct}%`, backgroundColor: col.color, opacity: 0.7 }}
+                        style={{ width: `${Math.max(pct, count > 0 ? 3 : 0)}%`, backgroundColor: col.color, opacity: 0.7 }}
                       />
                     </div>
-                    <span className="w-10 text-right text-[11px] text-neutral-500">{pct.toFixed(0)}%</span>
                   </div>
                 )
               })}

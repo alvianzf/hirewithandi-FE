@@ -234,7 +234,7 @@ export default function DashboardView() {
         </div>
 
         {/* Conversion funnel */}
-        <div className="rounded-3xl border border-white/[0.08] bg-white/[0.02] p-8">
+        <div className="rounded-3xl border border-white/[0.08] bg-neutral-900/40 backdrop-blur-md p-8">
           <h3 className="mb-6 text-[15px] font-bold text-white flex items-center gap-2.5">
             <Activity className="h-5 w-5 text-yellow-400" />
             Conversion Funnel
@@ -268,7 +268,7 @@ export default function DashboardView() {
 
         <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
           {/* Status breakdown */}
-          <div className="rounded-3xl border border-white/[0.08] bg-white/[0.02] p-8">
+          <div className="rounded-3xl border border-white/[0.08] bg-neutral-900/40 backdrop-blur-md p-8">
             <h3 className="mb-6 text-[15px] font-bold text-white flex items-center gap-2.5">
               <PieChart className="h-5 w-5 text-yellow-400" />
               Status Breakdown
@@ -302,7 +302,7 @@ export default function DashboardView() {
           </div>
 
           {/* Work type distribution */}
-          <div className="rounded-3xl border border-white/[0.08] bg-white/[0.02] p-8">
+          <div className="rounded-3xl border border-white/[0.08] bg-neutral-900/40 backdrop-blur-md p-8">
             <h3 className="mb-6 text-[15px] font-bold text-white flex items-center gap-2.5">
               <Globe className="h-5 w-5 text-yellow-400" />
               {t('workType')} Distribution
@@ -338,7 +338,7 @@ export default function DashboardView() {
 
         <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
           {/* Salary insights */}
-          <div className="rounded-3xl border border-white/[0.08] bg-white/[0.02] p-8">
+          <div className="rounded-3xl border border-white/[0.08] bg-neutral-900/40 backdrop-blur-md p-8">
             <h3 className="mb-6 text-[15px] font-bold text-white flex items-center gap-2.5">
               <DollarSign className="h-5 w-5 text-yellow-400" />
               Salary Insights
@@ -409,7 +409,7 @@ export default function DashboardView() {
           </div>
 
           {/* JFP Insights */}
-          <div className="rounded-3xl border border-white/[0.08] bg-white/[0.02] p-8">
+          <div className="rounded-3xl border border-white/[0.08] bg-neutral-900/40 backdrop-blur-md p-8">
             <h3 className="mb-6 text-[15px] font-bold text-white flex items-center gap-2.5">
               <Target className="h-5 w-5 text-yellow-400" />
               Job Fit Percentage
@@ -450,7 +450,7 @@ export default function DashboardView() {
 
         <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
           {/* Activity insights */}
-          <div className="rounded-3xl border border-white/[0.08] bg-white/[0.02] p-8">
+          <div className="rounded-3xl border border-white/[0.08] bg-neutral-900/40 backdrop-blur-md p-8">
             <h3 className="mb-6 text-[15px] font-bold text-white flex items-center gap-2.5">
               <BarChart3 className="h-5 w-5 text-yellow-400" />
               Activity Insights
@@ -498,7 +498,7 @@ export default function DashboardView() {
           </div>
 
           {/* Timeline Analytics */}
-          <div className="rounded-3xl border border-white/[0.08] bg-white/[0.02] p-8">
+          <div className="rounded-3xl border border-white/[0.08] bg-neutral-900/40 backdrop-blur-md p-8">
             <h3 className="mb-6 text-[15px] font-bold text-white flex items-center gap-2.5">
               <Clock className="h-5 w-5 text-yellow-400" />
               Timeline Analytics
@@ -545,7 +545,7 @@ export default function DashboardView() {
         </div>
 
         {/* Avg time per stage */}
-        <div className="rounded-3xl border border-white/[0.08] bg-white/[0.02] p-8">
+        <div className="rounded-3xl border border-white/[0.08] bg-neutral-900/40 backdrop-blur-md p-8">
           <h3 className="mb-6 text-[15px] font-bold text-white flex items-center gap-2.5">
             <Clock className="h-5 w-5 text-yellow-400" />
             Average Time per Stage
@@ -578,7 +578,7 @@ export default function DashboardView() {
 
 function StatCard({ icon, label, value, color, sub }) {
   return (
-    <div className="rounded-3xl border border-white/[0.08] bg-white/[0.02] p-7 lg:p-8 transition-colors hover:bg-white/[0.04]">
+    <div className="rounded-3xl border border-white/[0.08] bg-neutral-900/40 backdrop-blur-md p-7 lg:p-8 transition-all hover:bg-neutral-800/50 hover:backdrop-blur-lg">
       <div className="flex items-center gap-2.5 mb-3">
         <div className="text-neutral-500" style={{ color }}>{icon}</div>
         <span className="text-[13px] font-semibold text-neutral-400">{label}</span>

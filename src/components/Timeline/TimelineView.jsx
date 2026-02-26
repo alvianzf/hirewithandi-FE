@@ -120,7 +120,7 @@ export default function GanttView({ onCardClick }) {
         }}
       >
         {/* Left labels */}
-        <div className="sticky left-0 z-10 flex-shrink-0 border-r border-white/[0.06] bg-black">
+        <div className="sticky left-0 z-10 flex-shrink-0 border-r border-white/[0.06] bg-neutral-900/60 backdrop-blur-md">
           {/* Header spacer */}
           <div className="h-[60px] border-b border-white/[0.06] px-4 flex items-end pb-2">
             <span className="text-[11px] font-semibold text-neutral-500 uppercase tracking-wider">{t('company')}</span>
@@ -150,7 +150,7 @@ export default function GanttView({ onCardClick }) {
         {/* Chart area */}
         <div className="flex-1 relative" style={{ minWidth: chartWidth }}>
           {/* Time header */}
-          <div className="sticky top-0 z-10 h-[60px] border-b border-white/[0.06] bg-black/95 backdrop-blur-sm" style={{ width: chartWidth }}>
+          <div className="sticky top-0 z-10 h-[60px] border-b border-white/[0.06] bg-neutral-900/60 backdrop-blur-md" style={{ width: chartWidth }}>
             {/* Month labels */}
             {monthMarkers.map((date, i) => {
               const x = getXPosition(date)
@@ -281,7 +281,7 @@ export default function GanttView({ onCardClick }) {
           {/* Tooltip */}
           {hoveredJob && (
             <div
-              className="pointer-events-none absolute z-50 w-80 rounded-2xl border border-white/[0.1] bg-neutral-900 p-5 shadow-2xl shadow-black/60"
+              className="pointer-events-none absolute z-50 w-80 rounded-2xl border border-white/[0.1] bg-neutral-900/80 backdrop-blur-xl p-5 shadow-2xl shadow-black/60"
               style={{
                 left: Math.min(tooltipPos.x, chartWidth - 300),
                 top: tooltipPos.y,

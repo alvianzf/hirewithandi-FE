@@ -110,7 +110,7 @@ export default function TableView({ onCardClick }) {
       <div className="hidden overflow-hidden rounded-2xl border border-white/[0.06] md:block">
         <table className="w-full">
           <thead>
-            <tr className="border-b border-white/[0.06] bg-white/[0.02]">
+            <tr className="border-b border-white/[0.06] bg-neutral-900/60 backdrop-blur-md">
               <th className="px-8 py-5"><SortHeader field="company">{t('company')}</SortHeader></th>
               <th className="px-8 py-5"><SortHeader field="position">{t('position')}</SortHeader></th>
               <th className="px-8 py-5"><SortHeader field="status">{t('status')}</SortHeader></th>
@@ -129,7 +129,7 @@ export default function TableView({ onCardClick }) {
                 <tr
                   key={job.id}
                   onClick={() => onCardClick(job)}
-                  className="cursor-pointer border-b border-white/[0.04] transition-colors hover:bg-white/[0.04]"
+                  className="cursor-pointer border-b border-white/[0.04] bg-neutral-900/20 backdrop-blur-sm transition-colors hover:bg-neutral-800/40 hover:backdrop-blur-md"
                 >
                   <td className="px-8 py-5">
                     <span className="text-[15px] font-bold text-white">{job.company}</span>
@@ -198,7 +198,7 @@ export default function TableView({ onCardClick }) {
             <div
               key={job.id}
               onClick={() => onCardClick(job)}
-              className="cursor-pointer rounded-2xl border border-white/[0.06] bg-white/[0.02] p-5 transition-all hover:border-white/[0.12]"
+              className="cursor-pointer rounded-2xl border border-white/[0.06] bg-neutral-900/40 backdrop-blur-md p-5 transition-all hover:bg-neutral-800/50 hover:backdrop-blur-lg hover:border-white/[0.12]"
             >
               <div className="flex items-start justify-between gap-2">
                 <div>

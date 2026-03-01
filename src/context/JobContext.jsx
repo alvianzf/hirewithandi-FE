@@ -86,6 +86,25 @@ export function JobProvider({ children }) {
   const editJob = async (id, updates) => {
     try {
       if (updates.status) {
+        // Optimistic update for status change
+        setState(prevState => {
+          const oldJob = prevState.jobs[id]
+          if (!oldJob || oldJob.status === updates.status) return prevState
+          
+          const oldCol = oldJob.status
+          const newCol = updates.status
+          
+          const newColumns = { ...prevState.columns }
+          newColumns[oldCol] = (newColumns[oldCol] || []).filter(jid => jid !== id)
+          newColumns[newCol] = [id, ...(newColumns[newCol] || [])]
+          
+          const newJobs = {
+            ...prevState.jobs,
+            [id]: { ...oldJob, ...updates }
+          }
+          
+          return { ...prevState, columns: newColumns, jobs: newJobs }
+        })
         await api.patch(`/jobs/${id}/status`, { status: updates.status })
       }
       
@@ -95,12 +114,13 @@ export function JobProvider({ children }) {
         await api.patch(`/jobs/${id}`, detailsUpdates)
       }
       
-      // Update UI optimistically or refetch
-      await fetchJobs()
+      // Background refresh to ensure consistency
+      fetchJobs()
       toast.success('Job updated')
     } catch (e) {
       console.error('Failed to edit job', e)
       toast.error('Failed to update job')
+      fetchJobs() // Revert on failure
     }
   }
 
@@ -113,45 +133,54 @@ export function JobProvider({ children }) {
         const col = job.status
         const newJobs = { ...prevState.jobs }
         delete newJobs[id]
+        const newColumns = { ...prevState.columns }
+        newColumns[col] = (newColumns[col] || []).filter(jid => jid !== id)
         return {
           ...prevState,
           jobs: newJobs,
-          columns: { ...prevState.columns, [col]: prevState.columns[col].filter(jid => jid !== id) }
+          columns: newColumns
         }
       })
       toast.success('Job deleted')
     } catch (e) {
       console.error('Failed to delete job', e)
       toast.error('Failed to delete job')
+      fetchJobs()
     }
   }
 
   const moveJob = async (jobId, sourceCol, destCol, sourceIndex, destIndex) => {
     try {
       setState(prevState => {
-        const newState = { ...prevState }
-        if (sourceCol === destCol) {
-          const colJobs = [...newState.columns[sourceCol]]
-          colJobs.splice(sourceIndex, 1)
-          colJobs.splice(destIndex, 0, jobId)
-          newState.columns[sourceCol] = colJobs
-        } else {
-          const srcJobs = [...newState.columns[sourceCol]]
-          srcJobs.splice(sourceIndex, 1)
-          const destJobs = [...newState.columns[destCol]]
-          destJobs.splice(destIndex, 0, jobId)
-          newState.columns[sourceCol] = srcJobs
-          newState.columns[destCol] = destJobs
-          newState.jobs[jobId].status = destCol
+        const sourceIds = Array.from(prevState.columns[sourceCol] || [])
+        const destIds = sourceCol === destCol ? sourceIds : Array.from(prevState.columns[destCol] || [])
+        
+        sourceIds.splice(sourceIndex, 1)
+        destIds.splice(destIndex, 0, jobId)
+        
+        const newColumns = {
+          ...prevState.columns,
+          [sourceCol]: sourceIds,
+          [destCol]: destIds
         }
-        return newState
+        
+        const newJobs = {
+          ...prevState.jobs,
+          [jobId]: { ...prevState.jobs[jobId], status: destCol }
+        }
+        
+        return {
+          ...prevState,
+          columns: newColumns,
+          jobs: newJobs
+        }
       })
       await api.patch(`/jobs/${jobId}/status`, { status: destCol, boardPosition: destIndex })
-      await fetchJobs()
+      //fetchJobs() // Optional if optimistic is good
     } catch (e) {
       console.error('Failed to move job', e)
       toast.error('Failed to move job')
-      await fetchJobs() // Revert
+      fetchJobs() // Revert
     }
   }
 

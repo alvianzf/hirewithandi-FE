@@ -1,6 +1,6 @@
 import React from 'react'
 import { Draggable } from '@hello-pangea/dnd'
-import { Calendar, Clock, ExternalLink, MapPin, Globe, Building2, ArrowLeftRight, ChevronDown, Target, Trash2 } from 'lucide-react'
+import { Calendar, Clock, ExternalLink, MapPin, Globe, Building2, ArrowLeftRight, ChevronDown, Target } from 'lucide-react'
 import { calculateActiveDays, daysSince, formatDateShort, daysLabel, formatSalary } from '../../utils/helpers'
 import { COLUMNS, COLUMN_MAP, FINAL_STATUSES } from '../../utils/constants'
 import { useI18n } from '../../context/I18nContext'
@@ -40,12 +40,12 @@ const JobCard = React.memo(function JobCard({ job, index, onClick }) {
             ...provided.draggableProps.style,
             transform: snapshot.isDragging 
               ? `${provided.draggableProps.style?.transform || ''} rotate(2deg) scale(1.05)` 
-              : provided.draggableProps.style?.transform
+              : provided.draggableProps.style?.transform,
           }}
-          className={`group cursor-pointer rounded-2xl border border-white/[0.08] bg-neutral-900/80 p-6 hover:border-white/[0.15] hover:bg-neutral-800 ${
+          className={`group cursor-pointer rounded-2xl border border-white/[0.08] bg-neutral-900/80 p-6 transition-[border-color,background-color] duration-200 hover:border-white/[0.15] hover:bg-neutral-800 ${
             snapshot.isDragging 
               ? 'z-[9999] shadow-2xl shadow-yellow-400/20 ring-2 ring-yellow-400/30 bg-neutral-800 border-white/20' 
-              : 'transition-all shadow-lg'
+              : 'shadow-lg'
           }`}
         >
           {/* Status color strip */}

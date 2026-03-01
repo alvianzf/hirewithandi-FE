@@ -1,4 +1,5 @@
 import { createContext, useContext, useState } from 'react'
+import api from '../utils/api'
 
 const AuthContext = createContext(null)
 
@@ -17,18 +18,24 @@ function loadAuth() {
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(() => loadAuth())
 
-  const login = (profileData) => {
-    const userData = {
-      name: profileData.name.trim(),
-      email: profileData.email.trim(),
-      createdAt: new Date().toISOString(),
-    }
+  const login = async (email, password) => {
     try {
-      localStorage.setItem(AUTH_KEY, JSON.stringify(userData))
+      const response = await api.post('/auth/login', { email, password })
+      const { user: userData, token } = response.data.data
+      
+      const sessionData = {
+        name: userData.name,
+        email: userData.email,
+        createdAt: userData.createdAt || new Date().toISOString(),
+        token: token,
+      }
+      localStorage.setItem(AUTH_KEY, JSON.stringify(sessionData))
+      setUser(sessionData)
+      return true
     } catch (e) {
-      console.error('Failed to save auth:', e)
+      console.error('Failed to login via API:', e)
+      return false
     }
-    setUser(userData)
   }
 
   const logout = () => {

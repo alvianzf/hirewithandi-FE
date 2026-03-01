@@ -11,6 +11,7 @@ import { AuthProvider, useAuth } from './context/AuthContext'
 import { UserProfileProvider } from './context/UserProfileContext'
 import LoginPage from './components/Auth/LoginPage'
 import ProfilePage from './components/UserProfile/ProfilePage'
+import NotFoundView from './components/Layout/NotFoundView'
 
 function AppContent() {
   const { totalJobs } = useJobs()
@@ -69,6 +70,9 @@ function AppContent() {
       )}
       {activeView === 'profile' && (
         <ProfilePage />
+      )}
+      {!['dashboard', 'board', 'gantt', 'table', 'profile'].includes(activeView) && (
+        <NotFoundView />
       )}
 
       <JobModal

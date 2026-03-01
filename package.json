@@ -16,6 +16,7 @@
     "@hello-pangea/dnd": "^18.0.1",
     "@tailwindcss/vite": "^4.2.1",
     "@vitejs/plugin-react": "^5.1.4",
+    "axios": "^1.13.6",
     "lucide-react": "^0.575.0",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",

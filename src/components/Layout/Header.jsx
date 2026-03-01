@@ -29,9 +29,9 @@ export default function Header({ activeView, setActiveView, onAddJob, totalJobs 
 
   return (
     <header className="flex-shrink-0 border-b border-white/[0.08] bg-black/90 backdrop-blur-md">
-      <div className="flex items-center justify-between px-4 py-4 sm:px-8 md:px-12 lg:px-16">
+      <div className="relative flex items-center justify-between px-4 py-4 sm:px-8 md:px-12 lg:px-16">
         {/* Logo */}
-        <div className="flex items-center gap-3 sm:gap-4">
+        <div className="flex items-center gap-3 sm:gap-4 relative z-10">
           <img src="/lwa-logo.png" alt="LWA" className="h-9 w-9 sm:h-11 sm:w-11 object-contain drop-shadow-md" />
           <div>
             <h1 className="text-lg font-bold leading-tight tracking-tight text-white">
@@ -43,8 +43,8 @@ export default function Header({ activeView, setActiveView, onAddJob, totalJobs 
           </div>
         </div>
 
-        {/* Desktop view switcher */}
-        <div className="hidden items-center gap-2 rounded-2xl bg-neutral-900 p-2 md:flex">
+        {/* Desktop view switcher - Centered */}
+        <div className="hidden absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 items-center gap-2 rounded-2xl bg-neutral-900 p-2 md:flex">
           {views.map(v => {
             const Icon = v.icon
             const isActive = activeView === v.id
@@ -66,7 +66,7 @@ export default function Header({ activeView, setActiveView, onAddJob, totalJobs 
         </div>
 
         {/* Right actions */}
-        <div className="flex items-center gap-2 sm:gap-4">
+        <div className="flex items-center gap-2 sm:gap-4 relative z-10">
           <div className="relative hidden sm:block">
             <select
               value={locale}

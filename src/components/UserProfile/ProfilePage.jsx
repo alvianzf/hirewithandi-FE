@@ -18,6 +18,9 @@ export default function ProfilePage() {
     location: '',
     linkedIn: '',
   })
+  const [avatarFile, setAvatarFile] = useState(null)
+  const [avatarPreview, setAvatarPreview] = useState(null)
+  
   const [isSaving, setIsSaving] = useState(false)
   const [saveSuccess, setSaveSuccess] = useState(false)
   
@@ -58,10 +61,25 @@ export default function ProfilePage() {
   const handleSubmit = async (e) => {
     e.preventDefault()
     setIsSaving(true)
-    const success = await updateProfile(formData)
+    
+    let submissionData = formData;
+    
+    // If we have a new avatar file, we MUST send as FormData
+    if (avatarFile) {
+      submissionData = new FormData();
+      Object.keys(formData).forEach(key => {
+        if (formData[key] !== null && formData[key] !== undefined) {
+          submissionData.append(key, formData[key])
+        }
+      });
+      submissionData.append('avatar', avatarFile);
+    }
+    
+    const success = await updateProfile(submissionData)
     setIsSaving(false)
     if (success) {
       setSaveSuccess(true)
+      setAvatarFile(null) // Reset local file state on success
       setTimeout(() => setSaveSuccess(false), 3000)
     }
   }
@@ -124,11 +142,20 @@ export default function ProfilePage() {
       return
     }
 
-    const reader = new FileReader()
-    reader.onloadend = () => {
-      updateAvatar(reader.result)
+    // Set preview internally, don't upload yet
+    setAvatarFile(file);
+    setAvatarPreview(URL.createObjectURL(file));
+  }
+
+  const handleRemoveAvatar = async () => {
+    if (avatarFile || avatarPreview) {
+      // If it's just a local preview, discard it
+      setAvatarFile(null)
+      setAvatarPreview(null)
+    } else if (profile.avatarUrl) {
+      // If it's an existing avatar from the server, call API to remove it
+      await removeAvatar()
     }
-    reader.readAsDataURL(file)
   }
 
   if (loading) {
@@ -152,7 +179,13 @@ export default function ProfilePage() {
           {/* Avatar Section */}
           <div className="flex flex-col items-center rounded-2xl border border-white/[0.08] bg-neutral-900/50 p-6 backdrop-blur-sm self-start">
             <div className="relative mb-6 h-32 w-32 shrink-0 rounded-full border-4 border-neutral-800 bg-neutral-800 overflow-hidden">
-              {profile.avatarUrl ? (
+              {avatarPreview ? (
+                <img 
+                  src={avatarPreview} 
+                  alt="Avatar Preview" 
+                  className="h-full w-full object-cover" 
+                />
+              ) : profile.avatarUrl ? (
                 <img 
                   src={profile.avatarUrl.startsWith('/') ? `${import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000'}${profile.avatarUrl}` : profile.avatarUrl} 
                   alt="Avatar" 
@@ -181,9 +214,10 @@ export default function ProfilePage() {
                 <Camera className="h-4 w-4" />
                 {t('uploadPhoto') || 'Upload Photo'}
               </button>
-              {profile.avatarUrl && (
+              {(profile.avatarUrl || avatarPreview) && (
                 <button
-                  onClick={removeAvatar}
+                  onClick={handleRemoveAvatar}
+                  type="button"
                   className="flex items-center justify-center gap-2 rounded-xl border border-red-500/20 px-4 py-2.5 text-sm font-medium text-red-500 transition-colors hover:bg-red-500/10"
                 >
                   <Trash2 className="h-4 w-4" />
@@ -193,7 +227,7 @@ export default function ProfilePage() {
             </div>
             <p className="mt-4 text-center text-xs text-neutral-500">
               Recommended: Square image, &lt; 2MB.<br />
-              Securely stored in Cloudinary via HWA API.
+              Securely stored via HWA API.
             </p>
           </div>
 
@@ -203,7 +237,7 @@ export default function ProfilePage() {
               <div className="grid gap-4 sm:grid-cols-2">
                 <div>
                   <label className="mb-2 block text-sm font-medium text-neutral-300">
-                    {t('name') || 'Name'}
+                    {t('name') || 'Name'} <span className="text-xs text-neutral-500">(from account)</span>
                   </label>
                   <div className="relative">
                     <User className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-neutral-500" />
@@ -211,9 +245,8 @@ export default function ProfilePage() {
                       name="name"
                       type="text"
                       value={formData.name}
-                      onChange={handleChange}
-                      className="w-full rounded-xl border border-white/[0.08] bg-black/50 py-2.5 pl-10 pr-4 text-sm text-white cursor-not-allowed placeholder-neutral-500 transition-colors focus:border-yellow-400/50 focus:outline-none focus:ring-1 focus:ring-yellow-400/50"
-                      required
+                      disabled
+                      className="w-full rounded-xl border border-white/[0.08] bg-black/20 py-2.5 pl-10 pr-4 text-sm text-white opacity-60 cursor-not-allowed"
                     />
                   </div>
                 </div>

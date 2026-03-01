@@ -36,43 +36,36 @@ export function UserProfileProvider({ children }) {
     fetchProfile()
   }, [])
 
-  const updateProfile = async (fields) => {
+  const updateProfile = async (formDataOrFields) => {
     try {
-      const res = await api.patch('/profile', fields)
-      setProfile(prev => ({ ...prev, ...res.data.data }))
-      toast.success('Profile updated successfully')
-      return true
+      const isFormData = formDataOrFields instanceof FormData;
+      const config = isFormData ? { headers: { 'Content-Type': 'multipart/form-data' } } : {};
+      
+      const res = await api.patch('/profile', formDataOrFields, config);
+      setProfile(prev => ({ ...prev, ...res.data.data }));
+      toast.success('Profile updated successfully');
+      return true;
     } catch (e) {
-      console.error('Failed to update profile', e)
-      toast.error(e.response?.data?.error?.message || 'Failed to update profile')
-      return false
-    }
-  }
-
-  const updateAvatar = async (dataUrl) => {
-    try {
-      const res = await api.patch('/profile', { avatarUrl: dataUrl })
-      setProfile(prev => ({ ...prev, avatarUrl: res.data.data.avatarUrl }))
-      toast.success('Avatar updated')
-    } catch (e) {
-      console.error('Failed to update avatar', e)
-      toast.error('Failed to upload photo')
+      console.error('Failed to update profile', e);
+      toast.error(e.response?.data?.error?.message || 'Failed to update profile');
+      return false;
     }
   }
 
   const removeAvatar = async () => {
     try {
-      const res = await api.patch('/profile', { avatarUrl: null })
-      setProfile(prev => ({ ...prev, avatarUrl: null }))
-      toast.success('Avatar removed')
+      // Explicitly send null to clear avatar on backend
+      const res = await api.patch('/profile', { avatarUrl: null });
+      setProfile(prev => ({ ...prev, avatarUrl: null }));
+      toast.success('Avatar removed');
     } catch (e) {
-      console.error('Failed to remove avatar', e)
-      toast.error('Failed to remove photo')
+      console.error('Failed to remove avatar', e);
+      toast.error('Failed to remove photo');
     }
   }
 
   return (
-    <UserProfileContext.Provider value={{ profile, loading, updateProfile, updateAvatar, removeAvatar, refreshProfile: fetchProfile }}>
+    <UserProfileContext.Provider value={{ profile, loading, updateProfile, removeAvatar, refreshProfile: fetchProfile }}>
       {children}
     </UserProfileContext.Provider>
   )

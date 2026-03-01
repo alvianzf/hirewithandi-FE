@@ -3,6 +3,7 @@ import { X, Trash2, ExternalLink } from 'lucide-react'
 import { COLUMNS, COLUMN_MAP, WORK_TYPES } from '../../utils/constants'
 import { useJobs } from '../../context/JobContext'
 import { useI18n } from '../../context/I18nContext'
+import Swal from 'sweetalert2'
 
 export default function JobModal({ isOpen, onClose, editingJob, defaultStatus = 'wishlist' }) {
   const { addJob, editJob, deleteJob } = useJobs()
@@ -103,8 +104,24 @@ export default function JobModal({ isOpen, onClose, editingJob, defaultStatus = 
     onClose()
   }
 
-  const handleDelete = () => {
-    if (window.confirm(t('deleteConfirm'))) {
+  const handleDelete = async () => {
+    const result = await Swal.fire({
+      title: t('deleteConfirm'),
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#ef4444',
+      cancelButtonColor: 'rgba(255, 255, 255, 0.08)',
+      confirmButtonText: t('yes') || 'Yes',
+      cancelButtonText: t('cancel') || 'Cancel',
+      background: '#171717',
+      color: '#fff',
+      customClass: {
+        popup: 'rounded-3xl border border-white/[0.08] shadow-2xl',
+        cancelButton: 'text-neutral-300 border border-white/[0.08] hover:bg-neutral-800',
+      }
+    });
+
+    if (result.isConfirmed) {
       deleteJob(editingJob.id)
       onClose()
     }

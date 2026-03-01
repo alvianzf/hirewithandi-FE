@@ -2,6 +2,7 @@ import { useState, useRef } from 'react'
 import { useUserProfile } from '../../context/UserProfileContext'
 import { useI18n } from '../../context/I18nContext'
 import { Camera, Trash2, User, MapPin, Link as LinkIcon, Briefcase } from 'lucide-react'
+import Swal from 'sweetalert2'
 
 export default function ProfilePage() {
   const { profile, updateProfile, updateAvatar, removeAvatar } = useUserProfile()
@@ -37,11 +38,27 @@ export default function ProfilePage() {
 
     // Simple validation: Ensure it's an image and < 2MB
     if (!file.type.startsWith('image/')) {
-      alert('Please select an image file.')
+      Swal.fire({
+        icon: 'error',
+        title: 'Invalid File',
+        text: 'Please select an image file.',
+        confirmButtonColor: '#eab308',
+        background: '#171717',
+        color: '#fff',
+        customClass: { popup: 'rounded-2xl border border-white/[0.08]' }
+      });
       return
     }
     if (file.size > 2 * 1024 * 1024) {
-      alert('File size exceeds 2MB limit. Please choose a smaller image.')
+      Swal.fire({
+        icon: 'error',
+        title: 'File Too Large',
+        text: 'File size exceeds 2MB limit. Please choose a smaller image.',
+        confirmButtonColor: '#eab308',
+        background: '#171717',
+        color: '#fff',
+        customClass: { popup: 'rounded-2xl border border-white/[0.08]' }
+      });
       return
     }
 

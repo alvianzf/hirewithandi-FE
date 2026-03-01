@@ -42,18 +42,23 @@ api.interceptors.response.use(
           const session = JSON.parse(sessionStr);
           if (session.refreshToken) {
             const refreshRes = await axios.post(
-              api.defaults.baseURL + "/auth/refresh",
+              (api.defaults.baseURL || "http://localhost:3000/api") +
+                "/auth/refresh",
               {
                 refreshToken: session.refreshToken,
               },
             );
-            const { token, refreshToken, user } = refreshRes.data.data;
+            const {
+              token,
+              refreshToken: newRefreshToken,
+              user,
+            } = refreshRes.data.data;
             const newSession = {
               name: user.name,
               email: user.email,
               createdAt: user.createdAt,
               token,
-              refreshToken,
+              refreshToken: newRefreshToken || session.refreshToken,
             };
             localStorage.setItem("hwa_auth", JSON.stringify(newSession));
 

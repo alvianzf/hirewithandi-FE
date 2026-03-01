@@ -22,13 +22,14 @@ export function AuthProvider({ children }) {
   const login = async (email, password) => {
     try {
       const response = await api.post('/auth/login', { email, password, app: 'job-tracker' })
-      const { user: userData, token } = response.data.data
+      const { user: userData, token, refreshToken } = response.data.data
       
       const sessionData = {
         name: userData.name,
         email: userData.email,
         createdAt: userData.createdAt || new Date().toISOString(),
-        token: token,
+        token,
+        refreshToken,
       }
       localStorage.setItem(AUTH_KEY, JSON.stringify(sessionData))
       setUser(sessionData)
@@ -55,13 +56,14 @@ export function AuthProvider({ children }) {
   const setupPassword = async (email, password) => {
     try {
       const response = await api.post('/auth/setup-password', { email, password, app: 'job-tracker' });
-      const { user: userData, token } = response.data.data;
+      const { user: userData, token, refreshToken } = response.data.data;
       
       const sessionData = {
         name: userData.name,
         email: userData.email,
         createdAt: userData.createdAt || new Date().toISOString(),
-        token: token,
+        token,
+        refreshToken,
       };
       localStorage.setItem(AUTH_KEY, JSON.stringify(sessionData));
       setUser(sessionData);

@@ -74,7 +74,7 @@ export default function LandingPage({ onSignIn }) {
       </main>
 
       {/* Features Grid */}
-      <section className="relative z-10 max-w-7xl mx-auto px-6 py-20 pb-32">
+      <section className="relative z-10 max-w-7xl mx-auto px-6 py-20">
         <div className="grid md:grid-cols-3 gap-6">
           {features.map((feat, idx) => (
             <div key={idx} className="p-8 rounded-3xl border border-white/[0.08] bg-neutral-900/40 backdrop-blur-xl hover:bg-neutral-900/60 transition-colors group">
@@ -88,6 +88,18 @@ export default function LandingPage({ onSignIn }) {
         </div>
       </section>
 
+      {/* Why You Need This Section */}
+      <section className="relative z-10 py-20 bg-neutral-900/20 border-t border-white/[0.04]">
+        <div className="max-w-4xl mx-auto px-6 text-center">
+          <h2 className="text-3xl md:text-5xl font-bold mb-6">Why You Need This</h2>
+          <p className="text-lg text-neutral-400 leading-relaxed mb-12">
+            The job search process is chaotic. Spreadsheets get messy, mental notes fall through the cracks, and tracking multiple interviews across different companies quickly becomes overwhelming. 
+            <br/><br/>
+            HiredWithAndi centralizes the chaos into a clean, actionable dashboard so you never miss a follow-up, forget a salary expectation, or lose momentum on your career journey.
+          </p>
+        </div>
+      </section>
+
       {/* Partnership & Bootcamp Section */}
       <section className="relative z-10 border-t border-white/[0.08] bg-black/50">
         <div className="max-w-7xl mx-auto px-6 py-24">
@@ -97,10 +109,10 @@ export default function LandingPage({ onSignIn }) {
             <div className="p-10 rounded-3xl border border-yellow-400/20 bg-gradient-to-br from-yellow-400/10 to-transparent backdrop-blur-md">
               <div className="flex items-center gap-4 mb-6">
                 <Globe className="w-8 h-8 text-yellow-400" />
-                <h3 className="text-2xl font-bold">Free for LWA Members</h3>
+                <h3 className="text-2xl font-bold">Free with LearnWithAndi Subscriptions</h3>
               </div>
               <p className="text-neutral-300 mb-8 leading-relaxed">
-                HiredWithAndi is completely free for all active members of the LearnWithAndi ecosystem. Streamline your job search while you learn with us.
+                The HiredWithAndi premium app is bundled entirely for free with all LearnWithAndi subscriptions. Streamline your job search while you learn with us.
               </p>
               <a 
                 href="https://learnwithandi.com" 

@@ -234,7 +234,7 @@ export default function ProfilePage() {
               <div className="grid gap-4 sm:grid-cols-2">
                 <div>
                   <label className="mb-2 block text-sm font-medium text-neutral-300">
-                    {t('role') || 'Current Role / Title'} <span className="text-xs text-neutral-500">(from account)</span>
+                    {t('role') || 'Role'} <span className="text-xs text-neutral-500">(from account)</span>
                   </label>
                   <div className="relative">
                     <Briefcase className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-neutral-500 cursor-not-allowed" />

@@ -21,7 +21,7 @@ export function AuthProvider({ children }) {
 
   const login = async (email, password) => {
     try {
-      const response = await api.post('/auth/login', { email, password })
+      const response = await api.post('/auth/login', { email, password, app: 'job-tracker' })
       const { user: userData, token } = response.data.data
       
       const sessionData = {
@@ -41,6 +41,39 @@ export function AuthProvider({ children }) {
     }
   }
 
+  const checkEmail = async (email) => {
+    try {
+      const response = await api.post('/auth/check-email', { email });
+      return response.data.data; // { exists: boolean, hasPassword: boolean }
+    } catch (e) {
+      console.error('Failed to check email via API:', e);
+      toast.error(e.response?.data?.error?.message || 'Failed to verify email');
+      return null;
+    }
+  }
+
+  const setupPassword = async (email, password) => {
+    try {
+      const response = await api.post('/auth/setup-password', { email, password, app: 'job-tracker' });
+      const { user: userData, token } = response.data.data;
+      
+      const sessionData = {
+        name: userData.name,
+        email: userData.email,
+        createdAt: userData.createdAt || new Date().toISOString(),
+        token: token,
+      };
+      localStorage.setItem(AUTH_KEY, JSON.stringify(sessionData));
+      setUser(sessionData);
+      toast.success('Password created successfully. Welcome!');
+      return true;
+    } catch (e) {
+      console.error('Failed to setup password via API:', e);
+      toast.error(e.response?.data?.error?.message || 'Failed to setup password');
+      return false;
+    }
+  }
+
   const logout = () => {
     try {
       localStorage.removeItem(AUTH_KEY)
@@ -52,7 +85,7 @@ export function AuthProvider({ children }) {
   }
 
   return (
-    <AuthContext.Provider value={{ user, login, logout }}>
+    <AuthContext.Provider value={{ user, login, logout, checkEmail, setupPassword }}>
       {children}
     </AuthContext.Provider>
   )

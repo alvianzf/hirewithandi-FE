@@ -1,5 +1,6 @@
 import { createContext, useContext, useState } from 'react'
 import api from '../utils/api'
+import { toast } from 'sonner'
 
 const AuthContext = createContext(null)
 
@@ -31,9 +32,11 @@ export function AuthProvider({ children }) {
       }
       localStorage.setItem(AUTH_KEY, JSON.stringify(sessionData))
       setUser(sessionData)
+      toast.success('Welcome back!')
       return true
     } catch (e) {
       console.error('Failed to login via API:', e)
+      toast.error(e.response?.data?.error?.message || 'Login failed')
       return false
     }
   }
@@ -41,6 +44,7 @@ export function AuthProvider({ children }) {
   const logout = () => {
     try {
       localStorage.removeItem(AUTH_KEY)
+      toast.info('Logged out')
     } catch (e) {
       console.error('Failed to clear auth:', e)
     }

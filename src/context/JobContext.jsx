@@ -1,6 +1,7 @@
 import { createContext, useContext, useState, useEffect } from 'react'
 import { INITIAL_STATE } from '../utils/constants'
 import api from '../utils/api'
+import { toast } from 'sonner'
 
 const JobContext = createContext(null)
 
@@ -52,8 +53,10 @@ export function JobProvider({ children }) {
           columns: { ...prevState.columns, [col]: [newJob.id, ...prevState.columns[col]] }
         }
       })
+      toast.success('Job added successfully')
     } catch (e) {
       console.error('Failed to add job', e)
+      toast.error('Failed to add job')
     }
   }
 
@@ -71,8 +74,10 @@ export function JobProvider({ children }) {
       
       // Update UI optimistically or refetch
       await fetchJobs()
+      toast.success('Job updated')
     } catch (e) {
       console.error('Failed to edit job', e)
+      toast.error('Failed to update job')
     }
   }
 
@@ -91,8 +96,10 @@ export function JobProvider({ children }) {
           columns: { ...prevState.columns, [col]: prevState.columns[col].filter(jid => jid !== id) }
         }
       })
+      toast.success('Job deleted')
     } catch (e) {
       console.error('Failed to delete job', e)
+      toast.error('Failed to delete job')
     }
   }
 
@@ -120,6 +127,7 @@ export function JobProvider({ children }) {
       await fetchJobs()
     } catch (e) {
       console.error('Failed to move job', e)
+      toast.error('Failed to move job')
       await fetchJobs() // Revert
     }
   }

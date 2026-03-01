@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from 'react'
 import { useUserProfile } from '../../context/UserProfileContext'
+import { useAuth } from '../../context/AuthContext'
 import { useI18n } from '../../context/I18nContext'
 import { Camera, Trash2, User, MapPin, Link as LinkIcon, Briefcase, Lock, ShieldCheck, Eye, EyeOff } from 'lucide-react'
 import api from '../../utils/api'
@@ -7,6 +8,7 @@ import Swal from 'sweetalert2'
 
 export default function ProfilePage() {
   const { profile, loading, updateProfile, updateAvatar, removeAvatar } = useUserProfile()
+  const { user } = useAuth()
   const { t } = useI18n()
   
   const [formData, setFormData] = useState({
@@ -42,8 +44,8 @@ export default function ProfilePage() {
   useEffect(() => {
     if (profile) {
       setFormData({
-        name: profile.name || '',
-        email: profile.email || '',
+        name: profile.name || user?.name || '',
+        email: profile.email || user?.email || '',
         bio: profile.bio || '',
         role: profile.role || '',
         organization: profile.organization || '',
@@ -51,7 +53,7 @@ export default function ProfilePage() {
         linkedIn: profile.linkedIn || '',
       })
     }
-  }, [profile])
+  }, [profile, user])
 
   const handleChange = (e) => {
     const { name, value } = e.target
@@ -240,13 +242,13 @@ export default function ProfilePage() {
                     {t('name') || 'Name'} <span className="text-xs text-neutral-500">(from account)</span>
                   </label>
                   <div className="relative">
-                    <User className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-neutral-500" />
+                    <User className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-neutral-400" />
                     <input
                       name="name"
                       type="text"
                       value={formData.name}
                       disabled
-                      className="w-full rounded-xl border border-white/[0.08] bg-black/20 py-2.5 pl-10 pr-4 text-sm text-white opacity-60 cursor-not-allowed"
+                      className="w-full rounded-xl border border-white/[0.08] bg-black/20 py-2.5 pl-10 pr-4 text-sm text-white/90 cursor-not-allowed"
                     />
                   </div>
                 </div>
@@ -259,7 +261,7 @@ export default function ProfilePage() {
                     type="email"
                     value={formData.email}
                     disabled
-                    className="w-full rounded-xl border border-white/[0.08] bg-black/20 px-4 py-2.5 text-sm text-white opacity-60 cursor-not-allowed"
+                    className="w-full rounded-xl border border-white/[0.08] bg-black/20 px-4 py-2.5 text-sm text-white/90 cursor-not-allowed"
                   />
                 </div>
               </div>
@@ -270,13 +272,13 @@ export default function ProfilePage() {
                     {t('role') || 'Role'} <span className="text-xs text-neutral-500">(from account)</span>
                   </label>
                   <div className="relative">
-                    <Briefcase className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-neutral-500 cursor-not-allowed" />
+                    <Briefcase className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-neutral-400 cursor-not-allowed" />
                     <input
                       name="role"
                       type="text"
                       value={formData.role}
                       disabled
-                      className="w-full rounded-xl border border-white/[0.08] bg-black/20 py-2.5 pl-10 pr-4 text-sm text-white opacity-60 cursor-not-allowed"
+                      className="w-full rounded-xl border border-white/[0.08] bg-black/20 py-2.5 pl-10 pr-4 text-sm text-white/90 cursor-not-allowed"
                     />
                   </div>
                 </div>
@@ -285,13 +287,13 @@ export default function ProfilePage() {
                     {t('organization') || 'Organization'} <span className="text-xs text-neutral-500">(from account)</span>
                   </label>
                   <div className="relative">
-                    <Briefcase className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-neutral-500" />
+                    <Briefcase className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-neutral-400" />
                     <input
                       name="organization"
                       type="text"
                       value={formData.organization}
                       disabled
-                      className="w-full rounded-xl border border-white/[0.08] bg-black/20 py-2.5 pl-10 pr-4 text-sm text-white opacity-60 cursor-not-allowed"
+                      className="w-full rounded-xl border border-white/[0.08] bg-black/20 py-2.5 pl-10 pr-4 text-sm text-white/90 cursor-not-allowed"
                     />
                   </div>
                 </div>

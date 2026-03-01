@@ -106,7 +106,7 @@ export default function LandingPage({ onSignIn }) {
           <p className="text-lg text-neutral-300 leading-relaxed max-w-3xl mx-auto">
             The job search process is chaotic. Spreadsheets get messy, mental notes fall through the cracks, and tracking multiple interviews across different companies quickly becomes overwhelming. 
             <br/><br/>
-            HiredWithAndi centralizes the chaos into a clean, actionable dashboard so you never miss a follow-up, forget a salary expectation, or lose momentum on your career journey.
+            HiredWithAndi centralizes the chaos into a clean, actionable dashboard so you never miss a follow-up, forget a salary expectation, or lose momentum on your career journey. Designed by ed-tech managers and international recruiters so we know what we are doing.
           </p>
         </div>
       </section>
@@ -142,7 +142,7 @@ export default function LandingPage({ onSignIn }) {
                 <h3 className="text-2xl font-bold">For Bootcamps</h3>
               </div>
               <p className="text-neutral-300 mb-8 leading-relaxed">
-                Are you running a bootcamp and need a reliable placement tracker for your students? We've got you covered with customized dashboards.
+                Are you running a bootcamp and need a reliable placement tracker for your students? We've got you covered with a platform tailored for edtech.
               </p>
               <a 
                 href="mailto:contact@learnwithandi.com?subject=Bootcamp%20Demo%20Request" 

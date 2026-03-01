@@ -15,7 +15,7 @@ import NotFoundView from './components/Layout/NotFoundView'
 import { Toaster } from 'sonner'
 
 function AppContent() {
-  const { totalJobs } = useJobs()
+  const { totalJobs, loading } = useJobs()
   const { user } = useAuth()
   const [activeView, setActiveView] = useState('dashboard')
   const [modalOpen, setModalOpen] = useState(false)
@@ -50,6 +50,15 @@ function AppContent() {
         <Toaster position="top-right" richColors theme="dark" />
         <LoginPage />
       </>
+    )
+  }
+
+  if (loading) {
+    return (
+      <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-neutral-950/90 backdrop-blur-sm">
+        <div className="w-12 h-12 border-4 border-yellow-400 border-t-transparent rounded-full animate-spin" />
+        <p className="mt-4 text-sm font-semibold tracking-widest uppercase text-neutral-400 animate-pulse">Loading your data…</p>
+      </div>
     )
   }
 

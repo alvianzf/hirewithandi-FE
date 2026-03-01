@@ -7,6 +7,7 @@ const JobContext = createContext(null)
 
 export function JobProvider({ children }) {
   const [state, setState] = useState(INITIAL_STATE)
+  const [loading, setLoading] = useState(true)
 
   const fetchJobs = async () => {
     try {
@@ -33,6 +34,8 @@ export function JobProvider({ children }) {
       })
     } catch (e) {
       console.error('Failed to fetch jobs', e)
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -136,7 +139,7 @@ export function JobProvider({ children }) {
   const totalJobs = allJobs.length
 
   return (
-    <JobContext.Provider value={{ state, allJobs, totalJobs, addJob, editJob, deleteJob, moveJob, fetchJobs }}>
+    <JobContext.Provider value={{ state, allJobs, totalJobs, addJob, editJob, deleteJob, moveJob, fetchJobs, loading }}>
       {children}
     </JobContext.Provider>
   )

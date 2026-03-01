@@ -68,8 +68,8 @@ api.interceptors.response.use(
         }
       } catch (refreshError) {
         console.error("Token refresh failed", refreshError);
-        // Dispatch event or clear storage
         localStorage.removeItem("hwa_auth");
+        window.location.reload();
       }
     }
     return Promise.reject(error);

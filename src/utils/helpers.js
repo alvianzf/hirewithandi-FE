@@ -63,3 +63,56 @@ export function daysLabel(count) {
   if (count === 1) return "1 day";
   return `${count} days`;
 }
+
+export function formatSalary(salary) {
+  if (!salary) return "";
+  const s = String(salary).trim().toUpperCase();
+
+  // Extract currency symbol/code (Rp, $, USD, etc.)
+  const symbolMatch = s.match(/^(RP|\$|USD)/i);
+  const symbol = symbolMatch ? symbolMatch[0] : "";
+
+  // Extract numeric part (handling ranges, we take the max)
+  const tokens = s.match(/[\d,.]+\s*(?:K|M|B|T|JT)?/gi) || [];
+  const nums = tokens
+    .map((token) => {
+      const t = token.toUpperCase().trim();
+      const numPart = parseFloat(t.replace(/[^0-9.]/g, ""));
+      if (isNaN(numPart)) return NaN;
+      if (t.includes("JT")) return numPart * 1e6;
+      if (t.endsWith("T")) return numPart * 1e12;
+      if (t.endsWith("B")) return numPart * 1e9;
+      if (t.endsWith("M")) return numPart * 1e6;
+      if (t.endsWith("K")) return numPart * 1e3;
+      return numPart;
+    })
+    .filter((n) => !isNaN(n) && n > 0);
+
+  if (nums.length === 0) return salary; // Fallback to original
+
+  const n = Math.max(...nums);
+  let formatted = "";
+
+  const isIdr = symbol === "RP" || (!symbol && n > 10000); // Heuristic if no symbol
+
+  if (isIdr) {
+    if (n >= 1e9) formatted = `${(n / 1e9).toFixed(n % 1e9 === 0 ? 0 : 1)}M`;
+    else if (n >= 1e6)
+      formatted = `${(n / 1e6).toFixed(n % 1e6 === 0 ? 0 : 1)}Jt`;
+    else if (n >= 1e3) formatted = `${(n / 1e3).toFixed(0)}K`;
+    else formatted = String(n);
+  } else {
+    if (n >= 1e9) formatted = `${(n / 1e9).toFixed(n % 1e9 === 0 ? 0 : 1)}B`;
+    else if (n >= 1e6)
+      formatted = `${(n / 1e6).toFixed(n % 1e6 === 0 ? 0 : 1)}M`;
+    else if (n >= 1e3)
+      formatted = `${(n / 1e3).toFixed(n % 1000 === 0 ? 0 : 1)}K`;
+    else formatted = String(n);
+  }
+
+  // Handle display prefix/suffix
+  if (symbol === "$") return `$${formatted}`;
+  if (symbol === "RP") return `Rp ${formatted}`;
+  if (symbol) return `${symbol} ${formatted}`;
+  return formatted;
+}

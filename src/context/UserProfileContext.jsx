@@ -20,13 +20,16 @@ export function UserProfileProvider({ children }) {
   const { user } = useAuth()
   const [profile, setProfile] = useState(DEFAULT_PROFILE)
   const [loading, setLoading] = useState(false)
+  const [isInitialLoading, setIsInitialLoading] = useState(false)
 
-  const fetchProfile = useCallback(async () => {
+  const fetchProfile = useCallback(async (isInitial = false) => {
     if (!user) {
       setLoading(false)
+      setIsInitialLoading(false)
       return
     }
 
+    if (isInitial) setIsInitialLoading(true)
     setLoading(true)
     try {
       const res = await api.get('/profile')
@@ -37,15 +40,17 @@ export function UserProfileProvider({ children }) {
       console.error('Failed to fetch profile', e)
     } finally {
       setLoading(false)
+      setIsInitialLoading(false)
     }
   }, [user])
 
   useEffect(() => {
     if (user) {
-      fetchProfile()
+      fetchProfile(true)
     } else {
       setProfile(DEFAULT_PROFILE)
       setLoading(false)
+      setIsInitialLoading(false)
     }
   }, [user, fetchProfile])
 
@@ -78,7 +83,7 @@ export function UserProfileProvider({ children }) {
   }
 
   return (
-    <UserProfileContext.Provider value={{ profile, loading, updateProfile, removeAvatar, refreshProfile: fetchProfile }}>
+    <UserProfileContext.Provider value={{ profile, loading, isInitialLoading, updateProfile, removeAvatar, refreshProfile: fetchProfile }}>
       {children}
     </UserProfileContext.Provider>
   )

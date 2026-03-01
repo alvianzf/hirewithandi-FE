@@ -36,7 +36,7 @@ export default function JobModal({ isOpen, onClose, editingJob, defaultStatus = 
         notes: editingJob.notes || '',
         status: editingJob.status || 'wishlist',
         dateApplied: editingJob.dateApplied ? editingJob.dateApplied.slice(0, 10) : '',
-        workType: editingJob.workType || 'remote',
+        workType: (editingJob.workType || 'remote').toLowerCase(),
         location: editingJob.location || '',
         finalOffer: editingJob.finalOffer || '',
         benefits: editingJob.benefits || '',

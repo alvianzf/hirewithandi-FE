@@ -10,13 +10,16 @@ export function JobProvider({ children }) {
   const { user } = useAuth()
   const [state, setState] = useState(INITIAL_STATE)
   const [loading, setLoading] = useState(false)
+  const [isInitialLoading, setIsInitialLoading] = useState(false)
 
-  const fetchJobs = useCallback(async () => {
+  const fetchJobs = useCallback(async (isInitial = false) => {
     if (!user) {
       setLoading(false)
+      setIsInitialLoading(false)
       return
     }
     
+    if (isInitial) setIsInitialLoading(true)
     setLoading(true)
     try {
       const res = await api.get('/jobs')
@@ -44,15 +47,17 @@ export function JobProvider({ children }) {
       console.error('Failed to fetch jobs', e)
     } finally {
       setLoading(false)
+      setIsInitialLoading(false)
     }
   }, [user])
 
   useEffect(() => {
     if (user) {
-      fetchJobs()
+      fetchJobs(true)
     } else {
       setState(INITIAL_STATE)
       setLoading(false)
+      setIsInitialLoading(false)
     }
   }, [user, fetchJobs])
 
@@ -70,6 +75,8 @@ export function JobProvider({ children }) {
         }
       })
       toast.success('Job added successfully')
+      // Refresh in background if needed
+      fetchJobs()
     } catch (e) {
       console.error('Failed to add job', e)
       toast.error('Failed to add job')
@@ -152,7 +159,7 @@ export function JobProvider({ children }) {
   const totalJobs = allJobs.length
 
   return (
-    <JobContext.Provider value={{ state, allJobs, totalJobs, addJob, editJob, deleteJob, moveJob, fetchJobs, loading }}>
+    <JobContext.Provider value={{ state, allJobs, totalJobs, addJob, editJob, deleteJob, moveJob, fetchJobs, loading, isInitialLoading }}>
       {children}
     </JobContext.Provider>
   )

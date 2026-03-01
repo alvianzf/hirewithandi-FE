@@ -16,9 +16,9 @@ import NotFoundView from './components/Layout/NotFoundView'
 import { Toaster } from 'sonner'
 
 function AppContent() {
-  const { totalJobs, loading: jobsLoading } = useJobs()
+  const { totalJobs, isInitialLoading: jobsLoading } = useJobs()
   const { user } = useAuth()
-  const { loading: profileLoading } = useUserProfile()
+  const { isInitialLoading: profileLoading } = useUserProfile()
   const [activeView, setActiveView] = useState('dashboard')
   const [modalOpen, setModalOpen] = useState(false)
   const [editingJob, setEditingJob] = useState(null)

@@ -29,7 +29,14 @@ export default function DashboardView() {
 
   // Work type distribution
   const workTypes = { remote: 0, onsite: 0, hybrid: 0 }
-  allJobs.forEach(j => { if (j.workType) workTypes[j.workType]++ })
+  allJobs.forEach(j => { 
+    if (j.workType) {
+      const type = j.workType.toLowerCase()
+      if (workTypes.hasOwnProperty(type)) {
+        workTypes[type]++ 
+      }
+    }
+  })
 
   // Shared helper: parse a salary string into a number, handling K/M/B/T/Jt suffixes
   const parseSalaryNumber = (salaryStr) => {

@@ -39,7 +39,7 @@ export default function LandingPage({ onSignIn }) {
         </div>
         <button
           onClick={onSignIn}
-          className="px-5 py-2.5 text-sm font-semibold rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition-colors backdrop-blur-md"
+          className="px-5 py-2.5 text-sm font-bold rounded-xl bg-yellow-400 text-black shadow-[0_0_15px_rgba(250,204,21,0.5)] hover:bg-yellow-300 hover:shadow-[0_0_25px_rgba(250,204,21,0.65)] hover:-translate-y-0.5 transition-all"
         >
           {t('signIn') || 'Sign In'}
         </button>

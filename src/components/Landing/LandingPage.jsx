@@ -100,10 +100,10 @@ export default function LandingPage({ onSignIn }) {
       </section>
 
       {/* Why You Need This Section */}
-      <section className="relative z-10 py-20 bg-neutral-900/20 border-t border-white/[0.04]">
-        <div className="max-w-4xl mx-auto px-6 text-center">
+      <section className="relative z-10 py-20 max-w-5xl mx-auto px-6 mb-24">
+        <div className="rounded-3xl bg-neutral-900/60 backdrop-blur-2xl border border-white/10 p-12 text-center shadow-2xl">
           <h2 className="text-3xl md:text-5xl font-bold mb-6">Why You Need This</h2>
-          <p className="text-lg text-neutral-400 leading-relaxed mb-12">
+          <p className="text-lg text-neutral-300 leading-relaxed max-w-3xl mx-auto">
             The job search process is chaotic. Spreadsheets get messy, mental notes fall through the cracks, and tracking multiple interviews across different companies quickly becomes overwhelming. 
             <br/><br/>
             HiredWithAndi centralizes the chaos into a clean, actionable dashboard so you never miss a follow-up, forget a salary expectation, or lose momentum on your career journey.

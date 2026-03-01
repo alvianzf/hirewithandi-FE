@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Briefcase, ArrowRight } from 'lucide-react'
+import { Briefcase, ArrowRight, Eye, EyeOff } from 'lucide-react'
 import { useAuth } from '../../context/AuthContext'
 import { useUserProfile } from '../../context/UserProfileContext'
 import { useI18n } from '../../context/I18nContext'
@@ -16,6 +16,7 @@ export default function LoginPage() {
   
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
+  const [showPassword, setShowPassword] = useState(false)
 
   const handleNext = async (e) => {
     e.preventDefault()
@@ -118,16 +119,25 @@ export default function LoginPage() {
               <label htmlFor="password" className="mb-2 block text-sm font-medium text-neutral-300">
                 {!hasExistingPassword ? 'Create a New Password' : (t('password') || 'Password')}
               </label>
-              <input
-                id="password"
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="••••••••"
-                className="w-full rounded-xl border border-white/[0.08] bg-black/50 px-4 py-3 text-sm text-white placeholder-neutral-500 transition-colors focus:border-yellow-400/50 focus:outline-none focus:ring-1 focus:ring-yellow-400/50"
-                required
-                autoFocus
-              />
+              <div className="relative">
+                <input
+                  id="password"
+                  type={showPassword ? 'text' : 'password'}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="••••••••"
+                  className="w-full rounded-xl border border-white/[0.08] bg-black/50 pl-4 pr-12 py-3 text-sm text-white placeholder-neutral-500 transition-colors focus:border-yellow-400/50 focus:outline-none focus:ring-1 focus:ring-yellow-400/50"
+                  required
+                  autoFocus
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-neutral-500 hover:text-yellow-400 transition-colors"
+                >
+                  {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                </button>
+              </div>
               {!hasExistingPassword && (
                 <p className="mt-2 text-xs text-neutral-400">
                   Your organization administrator has created an account for you. Please set a secure password to continue.

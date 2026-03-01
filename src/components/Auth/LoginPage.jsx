@@ -8,19 +8,21 @@ export default function LoginPage() {
   const { login } = useAuth()
   const { updateProfile, profile } = useUserProfile()
   const { t } = useI18n()
-  const [name, setName] = useState('')
   const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  
+  const [isLoading, setIsLoading] = useState(false)
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    if (!name.trim() || !email.trim()) return
+    if (!email.trim() || !password.trim()) return
 
-    login({ name, email })
+    setIsLoading(true)
+    const success = await login(email, password)
+    setIsLoading(false)
     
-    // Initialize profile with name/email if it's empty
-    if (!profile.name && !profile.email) {
-      updateProfile({ name, email })
-    }
+    // Note: profile initialization is now handled better by pulling from the API
+    // but we can leave this as a fallback if needed, or remove it entirely.
   }
 
   return (
@@ -44,21 +46,6 @@ export default function LoginPage() {
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label htmlFor="name" className="mb-2 block text-sm font-medium text-neutral-300">
-              {t('name') || 'Name'}
-            </label>
-            <input
-              id="name"
-              type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              placeholder="e.g. Andi Ahmad"
-              className="w-full rounded-xl border border-white/[0.08] bg-black/50 px-4 py-3 text-sm text-white placeholder-neutral-500 transition-colors focus:border-yellow-400/50 focus:outline-none focus:ring-1 focus:ring-yellow-400/50"
-              required
-            />
-          </div>
-          
-          <div>
             <label htmlFor="email" className="mb-2 block text-sm font-medium text-neutral-300">
               {t('email') || 'Email'}
             </label>
@@ -72,13 +59,29 @@ export default function LoginPage() {
               required
             />
           </div>
+          
+          <div>
+            <label htmlFor="password" className="mb-2 block text-sm font-medium text-neutral-300">
+              {t('password') || 'Password'}
+            </label>
+            <input
+              id="password"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="••••••••"
+              className="w-full rounded-xl border border-white/[0.08] bg-black/50 px-4 py-3 text-sm text-white placeholder-neutral-500 transition-colors focus:border-yellow-400/50 focus:outline-none focus:ring-1 focus:ring-yellow-400/50"
+              required
+            />
+          </div>
 
           <button
             type="submit"
-            className="group mt-6 flex w-full items-center justify-center gap-2 rounded-xl bg-yellow-400 px-4 py-3.5 text-sm font-bold text-black shadow-lg shadow-yellow-400/20 transition-all hover:bg-yellow-300 hover:shadow-yellow-400/40 active:scale-[0.98]"
+            disabled={isLoading}
+            className="group mt-6 flex w-full items-center justify-center gap-2 rounded-xl bg-yellow-400 px-4 py-3.5 text-sm font-bold text-black shadow-lg shadow-yellow-400/20 transition-all hover:bg-yellow-300 hover:shadow-yellow-400/40 active:scale-[0.98] disabled:opacity-50"
           >
-            {t('signIn') || 'Continue'}
-            <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+            {isLoading ? 'Signing In...' : (t('signIn') || 'Continue')}
+            {!isLoading && <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />}
           </button>
         </form>
       </div>

@@ -89,22 +89,28 @@ export default function Header({ activeView, setActiveView, onAddJob, totalJobs 
             <span className="hidden sm:inline">{t('addJob')}</span>
           </button>
 
-          <div className="h-8 w-px bg-white/[0.08] hidden sm:block"></div>
-
-          {/* Avatar button */}
-          <button
-            onClick={() => setActiveView('profile')}
-            className={`flex h-[42px] w-[42px] sm:h-11 sm:w-11 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-white/[0.08] transition-all hover:border-yellow-400/50 ${activeView === 'profile' ? 'ring-2 ring-yellow-400 ring-offset-2 ring-offset-black' : ''}`}
-            title={t('profile')}
-          >
-            {profile?.avatarUrl ? (
-              <img src={profile.avatarUrl} alt="Avatar" className="h-full w-full object-cover" />
-            ) : (
-              <div className="flex h-full w-full items-center justify-center bg-neutral-800 text-sm font-bold text-neutral-400">
-                {profile?.name ? profile.name.charAt(0).toUpperCase() : <User className="h-5 w-5" />}
+          {/* Organization + Avatar button */}
+          <div className="hidden sm:flex items-center gap-3 border-l border-white/[0.08] pl-4">
+            {profile?.organization && (
+              <div className="text-right">
+                <p className="text-[10px] font-bold uppercase tracking-widest text-neutral-500">Organization</p>
+                <p className="text-sm font-semibold text-white truncate max-w-[140px]">{profile.organization}</p>
               </div>
             )}
-          </button>
+            <button
+              onClick={() => setActiveView('profile')}
+              className={`flex h-[42px] w-[42px] sm:h-11 sm:w-11 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-white/[0.08] transition-all hover:border-yellow-400/50 ${activeView === 'profile' ? 'ring-2 ring-yellow-400 ring-offset-2 ring-offset-black' : ''}`}
+              title={t('profile')}
+            >
+              {profile?.avatarUrl ? (
+                <img src={profile.avatarUrl} alt="Avatar" className="h-full w-full object-cover" />
+              ) : (
+                <div className="flex h-full w-full items-center justify-center bg-neutral-800 text-sm font-bold text-neutral-400">
+                  {profile?.name ? profile.name.charAt(0).toUpperCase() : <User className="h-5 w-5" />}
+                </div>
+              )}
+            </button>
+          </div>
 
           {/* Logout button */}
           <button
@@ -156,6 +162,12 @@ export default function Header({ activeView, setActiveView, onAddJob, totalJobs 
       {/* Mobile Extra Menu (Language & Logout) */}
       {mobileMenuOpen && (
         <div className="flex flex-col gap-3 border-t border-white/[0.08] px-8 py-4 sm:hidden">
+          {profile?.organization && (
+            <div className="rounded-xl border border-white/[0.06] bg-neutral-900/60 px-4 py-3">
+              <p className="text-[10px] font-bold uppercase tracking-widest text-neutral-500">Organization</p>
+              <p className="mt-0.5 text-sm font-semibold text-white">{profile.organization}</p>
+            </div>
+          )}
           <div className="flex flex-col gap-2">
             <span className="text-sm font-medium text-neutral-400 px-1">{t('language')}</span>
             <div className="relative w-full">

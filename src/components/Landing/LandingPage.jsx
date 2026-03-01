@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Briefcase, ArrowRight, CheckCircle, ExternalLink, GraduationCap, Layout, Clock, Globe } from 'lucide-react';
+import { Briefcase, ArrowRight, CheckCircle, ExternalLink, GraduationCap, Layout, Clock, Globe, AlertOctagon, LineChart, Target } from 'lucide-react';
 import { useI18n } from '../../context/I18nContext';
 
 export default function LandingPage({ onSignIn }) {
@@ -100,14 +100,38 @@ export default function LandingPage({ onSignIn }) {
       </section>
 
       {/* Why You Need This Section */}
-      <section className="relative z-10 py-20 max-w-5xl mx-auto px-6 mb-24">
-        <div className="rounded-3xl bg-neutral-900/60 backdrop-blur-2xl border border-white/10 p-12 text-center shadow-2xl">
-          <h2 className="text-3xl md:text-5xl font-bold mb-6">Why You Need This</h2>
-          <p className="text-lg text-neutral-300 leading-relaxed max-w-3xl mx-auto">
-            The job search process is chaotic. Spreadsheets get messy, mental notes fall through the cracks, and tracking multiple interviews across different companies quickly becomes overwhelming. 
-            <br/><br/>
-            HiredWithAndi centralizes the chaos into a clean, actionable dashboard so you never miss a follow-up, forget a salary expectation, or lose momentum on your career journey. Designed by ed-tech managers and international recruiters so we know what we are doing.
+      <section className="relative z-10 py-24 max-w-6xl mx-auto px-6 mb-12">
+        <div className="text-center mb-16">
+          <h2 className="text-3xl md:text-5xl font-extrabold mb-6 tracking-tight">Why You Need This</h2>
+          <p className="text-lg text-neutral-400 leading-relaxed max-w-2xl mx-auto">
+            The job search process is inherently chaotic. HiredWithAndi is built by <span className="text-white font-semibold">ed-tech managers and international recruiters</span> to centralize the chaos into an actionable, tailored dashboard so you never lose momentum on your career journey.
           </p>
+        </div>
+
+        <div className="grid md:grid-cols-3 gap-8">
+          <div className="p-8 rounded-3xl bg-red-500/5 backdrop-blur-xl border border-red-500/20 hover:bg-red-500/10 transition-colors group">
+            <div className="w-12 h-12 rounded-xl bg-red-500/20 text-red-400 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+              <AlertOctagon className="w-6 h-6" />
+            </div>
+            <h3 className="text-xl font-bold mb-3 text-white">Stop the Chaos</h3>
+            <p className="text-neutral-400 leading-relaxed">Spreadsheets get messy. Mental notes fall through the cracks. We provide a single source of truth for all your applications, interviews, and offers.</p>
+          </div>
+
+          <div className="p-8 rounded-3xl bg-yellow-400/5 backdrop-blur-xl border border-yellow-400/20 hover:bg-yellow-400/10 transition-colors group">
+            <div className="w-12 h-12 rounded-xl bg-yellow-400/20 text-yellow-400 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+              <Target className="w-6 h-6" />
+            </div>
+            <h3 className="text-xl font-bold mb-3 text-white">Never Miss a Beat</h3>
+            <p className="text-neutral-400 leading-relaxed">Track multiple interview stages across different companies effortlessly. Set reminders and never forget a follow-up or salary expectation.</p>
+          </div>
+
+          <div className="p-8 rounded-3xl bg-blue-500/5 backdrop-blur-xl border border-blue-500/20 hover:bg-blue-500/10 transition-colors group">
+            <div className="w-12 h-12 rounded-xl bg-blue-500/20 text-blue-400 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+              <LineChart className="w-6 h-6" />
+            </div>
+            <h3 className="text-xl font-bold mb-3 text-white">Insightful Analytics</h3>
+            <p className="text-neutral-400 leading-relaxed">Measure what matters. Visualize your funnel from application to offer, understand your timeline, and analyze your rejections to iterate faster.</p>
+          </div>
         </div>
       </section>
 

@@ -169,7 +169,9 @@ export default function LandingPage({ onSignIn }) {
                 Are you running a bootcamp and need a reliable placement tracker for your students? We've got you covered with a platform tailored for edtech.
               </p>
               <a 
-                href="mailto:contact@learnwithandi.com?subject=Bootcamp%20Demo%20Request" 
+                href="https://learnwithandi.com" 
+                target="_blank"
+                rel="noreferrer"
                 className="inline-flex items-center gap-2 text-blue-400 font-semibold hover:text-blue-300 transition-colors"
               >
                 Contact us for a free demo <ArrowRight className="w-4 h-4" />

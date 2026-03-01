@@ -187,7 +187,7 @@ export default function ProfilePage() {
                 />
               ) : profile.avatarUrl ? (
                 <img 
-                  src={profile.avatarUrl.startsWith('/') ? `${import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000'}${profile.avatarUrl}` : profile.avatarUrl} 
+                  src={profile.avatarUrl.startsWith('/') ? `${(import.meta.env.VITE_API_URL || '').replace(/\/api\/?$/, '')}${profile.avatarUrl}` : profile.avatarUrl} 
                   alt="Avatar" 
                   className="h-full w-full object-cover" 
                 />

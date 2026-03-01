@@ -103,7 +103,7 @@ export default function Header({ activeView, setActiveView, onAddJob, totalJobs 
               title={t('profile')}
             >
               {profile?.avatarUrl ? (
-                <img src={profile.avatarUrl} alt="Avatar" className="h-full w-full object-cover" />
+                <img src={profile.avatarUrl.startsWith('/') ? `${(import.meta.env.VITE_API_URL || '').replace(/\/api\/?$/, '')}${profile.avatarUrl}` : profile.avatarUrl} alt="Avatar" className="h-full w-full object-cover" />
               ) : (
                 <div className="flex h-full w-full items-center justify-center bg-neutral-800 text-sm font-bold text-neutral-400">
                   {profile?.name ? profile.name.charAt(0).toUpperCase() : <User className="h-5 w-5" />}

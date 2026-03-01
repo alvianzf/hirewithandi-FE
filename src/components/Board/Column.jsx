@@ -8,7 +8,7 @@ const Column = React.memo(function Column({ columnId, label, color, jobs, onCard
   const { colLabel } = useI18n()
 
   return (
-    <div className="kanban-column flex w-[320px] flex-shrink-0 flex-col rounded-3xl border border-white/[0.08] bg-neutral-900/20 backdrop-blur-md shadow-xl md:w-[300px] lg:w-[320px]" style={{ maxHeight: 'calc(100vh - 180px)' }}>
+    <div className="kanban-column flex w-[320px] flex-shrink-0 flex-col rounded-3xl border border-white/[0.08] bg-neutral-900 shadow-xl md:w-[300px] lg:w-[320px]" style={{ maxHeight: 'calc(100vh - 180px)' }}>
       {/* Column Header */}
       <div className="flex items-center justify-between px-6 pt-6 pb-4">
         <div className="flex items-center gap-3">

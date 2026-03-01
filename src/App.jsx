@@ -10,6 +10,7 @@ import JobModal from './components/Modal/JobModal'
 import { AuthProvider, useAuth } from './context/AuthContext'
 import { UserProfileProvider } from './context/UserProfileContext'
 import LoginPage from './components/Auth/LoginPage'
+import LandingPage from './components/Landing/LandingPage'
 import ProfilePage from './components/UserProfile/ProfilePage'
 import NotFoundView from './components/Layout/NotFoundView'
 import { Toaster } from 'sonner'
@@ -21,6 +22,7 @@ function AppContent() {
   const [modalOpen, setModalOpen] = useState(false)
   const [editingJob, setEditingJob] = useState(null)
   const [defaultStatus, setDefaultStatus] = useState('wishlist')
+  const [showLogin, setShowLogin] = useState(false)
 
   const handleAddJob = () => {
     setEditingJob(null)
@@ -45,10 +47,19 @@ function AppContent() {
   }
 
   if (!user) {
+    if (!showLogin) {
+      return (
+        <>
+          <Toaster position="top-right" richColors theme="dark" />
+          <LandingPage onSignIn={() => setShowLogin(true)} />
+        </>
+      )
+    }
+
     return (
       <>
         <Toaster position="top-right" richColors theme="dark" />
-        <LoginPage />
+        <LoginPage onBack={() => setShowLogin(false)} />
       </>
     )
   }

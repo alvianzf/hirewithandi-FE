@@ -4,7 +4,7 @@ import { useAuth } from '../../context/AuthContext'
 import { useUserProfile } from '../../context/UserProfileContext'
 import { useI18n } from '../../context/I18nContext'
 
-export default function LoginPage() {
+export default function LoginPage({ onBack }) {
   const { login, checkEmail, setupPassword } = useAuth()
   const { updateProfile, profile } = useUserProfile()
   const { t } = useI18n()
@@ -60,13 +60,22 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-black p-4 text-white">
+    <div className="flex min-h-screen items-center justify-center bg-transparent p-4 text-white">
       {/* Background decoration */}
       <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
         <div className="absolute -top-1/2 left-1/2 h-[1000px] w-[1000px] -translate-x-1/2 rounded-full bg-yellow-400/5 blur-[120px]" />
       </div>
 
       <div className="relative z-10 w-full max-w-md rounded-3xl border border-white/[0.08] bg-neutral-900/50 p-8 backdrop-blur-xl sm:p-10">
+        {onBack && (
+          <button 
+            onClick={onBack}
+            className="mb-6 flex items-center gap-2 text-sm text-neutral-400 hover:text-white transition-colors"
+          >
+            <ArrowRight className="w-4 h-4 rotate-180" />
+            Back to Home
+          </button>
+        )}
         <div className="mb-10 flex flex-col items-center text-center">
           <img src="/lwa-logo.png" alt="LWA" className="mb-6 h-20 w-20 object-contain drop-shadow-[0_0_15px_rgba(210,255,0,0.2)]" />
           <h1 className="mb-2 text-3xl font-bold tracking-tight">

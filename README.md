@@ -61,6 +61,98 @@ To preview the production build locally:
 npm run preview
 ```
 
+---
+
+## 🚀 Ubuntu VPS Setup Guide (Nginx + PM2)
+
+This guide assumes a fresh Ubuntu 22.04/24.04 LTS server.
+
+### 1. System Update & Dependencies
+
+```bash
+sudo apt update && sudo apt upgrade -y
+sudo apt install -y curl git nginx
+```
+
+### 2. Node.js Installation (nvm)
+
+```bash
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
+source ~/.bashrc
+nvm install 20
+```
+
+### 3. Application Deployment
+
+```bash
+git clone <repository-url>
+cd job-tracker
+npm install
+```
+
+Create `.env.local` file:
+
+```bash
+nano .env.local
+```
+
+Add your production API URL:
+
+```env
+VITE_API_URL=https://your-api-domain.com/api
+```
+
+### 4. Build for Production
+
+```bash
+npm run build
+```
+
+### 5. Serving with PM2
+
+We use PM2 to serve the static files:
+
+```bash
+npm install -g pm2
+pm2 serve dist 5174 --name hwa-tracker --spa
+pm2 save
+pm2 startup
+```
+
+### 6. Nginx Reverse Proxy
+
+```bash
+sudo nano /etc/nginx/sites-available/hwa-tracker
+```
+
+Add configuration:
+
+```nginx
+server {
+    listen 80;
+    server_name your_tracker_domain_or_ip;
+
+    location / {
+        proxy_pass http://localhost:5174;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_cache_bypass $http_upgrade;
+    }
+}
+```
+
+Enable and restart:
+
+```bash
+sudo ln -s /etc/nginx/sites-available/hwa-tracker /etc/nginx/sites-enabled/
+sudo nginx -t
+sudo systemctl restart nginx
+```
+
+---
+
 ## Technologies Used
 
 - React 19

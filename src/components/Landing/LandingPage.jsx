@@ -5,6 +5,8 @@ import { useI18n } from '../../context/I18nContext';
 export default function LandingPage({ onSignIn }) {
   const { t } = useI18n();
 
+  const [scrollY, setScrollY] = useState(0);
+
   const features = [
     {
       title: "Kanban Job Board",
@@ -24,11 +26,20 @@ export default function LandingPage({ onSignIn }) {
   ];
 
   return (
-    <div className="min-h-screen bg-transparent text-white selection:bg-yellow-400 selection:text-black overflow-x-hidden">
-      {/* Dynamic Backgrounds */}
+    <div 
+      className="h-screen overflow-y-auto overflow-x-hidden bg-transparent text-white selection:bg-yellow-400 selection:text-black"
+      onScroll={(e) => setScrollY(e.currentTarget.scrollTop)}
+    >
+      {/* Dynamic Backgrounds (Parallax) */}
       <div className="fixed inset-0 z-0 pointer-events-none">
-        <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-yellow-400/10 blur-[120px]" />
-        <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-blue-500/10 blur-[120px]" />
+        <div 
+          className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-yellow-400/10 blur-[120px] transition-transform duration-700 ease-out" 
+          style={{ transform: `translateY(${scrollY * 0.3}px)` }}
+        />
+        <div 
+          className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-blue-500/10 blur-[120px] transition-transform duration-700 ease-out"
+          style={{ transform: `translateY(-${scrollY * 0.2}px)` }}
+        />
       </div>
 
       {/* Navigation */}

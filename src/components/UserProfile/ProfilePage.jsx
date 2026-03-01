@@ -1,7 +1,8 @@
 import { useState, useRef } from 'react'
 import { useUserProfile } from '../../context/UserProfileContext'
 import { useI18n } from '../../context/I18nContext'
-import { Camera, Trash2, User, MapPin, Link as LinkIcon, Briefcase } from 'lucide-react'
+import { Camera, Trash2, User, MapPin, Link as LinkIcon, Briefcase, Lock, ShieldCheck } from 'lucide-react'
+import api from '../../utils/api'
 import Swal from 'sweetalert2'
 
 export default function ProfilePage() {
@@ -19,6 +20,14 @@ export default function ProfilePage() {
   })
   const [isSaving, setIsSaving] = useState(false)
   const [saveSuccess, setSaveSuccess] = useState(false)
+  
+  // Password change states
+  const [currentPassword, setCurrentPassword] = useState('')
+  const [newPassword, setNewPassword] = useState('')
+  const [confirmPassword, setConfirmPassword] = useState('')
+  const [isChangingPassword, setIsChangingPassword] = useState(false)
+  const [passwordStatus, setPasswordStatus] = useState({ type: '', message: '' })
+
   const fileInputRef = useRef(null)
 
   // Sync form with profile data once it loads
@@ -49,6 +58,34 @@ export default function ProfilePage() {
     if (success) {
       setSaveSuccess(true)
       setTimeout(() => setSaveSuccess(false), 3000)
+    }
+  }
+
+  const handlePasswordChange = async (e) => {
+    e.preventDefault()
+    if (newPassword !== confirmPassword) {
+      setPasswordStatus({ type: 'error', message: 'Passwords do not match' })
+      return
+    }
+    if (newPassword.length < 6) {
+      setPasswordStatus({ type: 'error', message: 'New password must be at least 6 characters' })
+      return
+    }
+
+    try {
+      setPasswordStatus({ type: 'loading', message: 'Processing password change...' })
+      await api.post('/auth/change-password', {
+        currentPassword,
+        newPassword
+      })
+      setPasswordStatus({ type: 'success', message: 'Password updated successfully!' })
+      setCurrentPassword('')
+      setNewPassword('')
+      setConfirmPassword('')
+      setTimeout(() => setPasswordStatus({ type: '', message: '' }), 3000)
+    } catch (err) {
+      const msg = err.response?.data?.error?.message || 'Failed to change password. Please check your current password.'
+      setPasswordStatus({ type: 'error', message: msg })
     }
   }
 
@@ -288,6 +325,95 @@ export default function ProfilePage() {
               </div>
             </form>
           </div>
+        </div>
+
+        {/* Security / Password Section */}
+        <div className="mt-8 rounded-2xl border border-white/[0.08] bg-neutral-900/50 p-6 backdrop-blur-sm">
+          <div className="mb-6 flex items-center gap-3">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-yellow-400/10 text-yellow-500">
+              <Lock size={20} />
+            </div>
+            <div>
+              <h2 className="text-xl font-bold text-white">Security Settings</h2>
+              <p className="text-xs text-neutral-500">Manage your password and account security</p>
+            </div>
+          </div>
+
+          <form onSubmit={handlePasswordChange} className="space-y-4 max-w-2xl">
+            <div className="grid gap-4 sm:grid-cols-2">
+              <div>
+                <label className="mb-2 block text-sm font-medium text-neutral-300">
+                  Current Password
+                </label>
+                <div className="relative">
+                  <Lock className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-neutral-500" />
+                  <input
+                    type="password"
+                    value={currentPassword}
+                    onChange={(e) => setCurrentPassword(e.target.value)}
+                    placeholder="Enter current password"
+                    className="w-full rounded-xl border border-white/[0.08] bg-black/50 py-2.5 pl-10 pr-4 text-sm text-white placeholder-neutral-500 transition-colors focus:border-yellow-400/50 focus:outline-none focus:ring-1 focus:ring-yellow-400/50"
+                    required
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div className="grid gap-4 sm:grid-cols-2">
+              <div>
+                <label className="mb-2 block text-sm font-medium text-neutral-300">
+                  New Password
+                </label>
+                <div className="relative">
+                  <Lock className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-neutral-500" />
+                  <input
+                    type="password"
+                    value={newPassword}
+                    onChange={(e) => setNewPassword(e.target.value)}
+                    placeholder="At least 6 characters"
+                    className="w-full rounded-xl border border-white/[0.08] bg-black/50 py-2.5 pl-10 pr-4 text-sm text-white placeholder-neutral-500 transition-colors focus:border-yellow-400/50 focus:outline-none focus:ring-1 focus:ring-yellow-400/50"
+                    required
+                  />
+                </div>
+              </div>
+              <div>
+                <label className="mb-2 block text-sm font-medium text-neutral-300">
+                  Confirm New Password
+                </label>
+                <div className="relative">
+                  <ShieldCheck className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-neutral-500" />
+                  <input
+                    type="password"
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    placeholder="Repeat new password"
+                    className="w-full rounded-xl border border-white/[0.08] bg-black/50 py-2.5 pl-10 pr-4 text-sm text-white placeholder-neutral-500 transition-colors focus:border-yellow-400/50 focus:outline-none focus:ring-1 focus:ring-yellow-400/50"
+                    required
+                  />
+                </div>
+              </div>
+            </div>
+
+            {passwordStatus.message && (
+              <div className={`p-4 rounded-xl text-sm font-medium border ${
+                passwordStatus.type === 'error' ? 'bg-red-500/10 border-red-500/20 text-red-500' : 
+                passwordStatus.type === 'success' ? 'bg-green-500/10 border-green-500/20 text-green-500' :
+                'bg-blue-500/10 border-blue-500/20 text-blue-500'
+              }`}>
+                {passwordStatus.message}
+              </div>
+            )}
+
+            <div className="flex justify-end pt-2">
+              <button
+                type="submit"
+                disabled={passwordStatus.type === 'loading'}
+                className="rounded-xl bg-neutral-800 px-6 py-2.5 text-sm font-bold text-white transition-all hover:bg-neutral-700 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {passwordStatus.type === 'loading' ? 'Updating...' : 'Update Password'}
+              </button>
+            </div>
+          </form>
         </div>
       </div>
     </div>

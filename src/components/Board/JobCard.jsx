@@ -1,3 +1,4 @@
+import React from 'react'
 import { Draggable } from '@hello-pangea/dnd'
 import { Calendar, Clock, ExternalLink, MapPin, Globe, Building2, ArrowLeftRight, ChevronDown, Target } from 'lucide-react'
 import { calculateActiveDays, daysSince, formatDateShort, daysLabel } from '../../utils/helpers'
@@ -11,7 +12,7 @@ const WORK_TYPE_ICONS = {
   hybrid: '🔄',
 }
 
-export default function JobCard({ job, index, onClick }) {
+const JobCard = React.memo(function JobCard({ job, index, onClick }) {
   const { t, colLabel } = useI18n()
   const { editJob } = useJobs()
   const isFinalState = FINAL_STATUSES.includes(job.status)
@@ -157,4 +158,6 @@ export default function JobCard({ job, index, onClick }) {
       )}
     </Draggable>
   )
-}
+})
+
+export default JobCard;

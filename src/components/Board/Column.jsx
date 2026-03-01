@@ -1,9 +1,10 @@
+import React from 'react'
 import { Droppable } from '@hello-pangea/dnd'
 import JobCard from './JobCard'
 import { Plus } from 'lucide-react'
 import { useI18n } from '../../context/I18nContext'
 
-export default function Column({ columnId, label, color, jobs, onCardClick, onAddToColumn }) {
+const Column = React.memo(function Column({ columnId, label, color, jobs, onCardClick, onAddToColumn }) {
   const { colLabel } = useI18n()
 
   return (
@@ -62,4 +63,6 @@ export default function Column({ columnId, label, color, jobs, onCardClick, onAd
       </Droppable>
     </div>
   )
-}
+})
+
+export default Column;

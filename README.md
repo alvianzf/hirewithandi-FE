@@ -6,17 +6,19 @@ A comprehensive and visually appealing job application tracking system designed 
 
 ## Features
 
-- **Kanban Board Interface**: Drag and drop job applications across customizable stages (Wishlist, Applied, HR Interview, Technical Interview, Additional Interview, Offered, Rejected).
+- **Kanban Board Interface**: Drag and drop job applications across customizable stages (Wishlist, Applied, HR Interview, Technical Interview, Additional Interview, Offered, Rejected by Company, Rejected by Applicant).
 - **Detailed Job Records**: Store extensive information including company, position, salary, location, work type (Remote/On-site/Hybrid), and custom notes.
 - **Offer Management**: Special fields for recording final offer details, benefits, and non-monetary perks when an application reaches the 'Offered' stage.
 - **Timeline & Analytics Dashboard**:
   - Visualize application history through a functional Gantt chart.
   - Track key metrics like days since the first application, last interview, and last rejection.
   - Monitor the status of your latest job application.
-  - **Active Duration Tracking**: Time spent in final states (Offered, Rejected) is intelligently paused for more accurate timeline metrics.
+  - **Active Duration Tracking**: Time spent in final states (Offered, Rejected by Company, Rejected by Applicant) is intelligently paused for more accurate timeline metrics.
 - **Bilingual Support (i18n)**: Seamlessly toggle between English and Bahasa Indonesia.
-- **Local Storage**: Data is safely stored in your browser's local storage for privacy and speed.
-- **User Identity & Profile**: Simple client-side auth (Name + Email) and a customizable User Profile with avatar upload, bio, and organization tracking.
+- **Secure Cloud API Integration**: Seamless integration with a secure backend API ensuring robust session management, email verification, and persistent data storage out of the box.
+- **User Identity & Profile**: Complete authentication system supporting customizable User Profiles with multi-part avatar uploads, bio, and read-only organization tracking.
+- **Actionable Superadmin Role**: Native support for global administrative privileges across the stack.
+- **Premium Engaging UI**: Featuring doodle background patterns, clean glassmorphism elements, and smooth modern animations giving it a polished premium feel.
 
 ## Prerequisites
 

@@ -239,7 +239,7 @@ export default function ProfilePage() {
               <div className="grid gap-4 sm:grid-cols-2">
                 <div>
                   <label className="mb-2 block text-sm font-medium text-neutral-300">
-                    {t('name') || 'Name'} <span className="text-xs text-neutral-500">(from account)</span>
+                    {t('name') || 'Name'} <span className="text-xs text-neutral-400">(from account)</span>
                   </label>
                   <div className="relative">
                     <User className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-neutral-400" />
@@ -254,7 +254,7 @@ export default function ProfilePage() {
                 </div>
                 <div>
                   <label className="mb-2 block text-sm font-medium text-neutral-300">
-                    {t('email') || 'Email'} <span className="text-xs text-neutral-500">(from login)</span>
+                    {t('email') || 'Email'} <span className="text-xs text-neutral-400">(from login)</span>
                   </label>
                   <input
                     name="email"
@@ -269,7 +269,7 @@ export default function ProfilePage() {
               <div className="grid gap-4 sm:grid-cols-2">
                 <div>
                   <label className="mb-2 block text-sm font-medium text-neutral-300">
-                    {t('role') || 'Role'} <span className="text-xs text-neutral-500">(from account)</span>
+                    {t('role') || 'Role'} <span className="text-xs text-neutral-400">(from account)</span>
                   </label>
                   <div className="relative">
                     <Briefcase className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-neutral-400 cursor-not-allowed" />
@@ -284,7 +284,7 @@ export default function ProfilePage() {
                 </div>
                 <div>
                   <label className="mb-2 block text-sm font-medium text-neutral-300">
-                    {t('organization') || 'Organization'} <span className="text-xs text-neutral-500">(from account)</span>
+                    {t('organization') || 'Organization'} <span className="text-xs text-neutral-400">(from account)</span>
                   </label>
                   <div className="relative">
                     <Briefcase className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-neutral-400" />

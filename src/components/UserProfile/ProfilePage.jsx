@@ -5,31 +5,51 @@ import { Camera, Trash2, User, MapPin, Link as LinkIcon, Briefcase } from 'lucid
 import Swal from 'sweetalert2'
 
 export default function ProfilePage() {
-  const { profile, updateProfile, updateAvatar, removeAvatar } = useUserProfile()
+  const { profile, loading, updateProfile, updateAvatar, removeAvatar } = useUserProfile()
   const { t } = useI18n()
   
   const [formData, setFormData] = useState({
-    name: profile.name || '',
-    email: profile.email || '',
-    bio: profile.bio || '',
-    role: profile.role || '',
-    organization: profile.organization || '',
-    location: profile.location || '',
-    linkedIn: profile.linkedIn || '',
+    name: '',
+    email: '',
+    bio: '',
+    role: '',
+    organization: '',
+    location: '',
+    linkedIn: '',
   })
+  const [isSaving, setIsSaving] = useState(false)
   const [saveSuccess, setSaveSuccess] = useState(false)
   const fileInputRef = useRef(null)
+
+  // Sync form with profile data once it loads
+  useEffect(() => {
+    if (profile) {
+      setFormData({
+        name: profile.name || '',
+        email: profile.email || '',
+        bio: profile.bio || '',
+        role: profile.role || '',
+        organization: profile.organization || '',
+        location: profile.location || '',
+        linkedIn: profile.linkedIn || '',
+      })
+    }
+  }, [profile])
 
   const handleChange = (e) => {
     const { name, value } = e.target
     setFormData(prev => ({ ...prev, [name]: value }))
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    updateProfile(formData)
-    setSaveSuccess(true)
-    setTimeout(() => setSaveSuccess(false), 3000)
+    setIsSaving(true)
+    const success = await updateProfile(formData)
+    setIsSaving(false)
+    if (success) {
+      setSaveSuccess(true)
+      setTimeout(() => setSaveSuccess(false), 3000)
+    }
   }
 
   const handleFileChange = (e) => {
@@ -69,6 +89,16 @@ export default function ProfilePage() {
     reader.readAsDataURL(file)
   }
 
+  if (loading) {
+    return (
+      <div className="flex-1 flex items-center justify-center bg-black">
+        <div className="text-[var(--color-primary-yellow)] animate-pulse font-bold text-xl tracking-widest uppercase">
+          Loading Profile...
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className="flex-1 overflow-auto bg-black p-4 sm:p-8">
       <div className="mx-auto max-w-3xl">
@@ -81,7 +111,11 @@ export default function ProfilePage() {
           <div className="flex flex-col items-center rounded-2xl border border-white/[0.08] bg-neutral-900/50 p-6 backdrop-blur-sm self-start">
             <div className="relative mb-6 h-32 w-32 shrink-0 rounded-full border-4 border-neutral-800 bg-neutral-800 overflow-hidden">
               {profile.avatarUrl ? (
-                <img src={profile.avatarUrl} alt="Avatar" className="h-full w-full object-cover" />
+                <img 
+                  src={profile.avatarUrl.startsWith('/') ? `${import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000'}${profile.avatarUrl}` : profile.avatarUrl} 
+                  alt="Avatar" 
+                  className="h-full w-full object-cover" 
+                />
               ) : (
                 <div className="flex h-full w-full items-center justify-center text-4xl font-bold text-neutral-600">
                   {profile.name ? profile.name.charAt(0).toUpperCase() : <User size={48} />}
@@ -117,7 +151,7 @@ export default function ProfilePage() {
             </div>
             <p className="mt-4 text-center text-xs text-neutral-500">
               Recommended: Square image, &lt; 2MB.<br />
-              Stored locally in your browser.
+              Securely stored in Cloudinary via HWA API.
             </p>
           </div>
 
@@ -246,9 +280,10 @@ export default function ProfilePage() {
                 
                 <button
                   type="submit"
-                  className="rounded-xl bg-yellow-400 px-6 py-2.5 text-sm font-bold text-black shadow-lg shadow-yellow-400/20 transition-all hover:bg-yellow-300 hover:shadow-yellow-400/40 active:scale-[0.98]"
+                  disabled={isSaving}
+                  className="rounded-xl bg-yellow-400 px-6 py-2.5 text-sm font-bold text-black shadow-lg shadow-yellow-400/20 transition-all hover:bg-yellow-300 hover:shadow-yellow-400/40 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  {t('saveProfile') || 'Save Changes'}
+                  {isSaving ? (t('saving') || 'Saving...') : (t('saveProfile') || 'Save Changes')}
                 </button>
               </div>
             </form>

@@ -1,12 +1,57 @@
 # API Contract & Data Schema
 
-_(Note: HiredWithAndi currently operates entirely client-side using `localStorage`. This document outlines the local state schema that acts as our "database".)_
+_(Note: HiredWithAndi currently utilizes a backend cloud API for data persistence, replacing the previous `localStorage` implementation. This document outlines the REST API endpoints and local stage schema that acts as our frontend cache.)_
 
-## 1. Job Tracker Schema (`hwa_jobs` or equivalent storage key)
+## 1. Authentication (`/auth`)
 
-The primary state for job applications is stored as a serialized JSON object containing columns for the Kanban board and the dictionary of jobs.
+Stores basic identity information and manages sessions.
 
-### `Job` Object
+| Endpoint               | Method | Payload                                                          | Response                                                  | Description                                        |
+| ---------------------- | ------ | ---------------------------------------------------------------- | --------------------------------------------------------- | -------------------------------------------------- |
+| `/auth/check-email`    | `POST` | `{ "email": "string" }`                                          | `{ "exists": boolean, "hasPassword": boolean }`           | Checks if a user or pre-seeded email exists.       |
+| `/auth/setup-password` | `POST` | `{ "email": "string", "password": "...", "app": "job-tracker" }` | `{ "user": User, "token": "...", "refreshToken": "..." }` | Assigns an initial password to an invited email.   |
+| `/auth/login`          | `POST` | `{ "email": "string", "password": "...", "app": "job-tracker" }` | `{ "user": User, "token": "...", "refreshToken": "..." }` | Standard login, returning the JWT tokens.          |
+| `/auth/refresh`        | `POST` | `{ "refreshToken": "string" }`                                   | `{ "user": User, "token": "...", "refreshToken": "..." }` | Refreshes the session using a valid refresh token. |
+
+## 2. User Profile (`/profile`)
+
+Manages the extended user profile including multi-part uploads.
+
+| Endpoint   | Method  | Payload                     | Response         | Description                                       |
+| ---------- | ------- | --------------------------- | ---------------- | ------------------------------------------------- |
+| `/profile` | `GET`   | `none`                      | `Profile Object` | Fetches the current authenticated user's profile. |
+| `/profile` | `PATCH` | `FormData` or `{...fields}` | `Profile Object` | Updates profile details or avatar picture.        |
+
+### `Profile` Object Schema
+
+```json
+{
+  "name": "string",
+  "email": "string",
+  "bio": "string",
+  "role": "string",
+  "organization": "string (read-only)",
+  "location": "string",
+  "linkedIn": "string (URL)",
+  "avatarUrl": "string (URL) | null"
+}
+```
+
+---
+
+## 3. Job Tracker API (`/jobs`)
+
+The primary resource for tracking job applications.
+
+| Endpoint           | Method   | Payload                                           | Response             | Description                                           |
+| ------------------ | -------- | ------------------------------------------------- | -------------------- | ----------------------------------------------------- |
+| `/jobs`            | `GET`    | `none`                                            | `[Job Object, ...]`  | Retrieves all jobs for the authenticated user.        |
+| `/jobs`            | `POST`   | `{ ...JobFields }`                                | `Job Object`         | Creates a new job application entry.                  |
+| `/jobs/:id`        | `PATCH`  | `{ ...JobFields }`                                | `Job Object`         | Updates specific details of an existing job.          |
+| `/jobs/:id/status` | `PATCH`  | `{ "status": "string", "boardPosition": number }` | `Job Object`         | Specialized endpoint for moving a job across columns. |
+| `/jobs/:id`        | `DELETE` | `none`                                            | `{ message: "..." }` | Deletes a specific job application.                   |
+
+### `Job` Object Schema
 
 ```json
 {
@@ -23,82 +68,37 @@ The primary state for job applications is stored as a serialized JSON object con
   "nonMonetaryBenefits": "string (optional, populated when in 'offered' status)",
   "jobFitPercentage": "number (0-100)",
   "dateApplied": "string (ISO 8601 Date)",
-  "dateAdded": "string (ISO 8601 Date)",
-  "status": "string (enum matching column IDs)",
+  "createdAt": "string (ISO 8601 Date)",
+  "status": "string (enum)",
   "statusChangedAt": "string (ISO 8601 Date)",
   "history": [
     {
-      "status": "string (enum matching column IDs)",
+      "status": "string (enum)",
       "enteredAt": "string (ISO 8601 Date)",
-      "leftAt": "string (ISO 8601 Date) | null" // Used to calculate accurate continuous active duration, excluding time spent in final states
+      "leftAt": "string (ISO 8601 Date) | null"
     }
   ]
 }
 ```
 
-### Main Jobs State (`JobContext`)
+### Valid Job Statuses
 
-```json
-{
-  "jobs": {
-    "job_id_1": {
-      /* Job Object */
-    },
-    "job_id_2": {
-      /* Job Object */
-    }
-  },
-  "columns": {
-    "wishlist": ["job_id_1"],
-    "applied": ["job_id_2"],
-    "hr_interview": [],
-    "technical_interview": [],
-    "additional_interview": [],
-    "offered": [],
-    "rejected_company": [],
-    "rejected_applicant": []
-  }
-}
-```
+Jobs follow a strict flow through these columns:
 
----
-
-## 2. Authentication Schema (`hwa_auth`)
-
-Stores basic identity information.
-
-```json
-{
-  "name": "string",
-  "email": "string",
-  "createdAt": "string (ISO 8601 Date)"
-}
-```
-
----
-
-## 3. User Profile Schema (`hwa_profile`)
-
-Stores the extended user profile including the base64 encoded avatar.
-
-```json
-{
-  "name": "string",
-  "email": "string",
-  "bio": "string",
-  "role": "string",
-  "organization": "string",
-  "location": "string",
-  "linkedIn": "string (URL)",
-  "avatarUrl": "string (Base64 Data URL) | null"
-}
-```
+- `wishlist`
+- `applied`
+- `hr_interview`
+- `technical_interview`
+- `additional_interview`
+- `offered` (Final State)
+- `rejected_company` (Final State)
+- `rejected_applicant` (Final State)
 
 ---
 
 ## 4. Initialization (I18n Context)
 
-Language preferences are stored separately:
+Language preferences remain localized to the user's browser:
 
 **Key**: `HiredWithAndi_locale`
 **Value**: `string (enum: 'en', 'id', 'id_corp', 'sg')`

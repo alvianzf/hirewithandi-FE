@@ -212,7 +212,7 @@ export default function ProfilePage() {
                       type="text"
                       value={formData.name}
                       onChange={handleChange}
-                      className="w-full rounded-xl border border-white/[0.08] bg-black/50 py-2.5 pl-10 pr-4 text-sm text-white placeholder-neutral-500 transition-colors focus:border-yellow-400/50 focus:outline-none focus:ring-1 focus:ring-yellow-400/50"
+                      className="w-full rounded-xl border border-white/[0.08] bg-black/50 py-2.5 pl-10 pr-4 text-sm text-white cursor-not-allowed placeholder-neutral-500 transition-colors focus:border-yellow-400/50 focus:outline-none focus:ring-1 focus:ring-yellow-400/50"
                       required
                     />
                   </div>
@@ -237,7 +237,7 @@ export default function ProfilePage() {
                     {t('role') || 'Current Role / Title'} <span className="text-xs text-neutral-500">(from account)</span>
                   </label>
                   <div className="relative">
-                    <Briefcase className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-neutral-500" />
+                    <Briefcase className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-neutral-500 cursor-not-allowed" />
                     <input
                       name="role"
                       type="text"

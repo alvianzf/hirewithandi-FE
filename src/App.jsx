@@ -12,6 +12,7 @@ import { UserProfileProvider } from './context/UserProfileContext'
 import LoginPage from './components/Auth/LoginPage'
 import ProfilePage from './components/UserProfile/ProfilePage'
 import NotFoundView from './components/Layout/NotFoundView'
+import { Toaster } from 'sonner'
 
 function AppContent() {
   const { totalJobs } = useJobs()
@@ -44,7 +45,12 @@ function AppContent() {
   }
 
   if (!user) {
-    return <LoginPage />
+    return (
+      <>
+        <Toaster position="top-right" richColors theme="dark" />
+        <LoginPage />
+      </>
+    )
   }
 
   return (
@@ -88,6 +94,7 @@ function AppContent() {
 export default function App() {
   return (
     <I18nProvider>
+      <Toaster position="top-right" richColors theme="dark" />
       <AuthProvider>
         <UserProfileProvider>
           <JobProvider>

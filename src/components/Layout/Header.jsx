@@ -32,9 +32,7 @@ export default function Header({ activeView, setActiveView, onAddJob, totalJobs 
       <div className="flex items-center justify-between px-4 py-4 sm:px-8 md:px-12 lg:px-16">
         {/* Logo */}
         <div className="flex items-center gap-3 sm:gap-4">
-          <div className="flex h-9 w-9 sm:h-11 sm:w-11 items-center justify-center rounded-2xl bg-gradient-to-br from-yellow-400 to-yellow-600 shadow-lg shadow-yellow-500/20">
-            <Briefcase className="h-4.5 w-4.5 text-black" />
-          </div>
+          <img src="/lwa-logo.png" alt="LWA" className="h-9 w-9 sm:h-11 sm:w-11 object-contain drop-shadow-md" />
           <div>
             <h1 className="text-lg font-bold leading-tight tracking-tight text-white">
               Hired<span className="text-yellow-400">With</span>Andi

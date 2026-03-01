@@ -32,9 +32,7 @@ export default function LoginPage() {
 
       <div className="relative z-10 w-full max-w-md rounded-3xl border border-white/[0.08] bg-neutral-900/50 p-8 backdrop-blur-xl sm:p-10">
         <div className="mb-10 flex flex-col items-center text-center">
-          <div className="mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-yellow-400 to-yellow-600 shadow-xl shadow-yellow-500/20">
-            <Briefcase className="h-8 w-8 text-black" />
-          </div>
+          <img src="/lwa-logo.png" alt="LWA" className="mb-6 h-20 w-20 object-contain drop-shadow-[0_0_15px_rgba(210,255,0,0.2)]" />
           <h1 className="mb-2 text-3xl font-bold tracking-tight">
             Welcome to <br />
             Hired<span className="text-yellow-400">With</span>Andi

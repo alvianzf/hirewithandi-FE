@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { useUserProfile } from '../../context/UserProfileContext'
 import { useI18n } from '../../context/I18nContext'
 import { Camera, Trash2, User, MapPin, Link as LinkIcon, Briefcase, Lock, ShieldCheck, Eye, EyeOff } from 'lucide-react'

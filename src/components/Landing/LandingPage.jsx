@@ -157,7 +157,7 @@ export default function LandingPage({ onSignIn }) {
       </section>
 
       {/* Footer */}
-      <footer className="relative z-10 border-t border-white/5 py-8 text-center text-sm text-neutral-500">
+      <footer className="relative z-10 border-t border-white/5 bg-black py-8 text-center text-sm text-neutral-500">
         <p>© {new Date().getFullYear()} HiredWithAndi. Part of the <a href="https://learnwithandi.com" className="text-neutral-300 hover:text-white transition-colors">LearnWithAndi</a> Ecosystem.</p>
       </footer>
     </div>

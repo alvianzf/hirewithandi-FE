@@ -156,7 +156,7 @@ export default function TableView({ onCardClick }) {
                   </td>
                   <td className="px-8 py-5">
                     <span className="text-[13px] font-medium text-neutral-400">
-                      {job.workType ? `${WORK_TYPE_ICONS[job.workType]} ${t(job.workType)}` : '—'}
+                      {job.workType ? `${WORK_TYPE_ICONS[job.workType.toLowerCase()] || ''} ${t(job.workType.toLowerCase())}` : '—'}
                     </span>
                   </td>
                   <td className="px-8 py-5">
@@ -222,7 +222,7 @@ export default function TableView({ onCardClick }) {
                   {daysLabel(applied)}
                 </span>
                 {job.workType && (
-                  <span>{WORK_TYPE_ICONS[job.workType]} {t(job.workType)}</span>
+                  <span>{WORK_TYPE_ICONS[job.workType.toLowerCase()] || ''} {t(job.workType.toLowerCase())}</span>
                 )}
                 {inCol > 0 && (
                   <span className={`flex items-center gap-1 font-medium ${

@@ -104,7 +104,7 @@ export default function LandingPage({ onSignIn }) {
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-5xl font-extrabold mb-6 tracking-tight">Why You Need This</h2>
           <p className="text-lg text-neutral-400 leading-relaxed max-w-2xl mx-auto">
-            The job search process is inherently chaotic. HiredWithAndi is built by <span className="text-white font-semibold">ed-tech managers and international recruiters</span> to centralize the chaos into an actionable, tailored dashboard so you never lose momentum on your career journey.
+            Tracking student placement success is inherently chaotic. HiredWithAndi is built by <span className="text-white font-semibold">ed-tech managers and international recruiters</span> to centralize your cohort's job search data into an actionable, tailored dashboard so you can guarantee placement outcomes.
           </p>
         </div>
 
@@ -113,24 +113,24 @@ export default function LandingPage({ onSignIn }) {
             <div className="w-12 h-12 rounded-xl bg-red-500/20 text-red-400 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
               <AlertOctagon className="w-6 h-6" />
             </div>
-            <h3 className="text-xl font-bold mb-3 text-white">Stop the Chaos</h3>
-            <p className="text-neutral-400 leading-relaxed">Spreadsheets get messy. Mental notes fall through the cracks. We provide a single source of truth for all your applications, interviews, and offers.</p>
+            <h3 className="text-xl font-bold mb-3 text-white">Stop Cohort Chaos</h3>
+            <p className="text-neutral-400 leading-relaxed">Spreadsheets get messy when tracking hundreds of alumni. We provide a single source of truth for all your students' applications, interviews, and final offers.</p>
           </div>
 
           <div className="p-8 rounded-3xl bg-yellow-400/5 backdrop-blur-xl border border-yellow-400/20 hover:bg-yellow-400/10 transition-colors group">
             <div className="w-12 h-12 rounded-xl bg-yellow-400/20 text-yellow-400 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
               <Target className="w-6 h-6" />
             </div>
-            <h3 className="text-xl font-bold mb-3 text-white">Never Miss a Beat</h3>
-            <p className="text-neutral-400 leading-relaxed">Track multiple interview stages across different companies effortlessly. Set reminders and never forget a follow-up or salary expectation.</p>
+            <h3 className="text-xl font-bold mb-3 text-white">Never Miss a Placement</h3>
+            <p className="text-neutral-400 leading-relaxed">Track multiple students across different companies effortlessly. Identify who needs interview coaching or follow-up nudges before they fall through the cracks.</p>
           </div>
 
           <div className="p-8 rounded-3xl bg-blue-500/5 backdrop-blur-xl border border-blue-500/20 hover:bg-blue-500/10 transition-colors group">
             <div className="w-12 h-12 rounded-xl bg-blue-500/20 text-blue-400 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
               <LineChart className="w-6 h-6" />
             </div>
-            <h3 className="text-xl font-bold mb-3 text-white">Insightful Analytics</h3>
-            <p className="text-neutral-400 leading-relaxed">Measure what matters. Visualize your funnel from application to offer, understand your timeline, and analyze your rejections to iterate faster.</p>
+            <h3 className="text-xl font-bold mb-3 text-white">Insightful Alumni Analytics</h3>
+            <p className="text-neutral-400 leading-relaxed">Measure what matters for your hiring partners. Visualize your cohort's funnel from application to offer, understand placement timelines, and analyze rejection trends to iterate your curriculum.</p>
           </div>
         </div>
       </section>

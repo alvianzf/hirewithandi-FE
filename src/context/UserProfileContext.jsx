@@ -1,8 +1,8 @@
-import { createContext, useContext, useState } from 'react'
+import { createContext, useContext, useState, useEffect } from 'react'
+import api from '../utils/api'
+import { toast } from 'sonner'
 
 const UserProfileContext = createContext(null)
-
-const PROFILE_KEY = 'hwa_profile'
 
 const DEFAULT_PROFILE = {
   name: '',
@@ -15,47 +15,64 @@ const DEFAULT_PROFILE = {
   avatarUrl: null,
 }
 
-function loadProfile() {
-  try {
-    const data = localStorage.getItem(PROFILE_KEY)
-    if (data) return { ...DEFAULT_PROFILE, ...JSON.parse(data) }
-  } catch (e) {
-    console.error('Failed to load profile:', e)
-  }
-  return { ...DEFAULT_PROFILE }
-}
-
-function saveProfile(profile) {
-  try {
-    localStorage.setItem(PROFILE_KEY, JSON.stringify(profile))
-  } catch (e) {
-    console.error('Failed to save profile:', e)
-  }
-}
-
 export function UserProfileProvider({ children }) {
-  const [profile, setProfile] = useState(() => loadProfile())
+  const [profile, setProfile] = useState(DEFAULT_PROFILE)
+  const [loading, setLoading] = useState(true)
 
-  const updateProfile = (fields) => {
-    const updated = { ...profile, ...fields }
-    setProfile(updated)
-    saveProfile(updated)
+  const fetchProfile = async () => {
+    try {
+      const res = await api.get('/profile')
+      if (res.data.data) {
+        setProfile(res.data.data)
+      }
+    } catch (e) {
+      console.error('Failed to fetch profile', e)
+    } finally {
+      setLoading(false)
+    }
   }
 
-  const updateAvatar = (dataUrl) => {
-    const updated = { ...profile, avatarUrl: dataUrl }
-    setProfile(updated)
-    saveProfile(updated)
+  useEffect(() => {
+    fetchProfile()
+  }, [])
+
+  const updateProfile = async (fields) => {
+    try {
+      const res = await api.patch('/profile', fields)
+      setProfile(prev => ({ ...prev, ...res.data.data }))
+      toast.success('Profile updated successfully')
+      return true
+    } catch (e) {
+      console.error('Failed to update profile', e)
+      toast.error(e.response?.data?.error?.message || 'Failed to update profile')
+      return false
+    }
   }
 
-  const removeAvatar = () => {
-    const updated = { ...profile, avatarUrl: null }
-    setProfile(updated)
-    saveProfile(updated)
+  const updateAvatar = async (dataUrl) => {
+    try {
+      const res = await api.patch('/profile', { avatarUrl: dataUrl })
+      setProfile(prev => ({ ...prev, avatarUrl: res.data.data.avatarUrl }))
+      toast.success('Avatar updated')
+    } catch (e) {
+      console.error('Failed to update avatar', e)
+      toast.error('Failed to upload photo')
+    }
+  }
+
+  const removeAvatar = async () => {
+    try {
+      const res = await api.patch('/profile', { avatarUrl: null })
+      setProfile(prev => ({ ...prev, avatarUrl: null }))
+      toast.success('Avatar removed')
+    } catch (e) {
+      console.error('Failed to remove avatar', e)
+      toast.error('Failed to remove photo')
+    }
   }
 
   return (
-    <UserProfileContext.Provider value={{ profile, updateProfile, updateAvatar, removeAvatar }}>
+    <UserProfileContext.Provider value={{ profile, loading, updateProfile, updateAvatar, removeAvatar, refreshProfile: fetchProfile }}>
       {children}
     </UserProfileContext.Provider>
   )

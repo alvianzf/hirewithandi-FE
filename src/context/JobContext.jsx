@@ -1,15 +1,23 @@
-import { createContext, useContext, useState, useEffect } from 'react'
+import { createContext, useContext, useState, useEffect, useCallback } from 'react'
 import { INITIAL_STATE } from '../utils/constants'
 import api from '../utils/api'
 import { toast } from 'sonner'
+import { useAuth } from './AuthContext'
 
 const JobContext = createContext(null)
 
 export function JobProvider({ children }) {
+  const { user } = useAuth()
   const [state, setState] = useState(INITIAL_STATE)
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(false)
 
-  const fetchJobs = async () => {
+  const fetchJobs = useCallback(async () => {
+    if (!user) {
+      setLoading(false)
+      return
+    }
+    
+    setLoading(true)
     try {
       const res = await api.get('/jobs')
       const jobsFromApi = res.data.data
@@ -37,11 +45,16 @@ export function JobProvider({ children }) {
     } finally {
       setLoading(false)
     }
-  }
+  }, [user])
 
   useEffect(() => {
-    fetchJobs()
-  }, [])
+    if (user) {
+      fetchJobs()
+    } else {
+      setState(INITIAL_STATE)
+      setLoading(false)
+    }
+  }, [user, fetchJobs])
 
   const addJob = async (jobData) => {
     try {

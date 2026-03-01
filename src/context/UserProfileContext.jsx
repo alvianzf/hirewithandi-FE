@@ -1,6 +1,7 @@
-import { createContext, useContext, useState, useEffect } from 'react'
+import { createContext, useContext, useState, useEffect, useCallback } from 'react'
 import api from '../utils/api'
 import { toast } from 'sonner'
+import { useAuth } from './AuthContext'
 
 const UserProfileContext = createContext(null)
 
@@ -16,10 +17,17 @@ const DEFAULT_PROFILE = {
 }
 
 export function UserProfileProvider({ children }) {
+  const { user } = useAuth()
   const [profile, setProfile] = useState(DEFAULT_PROFILE)
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(false)
 
-  const fetchProfile = async () => {
+  const fetchProfile = useCallback(async () => {
+    if (!user) {
+      setLoading(false)
+      return
+    }
+
+    setLoading(true)
     try {
       const res = await api.get('/profile')
       if (res.data.data) {
@@ -30,11 +38,16 @@ export function UserProfileProvider({ children }) {
     } finally {
       setLoading(false)
     }
-  }
+  }, [user])
 
   useEffect(() => {
-    fetchProfile()
-  }, [])
+    if (user) {
+      fetchProfile()
+    } else {
+      setProfile(DEFAULT_PROFILE)
+      setLoading(false)
+    }
+  }, [user, fetchProfile])
 
   const updateProfile = async (formDataOrFields) => {
     try {

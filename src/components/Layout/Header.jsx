@@ -29,15 +29,15 @@ export default function Header({ activeView, setActiveView, onAddJob, totalJobs,
 
   return (
     <header className="flex-shrink-0 border-b border-white/[0.08] bg-black/90 backdrop-blur-md">
-      <div className="flex items-center justify-between gap-4 px-4 py-4 sm:px-8 md:px-12 lg:px-16">
+      <div className="flex items-center justify-between gap-3 px-4 py-3 sm:px-6 md:px-8 lg:px-12">
         {/* Logo */}
-        <div className="flex items-center gap-3 sm:gap-4 flex-shrink-0">
-          <img src="/lwa-logo.png" alt="LWA" className="h-9 w-9 sm:h-11 sm:w-11 object-contain drop-shadow-md" />
+        <div className="flex items-center gap-2 sm:gap-4 flex-shrink-0">
+          <img src="/lwa-logo.png" alt="LWA" className="h-9 w-9 sm:h-10 sm:w-10 object-contain drop-shadow-md" />
           <div>
-            <h1 className="text-lg font-bold leading-tight tracking-tight text-white">
+            <h1 className="text-base sm:text-lg font-bold leading-tight tracking-tight text-white">
               Hired<span className="text-yellow-400">With</span>Andi
             </h1>
-            <p className="hidden text-xs text-neutral-500 md:block">
+            <p className="hidden text-[10px] sm:text-xs text-neutral-500 md:block">
               {jobsText}
             </p>
           </div>
@@ -68,14 +68,14 @@ export default function Header({ activeView, setActiveView, onAddJob, totalJobs,
         </div>
 
         {/* Right actions */}
-        <div className="flex items-center gap-2 sm:gap-4 flex-shrink-0">
+        <div className="flex items-center gap-2 sm:gap-3 lg:gap-4 flex-shrink-0">
           
           {/* Mobile view switcher drop-down (shows up to xl) */}
           <div className="hidden sm:block xl:hidden">
              <select
               value={activeView}
               onChange={e => setActiveView(e.target.value)}
-              className="appearance-none rounded-xl bg-neutral-800/80 pl-4 pr-10 py-3 text-sm font-medium text-neutral-200 cursor-pointer border border-white/[0.08] transition-colors hover:bg-neutral-700 focus:outline-none focus:ring-2 focus:ring-yellow-400/50"
+              className="appearance-none rounded-xl bg-neutral-800/80 pl-3 pr-8 py-2.5 sm:py-2 sm:text-xs md:text-sm font-medium text-neutral-200 cursor-pointer border border-white/[0.08] transition-colors hover:bg-neutral-700 focus:outline-none focus:ring-2 focus:ring-yellow-400/50"
              >
                {views.map(v => (
                  <option key={v.id} value={v.id}>{v.label}</option>
@@ -87,7 +87,7 @@ export default function Header({ activeView, setActiveView, onAddJob, totalJobs,
             <select
               value={locale}
               onChange={e => changeLocale(e.target.value)}
-              className="appearance-none rounded-xl bg-neutral-800/80 px-4 py-3 text-xl font-medium cursor-pointer border border-white/[0.08] transition-colors hover:bg-neutral-700 focus:outline-none focus:ring-2 focus:ring-yellow-400/50"
+              className="appearance-none rounded-xl bg-neutral-800/80 pl-2 pr-6 py-2 sm:pl-3 sm:pr-8 sm:py-2 text-base md:text-lg font-medium cursor-pointer border border-white/[0.08] transition-colors hover:bg-neutral-700 focus:outline-none focus:ring-2 focus:ring-yellow-400/50"
             >
               <option value="en">🇬🇧</option>
               <option value="id">🇮🇩</option>
@@ -99,7 +99,7 @@ export default function Header({ activeView, setActiveView, onAddJob, totalJobs,
           {!isDisabled && (
             <button
               onClick={onAddJob}
-              className="flex items-center gap-2 rounded-xl bg-yellow-400 px-3 py-2.5 sm:px-6 sm:py-3 text-sm font-bold text-black shadow-lg shadow-yellow-400/20 transition-all hover:bg-yellow-300 hover:shadow-yellow-400/40 active:scale-[0.97]"
+              className="flex items-center gap-1.5 rounded-xl bg-yellow-400 px-3 py-2.5 sm:px-4 sm:py-2.5 text-xs md:text-sm font-bold text-black shadow-lg shadow-yellow-400/20 transition-all hover:bg-yellow-300 hover:shadow-yellow-400/40 active:scale-[0.97]"
             >
               <Plus className="h-4 w-4" />
               <span className="hidden sm:inline">{t('addJob')}</span>
@@ -107,16 +107,16 @@ export default function Header({ activeView, setActiveView, onAddJob, totalJobs,
           )}
 
           {/* Organization + Avatar button */}
-          <div className="hidden sm:flex items-center gap-3 border-l border-white/[0.08] pl-4">
+          <div className="hidden sm:flex items-center gap-2 lg:gap-3 border-l border-white/[0.08] pl-3 lg:pl-4">
             {profile?.organization && (
-              <div className="text-right">
+              <div className="hidden lg:block text-right">
                 <p className="text-[10px] font-bold uppercase tracking-widest text-neutral-500">Organization</p>
                 <p className="text-sm font-semibold text-white truncate max-w-[140px]">{profile.organization}</p>
               </div>
             )}
             <button
               onClick={() => setActiveView('profile')}
-              className={`flex h-[42px] w-[42px] sm:h-11 sm:w-11 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-white/[0.08] transition-all hover:border-yellow-400/50 ${activeView === 'profile' ? 'ring-2 ring-yellow-400 ring-offset-2 ring-offset-black' : ''}`}
+              className={`flex h-[42px] w-[42px] sm:h-9 sm:w-9 md:h-10 md:w-10 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-white/[0.08] transition-all hover:border-yellow-400/50 ${activeView === 'profile' ? 'ring-2 ring-yellow-400 ring-offset-2 ring-offset-black' : ''}`}
               title={t('profile')}
             >
               {profile?.avatarUrl ? (
@@ -132,7 +132,7 @@ export default function Header({ activeView, setActiveView, onAddJob, totalJobs,
           {/* Logout button */}
           <button
             onClick={logout}
-            className="hidden sm:flex h-[42px] w-[42px] sm:h-11 sm:w-11 shrink-0 items-center justify-center rounded-xl border border-red-500/20 bg-red-500/10 text-red-500 transition-colors hover:bg-red-500/20"
+            className="hidden sm:flex h-[42px] w-[42px] sm:h-9 sm:w-9 md:h-10 md:w-10 shrink-0 items-center justify-center rounded-xl border border-red-500/20 bg-red-500/10 text-red-500 transition-colors hover:bg-red-500/20"
             title={t('logout')}
           >
             <LogOut className="h-4 w-4" />

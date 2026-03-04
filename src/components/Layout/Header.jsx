@@ -4,7 +4,7 @@ import { useI18n } from '../../context/I18nContext'
 import { useAuth } from '../../context/AuthContext'
 import { useUserProfile } from '../../context/UserProfileContext'
 
-export default function Header({ activeView, setActiveView, onAddJob, totalJobs }) {
+export default function Header({ activeView, setActiveView, onAddJob, totalJobs, isDisabled }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [mobileLangOpen, setMobileLangOpen] = useState(false)
   const { t, locale, toggleLocale, changeLocale } = useI18n()
@@ -81,13 +81,15 @@ export default function Header({ activeView, setActiveView, onAddJob, totalJobs 
             <ChevronDown className="pointer-events-none absolute right-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-neutral-400" />
           </div>
 
-          <button
-            onClick={onAddJob}
-            className="flex items-center gap-2 rounded-xl bg-yellow-400 px-3 py-2.5 sm:px-6 sm:py-3 text-sm font-bold text-black shadow-lg shadow-yellow-400/20 transition-all hover:bg-yellow-300 hover:shadow-yellow-400/40 active:scale-[0.97]"
-          >
-            <Plus className="h-4 w-4" />
-            <span className="hidden sm:inline">{t('addJob')}</span>
-          </button>
+          {!isDisabled && (
+            <button
+              onClick={onAddJob}
+              className="flex items-center gap-2 rounded-xl bg-yellow-400 px-3 py-2.5 sm:px-6 sm:py-3 text-sm font-bold text-black shadow-lg shadow-yellow-400/20 transition-all hover:bg-yellow-300 hover:shadow-yellow-400/40 active:scale-[0.97]"
+            >
+              <Plus className="h-4 w-4" />
+              <span className="hidden sm:inline">{t('addJob')}</span>
+            </button>
+          )}
 
           {/* Organization + Avatar button */}
           <div className="hidden sm:flex items-center gap-3 border-l border-white/[0.08] pl-4">

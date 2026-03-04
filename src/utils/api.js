@@ -29,6 +29,21 @@ api.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
+
+    // Handle SESSION_INVALIDATED explicitly
+    if (
+      error.response?.status === 401 &&
+      error.response?.data?.error?.code === "SESSION_INVALIDATED"
+    ) {
+      localStorage.removeItem("hwa_auth");
+      toast.error(
+        error.response.data.error.message ||
+          "Session invalidated. Please log in again.",
+      );
+      setTimeout(() => window.location.reload(), 1500);
+      return Promise.reject(error);
+    }
+
     // Don't intercept auth routes to prevent loops
     if (
       error.response?.status === 401 &&
@@ -56,6 +71,8 @@ api.interceptors.response.use(
             const newSession = {
               name: user.name,
               email: user.email,
+              status: user.status,
+              isDisabled: user.isDisabled,
               createdAt: user.createdAt,
               token,
               refreshToken: newRefreshToken || session.refreshToken,
@@ -68,6 +85,14 @@ api.interceptors.response.use(
         }
       } catch (refreshError) {
         console.error("Token refresh failed", refreshError);
+        // Ensure same behavior for SESSION_INVALIDATED from refresh
+        if (
+          refreshError.response?.data?.error?.code === "SESSION_INVALIDATED"
+        ) {
+          toast.error(
+            refreshError.response.data.error.message || "Session invalidated.",
+          );
+        }
         localStorage.removeItem("hwa_auth");
         window.location.reload();
       }

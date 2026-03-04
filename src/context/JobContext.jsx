@@ -7,7 +7,7 @@ import { useAuth } from './AuthContext'
 const JobContext = createContext(null)
 
 export function JobProvider({ children }) {
-  const { user } = useAuth()
+  const { user, isDisabled } = useAuth()
   const [state, setState] = useState(INITIAL_STATE)
   const [loading, setLoading] = useState(false)
   const [isInitialLoading, setIsInitialLoading] = useState(false)
@@ -62,6 +62,7 @@ export function JobProvider({ children }) {
   }, [user, fetchJobs])
 
   const addJob = async (jobData) => {
+    if (isDisabled) { toast.error('Account disabled — cannot add jobs'); return }
     try {
       const res = await api.post('/jobs', jobData)
       const newJob = res.data.data
@@ -84,6 +85,7 @@ export function JobProvider({ children }) {
   }
 
   const editJob = async (id, updates) => {
+    if (isDisabled) { toast.error('Account disabled — cannot edit jobs'); return }
     try {
       if (updates.status) {
         // Optimistic update for status change
@@ -125,6 +127,7 @@ export function JobProvider({ children }) {
   }
 
   const deleteJob = async (id) => {
+    if (isDisabled) { toast.error('Account disabled — cannot delete jobs'); return }
     try {
       await api.delete(`/jobs/${id}`)
       setState(prevState => {
@@ -150,6 +153,7 @@ export function JobProvider({ children }) {
   }
 
   const moveJob = async (jobId, sourceCol, destCol, sourceIndex, destIndex) => {
+    if (isDisabled) { toast.error('Account disabled — cannot move jobs'); return }
     try {
       setState(prevState => {
         const sourceIds = Array.from(prevState.columns[sourceCol] || [])

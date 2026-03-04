@@ -19,6 +19,8 @@ function loadAuth() {
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(() => loadAuth())
 
+  const isDisabled = user?.isDisabled || user?.status === 'DISABLED'
+
   const login = async (email, password) => {
     try {
       const response = await api.post('/auth/login', { email, password, app: 'job-tracker' })
@@ -27,6 +29,8 @@ export function AuthProvider({ children }) {
       const sessionData = {
         name: userData.name,
         email: userData.email,
+        status: userData.status,
+        isDisabled: userData.isDisabled,
         createdAt: userData.createdAt || new Date().toISOString(),
         token,
         refreshToken,
@@ -61,6 +65,8 @@ export function AuthProvider({ children }) {
       const sessionData = {
         name: userData.name,
         email: userData.email,
+        status: userData.status,
+        isDisabled: userData.isDisabled,
         createdAt: userData.createdAt || new Date().toISOString(),
         token,
         refreshToken,
@@ -87,7 +93,7 @@ export function AuthProvider({ children }) {
   }
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, checkEmail, setupPassword }}>
+    <AuthContext.Provider value={{ user, isDisabled, login, logout, checkEmail, setupPassword }}>
       {children}
     </AuthContext.Provider>
   )

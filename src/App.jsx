@@ -17,7 +17,7 @@ import { Toaster } from 'sonner'
 
 function AppContent() {
   const { totalJobs, isInitialLoading: jobsLoading } = useJobs()
-  const { user } = useAuth()
+  const { user, isDisabled } = useAuth()
   const { isInitialLoading: profileLoading } = useUserProfile()
   const [activeView, setActiveView] = useState('dashboard')
   const [modalOpen, setModalOpen] = useState(false)
@@ -26,6 +26,7 @@ function AppContent() {
   const [showLogin, setShowLogin] = useState(false)
 
   const handleAddJob = () => {
+    if (isDisabled) return
     setEditingJob(null)
     setDefaultStatus('wishlist')
     setModalOpen(true)
@@ -76,11 +77,19 @@ function AppContent() {
 
   return (
     <div className="flex h-full flex-col">
+      {isDisabled && (
+        <div className="flex-shrink-0 bg-red-500/10 border-b border-red-500/20 px-4 py-3 text-center">
+          <p className="text-sm font-medium text-red-400">
+            ⚠️ Your account has been disabled. You can view your data but cannot make changes.
+          </p>
+        </div>
+      )}
       <Header
         activeView={activeView}
         setActiveView={setActiveView}
         onAddJob={handleAddJob}
         totalJobs={totalJobs}
+        isDisabled={isDisabled}
       />
 
       {activeView === 'dashboard' && (
@@ -102,12 +111,14 @@ function AppContent() {
         <NotFoundView />
       )}
 
-      <JobModal
-        isOpen={modalOpen}
-        onClose={handleCloseModal}
-        editingJob={editingJob}
-        defaultStatus={defaultStatus}
-      />
+      {!isDisabled && (
+        <JobModal
+          isOpen={modalOpen}
+          onClose={handleCloseModal}
+          editingJob={editingJob}
+          defaultStatus={defaultStatus}
+        />
+      )}
     </div>
   )
 }

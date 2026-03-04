@@ -2,6 +2,10 @@
 
 ![CI/CD](https://github.com/alvianzf/friendswithandi/actions/workflows/ci-cd.yml/badge.svg)
 
+![Kanban Board](public/docs/board.png)
+![Analytics Dashboard](public/docs/dashboard.png)
+![Gantt Chart](public/docs/gantt.png)
+
 A comprehensive and visually appealing job application tracking system designed to help you organize, manage, and analyze your job search journey.
 
 ## Features

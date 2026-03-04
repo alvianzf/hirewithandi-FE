@@ -30,12 +30,19 @@ Manages the extended user profile including multi-part uploads.
   "email": "string",
   "bio": "string",
   "role": "string",
+  "status": "string (enum: 'ACTIVE', 'DISABLED')",
+  "isDisabled": "boolean (true if user OR organization is disabled)",
   "organization": "string (read-only)",
   "location": "string",
   "linkedIn": "string (URL)",
   "avatarUrl": "string (URL) | null"
 }
 ```
+
+### Read-Only Mode & Security
+
+- **Disabled Accounts**: When `isDisabled` is `true`, the application operates in **Read-Only Mode**. Most mutations (`POST`, `PATCH`, `DELETE` on jobs) will be blocked both on frontend and backend.
+- **Single Concurrent Login**: MEMBER accounts are restricted to one active session. Logging in on a new device will invalidate the previous `sessionToken`, causing any active sessions on other devices to receive a `401 Unauthorized` (Session Invalidated) error.
 
 ---
 

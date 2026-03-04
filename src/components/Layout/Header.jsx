@@ -43,8 +43,8 @@ export default function Header({ activeView, setActiveView, onAddJob, totalJobs,
           </div>
         </div>
 
-        {/* Desktop view switcher - Centered */}
-        <div className="hidden absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 items-center gap-2 rounded-2xl bg-neutral-900 p-2 md:flex">
+        {/* Desktop view switcher - Centered on large screens, hidden on smaller ones */}
+        <div className="hidden lg:flex absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 items-center gap-2 rounded-2xl bg-neutral-900 p-2">
           {views.map(v => {
             const Icon = v.icon
             const isActive = activeView === v.id
@@ -67,18 +67,31 @@ export default function Header({ activeView, setActiveView, onAddJob, totalJobs,
 
         {/* Right actions */}
         <div className="flex items-center gap-2 sm:gap-4 relative z-10">
+          
+          {/* Mobile view switcher drop-down (shows up to lg) */}
+          <div className="hidden sm:block lg:hidden">
+             <select
+              value={activeView}
+              onChange={e => setActiveView(e.target.value)}
+              className="appearance-none rounded-xl bg-neutral-800/80 pl-4 pr-10 py-3 text-sm font-medium text-neutral-200 cursor-pointer border border-white/[0.08] transition-colors hover:bg-neutral-700 focus:outline-none focus:ring-2 focus:ring-yellow-400/50"
+             >
+               {views.map(v => (
+                 <option key={v.id} value={v.id}>{v.label}</option>
+               ))}
+             </select>
+          </div>
+
           <div className="relative hidden sm:block">
             <select
               value={locale}
               onChange={e => changeLocale(e.target.value)}
-              className="appearance-none rounded-xl bg-neutral-800/80 pl-4 pr-10 py-3 text-sm font-medium text-neutral-200 cursor-pointer border border-white/[0.08] transition-colors hover:bg-neutral-700 focus:outline-none focus:ring-2 focus:ring-yellow-400/50"
+              className="appearance-none rounded-xl bg-neutral-800/80 px-4 py-3 text-xl font-medium cursor-pointer border border-white/[0.08] transition-colors hover:bg-neutral-700 focus:outline-none focus:ring-2 focus:ring-yellow-400/50"
             >
-              <option value="en">🇬🇧 English</option>
-              <option value="id">🇮🇩 Indonesia</option>
-              <option value="id_corp">👔 Jaksel</option>
-              <option value="sg">🇸🇬 Singlish</option>
+              <option value="en">🇬🇧</option>
+              <option value="id">🇮🇩</option>
+              <option value="id_corp">👔</option>
+              <option value="sg">🇸🇬</option>
             </select>
-            <ChevronDown className="pointer-events-none absolute right-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-neutral-400" />
           </div>
 
           {!isDisabled && (

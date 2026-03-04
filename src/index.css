@@ -74,9 +74,22 @@
   }
 
   /* Select option styling for dark bg */
+  select {
+    cursor: pointer;
+    background-color: var(--color-bg-secondary);
+    color: var(--color-text-primary);
+  }
+
   select option {
-    background: #111;
+    background-color: #111;
     color: #fff;
+    padding: 10px;
+  }
+
+  /* Target specific browsers for option styling where possible */
+  select:focus option:checked {
+    background: var(--color-accent) linear-gradient(0deg, var(--color-accent) 0%, var(--color-accent) 100%);
+    color: #000;
   }
 
   /* Added selection styling */

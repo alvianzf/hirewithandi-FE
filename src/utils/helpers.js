@@ -46,7 +46,7 @@ export function formatDate(dateString) {
 export function formatDateShort(dateString) {
   if (!dateString) return "—";
   try {
-    return format(new Date(dateString), "dd MMM");
+    return format(new Date(dateString), "dd MMMM");
   } catch (e) {
     return dateString;
   }
@@ -69,11 +69,9 @@ export function daysLabel(count) {
 export function formatRelativeTime(dateString) {
   if (!dateString) return "—";
   try {
-    const distanceText = formatDistanceToNow(new Date(dateString), {
+    return formatDistanceToNow(new Date(dateString), {
       addSuffix: true,
     });
-    // This outputs e.g. "3 days ago", "about 1 month ago"
-    return `Applied ${distanceText}`;
   } catch (e) {
     return dateString;
   }

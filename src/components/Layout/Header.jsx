@@ -132,11 +132,10 @@ export default function Header({ activeView, setActiveView, onAddJob, totalJobs,
           {/* Logout button */}
           <button
             onClick={logout}
-            className="hidden sm:flex h-[42px] w-[42px] sm:h-11 sm:w-auto shrink-0 items-center justify-center gap-2 rounded-xl border border-red-500/20 bg-red-500/10 px-0 sm:px-4 text-sm font-medium text-red-500 transition-colors hover:bg-red-500/20"
+            className="hidden sm:flex h-[42px] w-[42px] sm:h-11 sm:w-11 shrink-0 items-center justify-center rounded-xl border border-red-500/20 bg-red-500/10 text-red-500 transition-colors hover:bg-red-500/20"
             title={t('logout')}
           >
-            <LogOut className="h-4 w-4 sm:h-4 sm:w-4" />
-            <span className="hidden sm:inline">{t('logout')}</span>
+            <LogOut className="h-4 w-4" />
           </button>
 
           {/* Mobile menu toggle */}

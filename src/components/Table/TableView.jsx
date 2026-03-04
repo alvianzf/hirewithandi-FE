@@ -107,7 +107,7 @@ export default function TableView({ onCardClick }) {
       </div>
 
       {/* Desktop table */}
-      <div className="hidden overflow-hidden rounded-2xl border border-white/[0.06] md:block">
+      <div className="hidden overflow-x-auto rounded-2xl border border-white/[0.06] md:block w-full">
         <table className="w-full">
           <thead>
             <tr className="border-b border-white/[0.06] bg-neutral-900/60 backdrop-blur-md">

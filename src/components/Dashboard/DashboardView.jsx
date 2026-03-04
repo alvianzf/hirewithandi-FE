@@ -210,7 +210,7 @@ export default function DashboardView() {
       <div className="mx-auto max-w-7xl space-y-12">
 
         {/* Top KPI cards */}
-        <div className="grid grid-cols-2 gap-8 md:grid-cols-4">
+        <div className="grid grid-cols-2 gap-4 md:gap-6 lg:grid-cols-4 lg:gap-8">
           <StatCard
             icon={<Briefcase className="h-5 w-5" />}
             label={t('all')}

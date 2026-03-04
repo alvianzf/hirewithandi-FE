@@ -29,9 +29,9 @@ export default function Header({ activeView, setActiveView, onAddJob, totalJobs,
 
   return (
     <header className="flex-shrink-0 border-b border-white/[0.08] bg-black/90 backdrop-blur-md">
-      <div className="relative flex items-center justify-between px-4 py-4 sm:px-8 md:px-12 lg:px-16">
+      <div className="flex items-center justify-between gap-4 px-4 py-4 sm:px-8 md:px-12 lg:px-16">
         {/* Logo */}
-        <div className="flex items-center gap-3 sm:gap-4 relative z-10">
+        <div className="flex items-center gap-3 sm:gap-4 flex-shrink-0">
           <img src="/lwa-logo.png" alt="LWA" className="h-9 w-9 sm:h-11 sm:w-11 object-contain drop-shadow-md" />
           <div>
             <h1 className="text-lg font-bold leading-tight tracking-tight text-white">
@@ -43,8 +43,9 @@ export default function Header({ activeView, setActiveView, onAddJob, totalJobs,
           </div>
         </div>
 
-        {/* Desktop view switcher - Centered on large screens, hidden on smaller ones */}
-        <div className="hidden lg:flex absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 items-center gap-2 rounded-2xl bg-neutral-900 p-2">
+        {/* Desktop view switcher - Hidden on < 1280px to save space */}
+        <div className="hidden xl:flex items-center justify-center flex-1 mx-4">
+          <div className="flex items-center gap-2 rounded-2xl bg-neutral-900 p-2 flex-shrink-0">
           {views.map(v => {
             const Icon = v.icon
             const isActive = activeView === v.id
@@ -63,13 +64,14 @@ export default function Header({ activeView, setActiveView, onAddJob, totalJobs,
               </button>
             )
           })}
+          </div>
         </div>
 
         {/* Right actions */}
-        <div className="flex items-center gap-2 sm:gap-4 relative z-10">
+        <div className="flex items-center gap-2 sm:gap-4 flex-shrink-0">
           
-          {/* Mobile view switcher drop-down (shows up to lg) */}
-          <div className="hidden sm:block lg:hidden">
+          {/* Mobile view switcher drop-down (shows up to xl) */}
+          <div className="hidden sm:block xl:hidden">
              <select
               value={activeView}
               onChange={e => setActiveView(e.target.value)}

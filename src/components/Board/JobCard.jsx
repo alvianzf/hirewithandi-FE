@@ -1,7 +1,7 @@
 import React from 'react'
 import { Draggable } from '@hello-pangea/dnd'
 import { Calendar, Clock, ExternalLink, MapPin, Globe, Building2, ArrowLeftRight, ChevronDown, Target } from 'lucide-react'
-import { calculateActiveDays, daysSince, formatDateShort, daysLabel, formatSalary } from '../../utils/helpers'
+import { calculateActiveDays, daysSince, formatDateShort, daysLabel, formatSalary, formatRelativeTime } from '../../utils/helpers'
 import { COLUMNS, COLUMN_MAP, FINAL_STATUSES } from '../../utils/constants'
 import { useI18n } from '../../context/I18nContext'
 import { useJobs } from '../../context/JobContext'
@@ -72,7 +72,10 @@ const JobCard = React.memo(function JobCard({ job, index, onClick }) {
             )}
             {job.workType && (
               <span className="inline-flex items-center gap-1.5 text-xs font-medium text-neutral-400">
-                {WORK_TYPE_ICONS[job.workType]} {t(job.workType)}
+                {job.workType === 'remote' && <Globe className="h-3.5 w-3.5 text-cyan-400" />}
+                {job.workType === 'onsite' && <Building2 className="h-3.5 w-3.5 text-orange-400" />}
+                {job.workType === 'hybrid' && <ArrowLeftRight className="h-3.5 w-3.5 text-purple-400" />}
+                <span className="capitalize">{t(job.workType)}</span>
               </span>
             )}
             {job.location && (job.workType === 'onsite' || job.workType === 'hybrid') && (
@@ -105,12 +108,12 @@ const JobCard = React.memo(function JobCard({ job, index, onClick }) {
           <div className="flex flex-wrap items-center gap-2.5 border-t border-white/[0.06] pt-5">
             <span className="inline-flex items-center gap-1.5 rounded-lg bg-neutral-800/50 px-3 py-1.5 text-xs font-medium text-neutral-300">
               <Calendar className="h-3.5 w-3.5 text-neutral-500" />
-              {formatDateShort(job.dateApplied)}
+              Applied {formatDateShort(job.dateApplied)}
             </span>
 
             <span className="inline-flex items-center gap-1.5 rounded-lg bg-neutral-800/50 px-3 py-1.5 text-xs font-medium text-neutral-300">
               <Clock className="h-3.5 w-3.5 text-neutral-500" />
-              {daysLabel(daysApplied)}
+              {formatRelativeTime(job.dateApplied)}
             </span>
 
             {daysInCol > 0 && (

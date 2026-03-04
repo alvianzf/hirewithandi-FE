@@ -3,6 +3,7 @@ export function generateId() {
 }
 
 import { FINAL_STATUSES } from "./constants";
+import { format, formatDistanceToNow } from "date-fns";
 
 export function daysSince(dateString, endDateString = null) {
   if (!dateString) return 0;
@@ -44,10 +45,11 @@ export function formatDate(dateString) {
 
 export function formatDateShort(dateString) {
   if (!dateString) return "—";
-  return new Date(dateString).toLocaleDateString("en-US", {
-    month: "short",
-    day: "numeric",
-  });
+  try {
+    return format(new Date(dateString), "dd MMM");
+  } catch (e) {
+    return dateString;
+  }
 }
 
 export function getMonthYear(dateString) {
@@ -62,6 +64,19 @@ export function daysLabel(count) {
   if (count === 0) return "Today";
   if (count === 1) return "1 day";
   return `${count} days`;
+}
+
+export function formatRelativeTime(dateString) {
+  if (!dateString) return "—";
+  try {
+    const distanceText = formatDistanceToNow(new Date(dateString), {
+      addSuffix: true,
+    });
+    // This outputs e.g. "3 days ago", "about 1 month ago"
+    return `Applied ${distanceText}`;
+  } catch (e) {
+    return dateString;
+  }
 }
 
 export function formatSalary(salary) {

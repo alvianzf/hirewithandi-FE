@@ -1,5 +1,8 @@
 import { useState, useEffect } from 'react'
-import { X, Trash2, ExternalLink, Clock, ChevronDown, ChevronUp } from 'lucide-react'
+import { X, Trash2, ExternalLink, Clock, ChevronDown, ChevronUp, Calendar } from 'lucide-react'
+import DatePicker from 'react-datepicker'
+import 'react-datepicker/dist/react-datepicker.css'
+import { formatRelativeTime } from '../../utils/helpers'
 import { COLUMNS, COLUMN_MAP, WORK_TYPES } from '../../utils/constants'
 import { useJobs } from '../../context/JobContext'
 import { useI18n } from '../../context/I18nContext'
@@ -277,12 +280,23 @@ export default function JobModal({ isOpen, onClose, editingJob, defaultStatus = 
             </div>
             <div>
               <label className="mb-1.5 block text-sm font-medium text-neutral-300">{t('dateApplied')}</label>
-              <input
-                type="date"
-                value={form.dateApplied}
-                onChange={e => handleChange('dateApplied', e.target.value)}
-                className={inputClass}
-              />
+              <div className="relative">
+                <DatePicker
+                  selected={form.dateApplied ? new Date(form.dateApplied) : null}
+                  onChange={date => {
+                    if (date) {
+                      handleChange('dateApplied', date.toLocaleDateString('en-CA')) // YYYY-MM-DD
+                    } else {
+                      handleChange('dateApplied', '')
+                    }
+                  }}
+                  dateFormat="MMM d, yyyy"
+                  className={`${inputClass} !pl-10 !py-3.5`}
+                  calendarClassName="dark-theme-calendar"
+                  popperPlacement="bottom-start"
+                />
+                <Calendar className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-neutral-400" />
+              </div>
             </div>
             <div>
               <label className="mb-2 block text-sm font-medium text-neutral-300">{t('jobFitPercentage')}</label>
@@ -382,11 +396,11 @@ export default function JobModal({ isOpen, onClose, editingJob, defaultStatus = 
               
               {showHistory && (
                 <div className="border-t border-white/[0.08] p-5 space-y-4">
-                  {editingJob.history.map((hist, index) => (
+                  {[...(editingJob.history || [])].sort((a, b) => new Date(b.enteredAt) - new Date(a.enteredAt)).map((hist, index, array) => (
                     <div key={hist.id || index} className="flex gap-4">
                       <div className="flex flex-col items-center">
                         <div className="h-2 w-2 rounded-full mt-1.5" style={{ backgroundColor: COLUMN_MAP[hist.status]?.color || '#6c757d' }} />
-                        {index !== editingJob.history.length - 1 && (
+                        {index !== array.length - 1 && (
                           <div className="w-[1px] h-full bg-white/[0.08] my-1" />
                         )}
                       </div>

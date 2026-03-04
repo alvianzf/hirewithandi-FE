@@ -12,7 +12,7 @@ const WORK_TYPE_ICONS = {
   hybrid: '🔄',
 }
 
-const JobCard = React.memo(function JobCard({ job, index, onClick }) {
+const JobCard = React.memo(function JobCard({ job, index, onClick, isDisabled }) {
   const { t, colLabel } = useI18n()
   const { editJob } = useJobs()
   const isFinalState = FINAL_STATUSES.includes(job.status)
@@ -34,7 +34,7 @@ const JobCard = React.memo(function JobCard({ job, index, onClick }) {
         <div
           ref={provided.innerRef}
           {...provided.draggableProps}
-          {...provided.dragHandleProps}
+          {...(!isDisabled ? provided.dragHandleProps : {})}
           onClick={() => onClick(job)}
           style={{
             ...provided.draggableProps.style,
@@ -133,10 +133,11 @@ const JobCard = React.memo(function JobCard({ job, index, onClick }) {
           </div>
 
           {/* Quick status switcher — visible on hover */}
-          <div
-            className={`mt-4 transition-all duration-200 ${snapshot.isDragging ? 'opacity-0' : 'group-hover:opacity-100 opacity-0'}`}
-            onClick={e => e.stopPropagation()}
-          >
+          {!isDisabled && (
+            <div
+              className={`mt-4 transition-all duration-200 ${snapshot.isDragging ? 'opacity-0' : 'group-hover:opacity-100 opacity-0'}`}
+              onClick={e => e.stopPropagation()}
+            >
             <div className="relative">
               <select
                 value={job.status}
@@ -156,7 +157,7 @@ const JobCard = React.memo(function JobCard({ job, index, onClick }) {
                 style={{ color: colMeta?.color }}
               />
             </div>
-          </div>
+          )}
 
         </div>
       )}

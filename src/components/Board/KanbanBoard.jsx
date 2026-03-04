@@ -5,7 +5,7 @@ import { COLUMNS } from '../../utils/constants'
 import { useI18n } from '../../context/I18nContext'
 import Column from './Column'
 
-export default function KanbanBoard({ onCardClick, onAddToColumn }) {
+export default function KanbanBoard({ onCardClick, onAddToColumn, isDisabled }) {
   const { state, moveJob } = useJobs()
   const { colLabel } = useI18n()
   const scrollRef = useRef(null)
@@ -86,6 +86,7 @@ export default function KanbanBoard({ onCardClick, onAddToColumn }) {
                 jobs={jobs}
                 onCardClick={onCardClick}
                 onAddToColumn={onAddToColumn}
+                isDisabled={isDisabled}
               />
             </div>
           )

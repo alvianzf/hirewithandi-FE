@@ -4,7 +4,7 @@ import JobCard from './JobCard'
 import { Plus } from 'lucide-react'
 import { useI18n } from '../../context/I18nContext'
 
-const Column = React.memo(function Column({ columnId, label, color, jobs, onCardClick, onAddToColumn }) {
+const Column = React.memo(function Column({ columnId, label, color, jobs, onCardClick, onAddToColumn, isDisabled }) {
   const { colLabel } = useI18n()
 
   return (
@@ -21,13 +21,15 @@ const Column = React.memo(function Column({ columnId, label, color, jobs, onCard
             {jobs.length}
           </span>
         </div>
-        <button
-          onClick={() => onAddToColumn(columnId)}
-          className="rounded-lg p-2 text-neutral-600 transition-colors hover:bg-white/[0.06] hover:text-neutral-300"
-          title={`Add to ${colLabel(columnId)}`}
-        >
-          <Plus className="h-4 w-4" />
-        </button>
+        {!isDisabled && (
+          <button
+            onClick={() => onAddToColumn(columnId)}
+            className="rounded-lg p-2 text-neutral-600 transition-colors hover:bg-white/[0.06] hover:text-neutral-300"
+            title={`Add to ${colLabel(columnId)}`}
+          >
+            <Plus className="h-4 w-4" />
+          </button>
+        )}
       </div>
 
       {/* Droppable Area */}
@@ -42,7 +44,7 @@ const Column = React.memo(function Column({ columnId, label, color, jobs, onCard
             style={{ minHeight: 80 }}
           >
             {jobs.map((job, index) => (
-              <JobCard key={job.id} job={job} index={index} onClick={onCardClick} />
+              <JobCard key={job.id} job={job} index={index} onClick={onCardClick} isDisabled={isDisabled} />
             ))}
             {provided.placeholder}
 
@@ -50,12 +52,14 @@ const Column = React.memo(function Column({ columnId, label, color, jobs, onCard
             {jobs.length === 0 && !snapshot.isDraggingOver && (
               <div className="flex flex-col items-center justify-center py-10 text-center">
                 <p className="text-sm font-medium text-neutral-500">No jobs here</p>
-                <button
-                  onClick={() => onAddToColumn(columnId)}
-                  className="mt-3 rounded-xl bg-white/[0.04] px-5 py-2.5 text-xs font-bold text-neutral-300 transition-colors hover:bg-white/[0.1] hover:text-white"
-                >
-                  + Add one
-                </button>
+                {!isDisabled && (
+                  <button
+                    onClick={() => onAddToColumn(columnId)}
+                    className="mt-3 rounded-xl bg-white/[0.04] px-5 py-2.5 text-xs font-bold text-neutral-300 transition-colors hover:bg-white/[0.1] hover:text-white"
+                  >
+                    + Add one
+                  </button>
+                )}
               </div>
             )}
           </div>

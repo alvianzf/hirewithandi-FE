@@ -111,14 +111,13 @@ function AppContent() {
         <NotFoundView />
       )}
 
-      {!isDisabled && (
         <JobModal
           isOpen={modalOpen}
           onClose={handleCloseModal}
           editingJob={editingJob}
           defaultStatus={defaultStatus}
+          isDisabled={isDisabled}
         />
-      )}
     </div>
   )
 }

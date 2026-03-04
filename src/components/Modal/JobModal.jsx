@@ -8,7 +8,7 @@ import { useJobs } from '../../context/JobContext'
 import { useI18n } from '../../context/I18nContext'
 import Swal from 'sweetalert2'
 
-export default function JobModal({ isOpen, onClose, editingJob, defaultStatus = 'wishlist' }) {
+export default function JobModal({ isOpen, onClose, editingJob, defaultStatus = 'wishlist', isDisabled }) {
   const { addJob, editJob, deleteJob } = useJobs()
   const { t, colLabel } = useI18n()
   const isEditing = !!editingJob
@@ -147,7 +147,7 @@ export default function JobModal({ isOpen, onClose, editingJob, defaultStatus = 
             {isEditing ? t('editApplication') : t('newApplication')}
           </h2>
           <div className="flex items-center gap-2">
-            {isEditing && (
+            {isEditing && !isDisabled && (
               <button
                 onClick={handleDelete}
                 className="rounded-lg p-2 text-red-400 transition-colors hover:bg-red-500/10 hover:text-red-300"
@@ -167,6 +167,17 @@ export default function JobModal({ isOpen, onClose, editingJob, defaultStatus = 
 
         {/* Form */}
         <form onSubmit={handleSubmit} className="max-h-[70vh] space-y-6 overflow-y-auto p-8">
+          {isDisabled && (
+            <div className="flex items-center gap-3 rounded-2xl bg-yellow-400/10 border border-yellow-400/20 px-5 py-4 text-yellow-500/90 shadow-lg shadow-yellow-400/5 animate-in fade-in slide-in-from-top-4 duration-500">
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-yellow-400/20 text-yellow-400 flex-shrink-0">
+                <Clock className="h-5 w-5" />
+              </div>
+              <div>
+                <p className="text-sm font-bold uppercase tracking-widest leading-none mb-1">Read-Only Mode</p>
+                <p className="text-[11px] font-medium text-yellow-400/70 leading-tight">Your account is disabled. You can view details but cannot save changes.</p>
+              </div>
+            </div>
+          )}
           {/* Position */}
           <div>
             <label className="mb-2 block text-sm font-medium text-neutral-300">{t('position')} *</label>
@@ -178,6 +189,7 @@ export default function JobModal({ isOpen, onClose, editingJob, defaultStatus = 
               className={inputClass}
               required
               autoFocus
+              disabled={isDisabled}
             />
           </div>
 
@@ -191,6 +203,7 @@ export default function JobModal({ isOpen, onClose, editingJob, defaultStatus = 
               placeholder={t('companyPlaceholder')}
               className={inputClass}
               required
+              disabled={isDisabled}
             />
           </div>
 
@@ -204,6 +217,7 @@ export default function JobModal({ isOpen, onClose, editingJob, defaultStatus = 
                 onChange={e => handleChange('url', e.target.value)}
                 placeholder="https://..."
                 className={inputClass}
+                disabled={isDisabled}
               />
             </div>
             <div>
@@ -214,6 +228,7 @@ export default function JobModal({ isOpen, onClose, editingJob, defaultStatus = 
                 onChange={e => handleChange('salary', e.target.value)}
                 placeholder={t('salaryPlaceholder')}
                 className={inputClass}
+                disabled={isDisabled}
               />
             </div>
           </div>
@@ -226,12 +241,13 @@ export default function JobModal({ isOpen, onClose, editingJob, defaultStatus = 
                 <button
                   key={wt.id}
                   type="button"
-                  onClick={() => handleChange('workType', wt.id)}
+                  onClick={() => !isDisabled && handleChange('workType', wt.id)}
+                  disabled={isDisabled}
                   className={`flex flex-1 items-center justify-center gap-2 rounded-xl border px-4 py-3 text-sm font-medium transition-all ${
                     form.workType === wt.id
                       ? 'border-yellow-400/50 bg-yellow-400/10 text-yellow-400'
                       : 'border-white/[0.08] bg-white/[0.02] text-neutral-400 hover:border-white/[0.15] hover:text-neutral-300'
-                  }`}
+                  } ${isDisabled ? 'cursor-not-allowed opacity-80' : ''}`}
                 >
                   <span>{wt.icon}</span>
                   {t(wt.id)}
@@ -250,6 +266,7 @@ export default function JobModal({ isOpen, onClose, editingJob, defaultStatus = 
                 onChange={e => handleChange('location', e.target.value)}
                 placeholder={t('locationPlaceholder')}
                 className={inputClass}
+                disabled={isDisabled}
               />
             </div>
           )}
@@ -262,7 +279,8 @@ export default function JobModal({ isOpen, onClose, editingJob, defaultStatus = 
                 <select
                   value={form.status}
                   onChange={e => handleChange('status', e.target.value)}
-                  className="w-full appearance-none rounded-xl border-0 pl-10 pr-10 py-3.5 text-sm font-bold cursor-pointer focus:outline-none focus:ring-2 focus:ring-yellow-400/50 transition-colors"
+                  disabled={isDisabled}
+                  className={`w-full appearance-none rounded-xl border-0 pl-10 pr-10 py-3.5 text-sm font-bold focus:outline-none focus:ring-2 focus:ring-yellow-400/50 transition-colors ${isDisabled ? 'cursor-not-allowed opacity-80' : 'cursor-pointer'}`}
                   style={{
                     backgroundColor: `${COLUMN_MAP[form.status]?.color}18`,
                     color: COLUMN_MAP[form.status]?.color,
@@ -291,9 +309,10 @@ export default function JobModal({ isOpen, onClose, editingJob, defaultStatus = 
                     }
                   }}
                   dateFormat="MMM d, yyyy"
-                  className={`${inputClass} !pl-10 !py-3.5`}
+                  className={`${inputClass} !pl-10 !py-3.5 ${isDisabled ? 'cursor-not-allowed opacity-80' : ''}`}
                   calendarClassName="dark-theme-calendar"
                   popperPlacement="bottom-start"
+                  disabled={isDisabled}
                 />
                 <Calendar className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-neutral-400" />
               </div>
@@ -309,6 +328,7 @@ export default function JobModal({ isOpen, onClose, editingJob, defaultStatus = 
                   onBlur={handleJobFitBlur}
                   placeholder="0-100"
                   className={`${inputClass} pr-10`}
+                  disabled={isDisabled}
                 />
                 <span className={`pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-sm font-bold ${
                   form.jobFitPercentage !== '' && parseInt(form.jobFitPercentage, 10) < 80 ? 'text-red-400' : form.jobFitPercentage !== '' && parseInt(form.jobFitPercentage, 10) >= 80 ? 'text-green-400' : 'text-neutral-500'
@@ -329,6 +349,7 @@ export default function JobModal({ isOpen, onClose, editingJob, defaultStatus = 
                   onChange={e => handleChange('finalOffer', e.target.value)}
                   placeholder={t('finalOfferPlaceholder')}
                   className={inputClass}
+                  disabled={isDisabled}
                 />
               </div>
               <div>
@@ -339,6 +360,7 @@ export default function JobModal({ isOpen, onClose, editingJob, defaultStatus = 
                   placeholder={t('benefitsPlaceholder')}
                   rows={2}
                   className={`${inputClass} resize-none`}
+                  disabled={isDisabled}
                 />
               </div>
               <div>
@@ -349,6 +371,7 @@ export default function JobModal({ isOpen, onClose, editingJob, defaultStatus = 
                   placeholder={t('nonMonetaryPlaceholder')}
                   rows={2}
                   className={`${inputClass} resize-none`}
+                  disabled={isDisabled}
                 />
               </div>
             </div>
@@ -363,6 +386,7 @@ export default function JobModal({ isOpen, onClose, editingJob, defaultStatus = 
               placeholder={t('notesPlaceholder')}
               rows={3}
               className={`${inputClass} resize-none`}
+              disabled={isDisabled}
             />
           </div>
 
@@ -429,14 +453,16 @@ export default function JobModal({ isOpen, onClose, editingJob, defaultStatus = 
               onClick={onClose}
               className="flex-1 rounded-xl border border-white/[0.08] px-5 py-3.5 text-sm font-medium text-neutral-300 transition-colors hover:bg-neutral-800"
             >
-              {t('cancel')}
+              {isDisabled ? 'Dismiss' : t('cancel')}
             </button>
-            <button
-              type="submit"
-              className="flex-1 rounded-xl bg-yellow-400 px-5 py-3.5 text-sm font-bold text-black shadow-lg shadow-yellow-400/20 transition-all hover:bg-yellow-300 hover:shadow-yellow-400/40"
-            >
-              {isEditing ? t('saveChanges') : t('addApplication')}
-            </button>
+            {!isDisabled && (
+              <button
+                type="submit"
+                className="flex-1 rounded-xl bg-yellow-400 px-5 py-3.5 text-sm font-bold text-black shadow-lg shadow-yellow-400/20 transition-all hover:bg-yellow-300 hover:shadow-yellow-400/40"
+              >
+                {isEditing ? t('saveChanges') : t('addApplication')}
+              </button>
+            )}
           </div>
         </form>
       </div>

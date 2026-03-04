@@ -157,6 +157,7 @@ const JobCard = React.memo(function JobCard({ job, index, onClick, isDisabled })
                 style={{ color: colMeta?.color }}
               />
             </div>
+          </div>
           )}
 
         </div>

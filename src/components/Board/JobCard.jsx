@@ -54,11 +54,11 @@ const JobCard = React.memo(function JobCard({ job, index, onClick }) {
             style={{ backgroundColor: colMeta?.color || '#FFD700' }}
           />
 
-          {/* Company & Position */}
+          {/* Position & Company - SWAPPED as requested */}
           <div className="mb-4 text-left">
-            <h3 className="text-[15px] font-bold text-white leading-tight">{job.company}</h3>
-            {job.position && (
-              <p className="mt-1 text-xs font-medium text-neutral-400 leading-snug">{job.position}</p>
+            <h3 className="text-[17px] font-bold text-white leading-tight">{job.position || 'Unknown Role'}</h3>
+            {job.company && (
+              <p className="mt-1 text-sm font-medium text-[var(--color-primary-yellow)] leading-snug">{job.company}</p>
             )}
             {job.notes && (
               <p className="mt-2 text-[11px] text-neutral-500 leading-relaxed line-clamp-2">{job.notes}</p>
@@ -155,13 +155,6 @@ const JobCard = React.memo(function JobCard({ job, index, onClick }) {
             </div>
           </div>
 
-          {/* URL indicator */}
-          {job.url && !snapshot.isDragging && (
-            <div className="mt-2 flex items-center gap-1 text-[11px] text-yellow-400 opacity-0 transition-opacity group-hover:opacity-100">
-              <ExternalLink className="h-3 w-3" />
-              <span>{t('viewPosting')}</span>
-            </div>
-          )}
         </div>
       )}
     </Draggable>

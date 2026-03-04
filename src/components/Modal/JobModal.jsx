@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { X, Trash2, ExternalLink } from 'lucide-react'
+import { X, Trash2, ExternalLink, Clock, ChevronDown, ChevronUp } from 'lucide-react'
 import { COLUMNS, COLUMN_MAP, WORK_TYPES } from '../../utils/constants'
 import { useJobs } from '../../context/JobContext'
 import { useI18n } from '../../context/I18nContext'
@@ -9,6 +9,7 @@ export default function JobModal({ isOpen, onClose, editingJob, defaultStatus = 
   const { addJob, editJob, deleteJob } = useJobs()
   const { t, colLabel } = useI18n()
   const isEditing = !!editingJob
+  const [showHistory, setShowHistory] = useState(false)
 
   const [form, setForm] = useState({
     company: '',
@@ -17,7 +18,7 @@ export default function JobModal({ isOpen, onClose, editingJob, defaultStatus = 
     salary: '',
     notes: '',
     status: 'wishlist',
-    dateApplied: new Date().toISOString().slice(0, 10),
+    dateApplied: new Date().toLocaleDateString('en-CA'), // 'YYYY-MM-DD' local time
     workType: 'remote',
     location: '',
     finalOffer: '',
@@ -35,7 +36,7 @@ export default function JobModal({ isOpen, onClose, editingJob, defaultStatus = 
         salary: editingJob.salary || '',
         notes: editingJob.notes || '',
         status: editingJob.status || 'wishlist',
-        dateApplied: editingJob.dateApplied ? editingJob.dateApplied.slice(0, 10) : '',
+        dateApplied: editingJob.dateApplied ? new Date(editingJob.dateApplied).toLocaleDateString('en-CA') : '',
         workType: (editingJob.workType || 'remote').toLowerCase(),
         location: editingJob.location || '',
         finalOffer: editingJob.finalOffer || '',
@@ -51,7 +52,7 @@ export default function JobModal({ isOpen, onClose, editingJob, defaultStatus = 
         salary: '',
         notes: '',
         status: defaultStatus || 'wishlist',
-        dateApplied: new Date().toISOString().slice(0, 10),
+        dateApplied: new Date().toLocaleDateString('en-CA'),
         workType: 'remote',
         location: '',
         finalOffer: '',
@@ -163,6 +164,20 @@ export default function JobModal({ isOpen, onClose, editingJob, defaultStatus = 
 
         {/* Form */}
         <form onSubmit={handleSubmit} className="max-h-[70vh] space-y-6 overflow-y-auto p-8">
+          {/* Position */}
+          <div>
+            <label className="mb-2 block text-sm font-medium text-neutral-300">{t('position')} *</label>
+            <input
+              type="text"
+              value={form.position}
+              onChange={e => handleChange('position', e.target.value)}
+              placeholder={t('positionPlaceholder')}
+              className={inputClass}
+              required
+              autoFocus
+            />
+          </div>
+
           {/* Company */}
           <div>
             <label className="mb-2 block text-sm font-medium text-neutral-300">{t('company')} *</label>
@@ -173,19 +188,6 @@ export default function JobModal({ isOpen, onClose, editingJob, defaultStatus = 
               placeholder={t('companyPlaceholder')}
               className={inputClass}
               required
-              autoFocus
-            />
-          </div>
-
-          {/* Position */}
-          <div>
-            <label className="mb-2 block text-sm font-medium text-neutral-300">{t('position')}</label>
-            <input
-              type="text"
-              value={form.position}
-              onChange={e => handleChange('position', e.target.value)}
-              placeholder={t('positionPlaceholder')}
-              className={inputClass}
             />
           </div>
 
@@ -361,6 +363,49 @@ export default function JobModal({ isOpen, onClose, editingJob, defaultStatus = 
               <ExternalLink className="h-4 w-4" />
               {t('openJobPosting')}
             </a>
+          )}
+
+          {/* Activity History Accordion */}
+          {isEditing && editingJob?.history && editingJob.history.length > 0 && (
+            <div className="rounded-xl border border-white/[0.08] bg-white/[0.02] overflow-hidden">
+              <button
+                type="button"
+                onClick={() => setShowHistory(!showHistory)}
+                className="flex w-full items-center justify-between px-5 py-3.5 text-sm font-medium text-neutral-300 transition-colors hover:bg-white/[0.04]"
+              >
+                <div className="flex items-center gap-2">
+                  <Clock className="h-4 w-4 text-neutral-400" />
+                  Activity History
+                </div>
+                {showHistory ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+              </button>
+              
+              {showHistory && (
+                <div className="border-t border-white/[0.08] p-5 space-y-4">
+                  {editingJob.history.map((hist, index) => (
+                    <div key={hist.id || index} className="flex gap-4">
+                      <div className="flex flex-col items-center">
+                        <div className="h-2 w-2 rounded-full mt-1.5" style={{ backgroundColor: COLUMN_MAP[hist.status]?.color || '#6c757d' }} />
+                        {index !== editingJob.history.length - 1 && (
+                          <div className="w-[1px] h-full bg-white/[0.08] my-1" />
+                        )}
+                      </div>
+                      <div className="pb-2">
+                        <p className="text-sm font-medium text-white">
+                          Moved to <span style={{ color: COLUMN_MAP[hist.status]?.color }}>{colLabel(hist.status)}</span>
+                        </p>
+                        <p className="text-xs text-neutral-500 mt-1">
+                          {new Date(hist.enteredAt).toLocaleString(undefined, {
+                            year: 'numeric', month: 'short', day: 'numeric',
+                            hour: '2-digit', minute: '2-digit'
+                          })}
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
           )}
 
           {/* Actions */}

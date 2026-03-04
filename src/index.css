@@ -25,6 +25,7 @@
   --color-additional-interview: #ec4899;
   --color-offered: #4ADE80;
   --color-rejected: #EF4444;
+
 }
 
 @layer base {
@@ -50,6 +51,7 @@
     background-attachment: fixed, fixed;
     color: var(--color-text-primary);
     font-family: var(--font-sans);
+    color-scheme: dark;
   }
 
   /* Custom scrollbar */
@@ -75,6 +77,18 @@
   select option {
     background: #111;
     color: #fff;
+  }
+
+  /* Added selection styling */
+  ::selection {
+    background-color: var(--color-accent); /* Using existing accent color for selection */
+    color: var(--color-bg-primary); /* Text color on selection */
+  }
+
+  /* Hide default browser calendar icon for date inputs */
+  ::-webkit-calendar-picker-indicator {
+    display: none !important;
+    opacity: 0 !important;
   }
 }
 

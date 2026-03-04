@@ -2,10 +2,13 @@
 
 ![Version](https://img.shields.io/badge/version-v0.5-blue)
 ![CI/CD](https://github.com/alvianzf/hirewithandi-FE/actions/workflows/ci-cd.yml/badge.svg?branch=main)
-![React](https://img.shields.io/badge/React-61DAFB?style=flat&logo=react&logoColor=black)
-![Vite](https://img.shields.io/badge/Vite-646CFF?style=flat&logo=vite&logoColor=white)
-![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=flat&logo=tailwind-css&logoColor=white)
-![Lucide](https://img.shields.io/badge/Lucide-white?style=flat&logo=lucide&logoColor=black)
+![React](https://img.shields.io/badge/React-v19.2-61DAFB?style=flat&logo=react&logoColor=black)
+![Vite](https://img.shields.io/badge/Vite-v7.3-646CFF?style=flat&logo=vite&logoColor=white)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-v4.2-38B2AC?style=flat&logo=tailwind-css&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-v5.9-3178C6?style=flat&logo=typescript&logoColor=white)
+![Lucide](https://img.shields.io/badge/Lucide-v0.575-white?style=flat&logo=lucide&logoColor=black)
+![Axios](https://img.shields.io/badge/Axios-v1.13-5A29E4?style=flat&logo=axios&logoColor=white)
+![DND](https://img.shields.io/badge/@hello--pangea/dnd-v18.0-orange?style=flat)
 
 ![Kanban Board](public/docs/board.png)
 ![Analytics Dashboard](public/docs/dashboard.png)

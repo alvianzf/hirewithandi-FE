@@ -203,11 +203,23 @@ export default function DashboardView() {
 
   if (total === 0) {
     return (
-      <div className="view-transition flex flex-1 items-center justify-center">
-        <div className="text-center">
-          <BarChart3 className="mx-auto h-12 w-12 text-neutral-700" />
-          <p className="mt-3 text-sm text-neutral-500">{t('noApplicationsYet')}</p>
-          <p className="mt-1 text-xs text-neutral-600">{t('addFirstJob')}</p>
+      <div className="view-transition flex-1 overflow-y-auto px-10 py-12 md:px-16 lg:px-20 relative">
+        <div className="mx-auto max-w-7xl space-y-12">
+          {/* Checklist Widget */}
+          {user?.role === 'MEMBER' && !isComplete && (
+            <ChecklistWidget 
+              progressState={progressState}
+              isComplete={isComplete}
+              onOpen={() => setIsDrawerOpen(true)}
+              onComplete={completeBoardOnboarding}
+            />
+          )}
+
+          <div className="flex flex-col items-center justify-center py-20">
+            <BarChart3 className="mx-auto h-12 w-12 text-neutral-700" />
+            <p className="mt-3 text-sm text-neutral-500">{t('noApplicationsYet')}</p>
+            <p className="mt-1 text-xs text-neutral-600">{t('addFirstJob')}</p>
+          </div>
         </div>
       </div>
     )

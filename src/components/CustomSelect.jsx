@@ -1,14 +1,14 @@
 import { useState, useEffect, useRef, useCallback } from "react";
+import { createPortal } from "react-dom";
 import { ChevronDown } from "lucide-react";
 
 /**
  * CustomSelect — replaces native <select> with a fully styled dropdown.
  * Supports dynamic inline `style` overrides for bg/color (status selects).
+ * Uses React Portal to prevent cutoff in overflow: hidden containers (like TableView).
  *
  * Props mirror a native <select>:
  *   value, onChange, options, placeholder, disabled, className, style
- *
- * `options` is an array of { value, label } objects.
  */
 export default function CustomSelect({
   value,
@@ -20,38 +20,73 @@ export default function CustomSelect({
   style = {},
 }) {
   const [open, setOpen] = useState(false);
-  const ref = useRef(null);
+  const triggerRef = useRef(null);
+  const dropdownRef = useRef(null);
+  const [coords, setCoords] = useState({ top: 0, left: 0, width: 0, isFlipped: false });
 
   const selected = options.find((o) => o.value === value);
 
   const close = useCallback(() => setOpen(false), []);
 
+  const updateCoords = useCallback(() => {
+    if (triggerRef.current) {
+      const rect = triggerRef.current.getBoundingClientRect();
+      const spaceBelow = window.innerHeight - rect.bottom;
+      const spaceAbove = rect.top;
+      // Flip up if less than 220px below and more space above
+      const flipUp = spaceBelow < 220 && spaceAbove > spaceBelow;
+
+      setCoords({
+        top: flipUp ? undefined : rect.bottom + window.scrollY + 6,
+        bottom: flipUp ? (window.innerHeight - rect.top - window.scrollY + 6) : undefined,
+        left: rect.left + window.scrollX,
+        width: rect.width,
+        isFlipped: flipUp,
+      });
+    }
+  }, []);
+
   useEffect(() => {
     if (!open) return;
+    updateCoords();
+
     const handleClick = (e) => {
-      if (ref.current && !ref.current.contains(e.target)) close();
+      // Close if clicking outside both trigger and dropdown
+      if (
+        triggerRef.current && !triggerRef.current.contains(e.target) &&
+        dropdownRef.current && !dropdownRef.current.contains(e.target)
+      ) {
+        close();
+      }
     };
     const handleKey = (e) => {
       if (e.key === "Escape") close();
     };
+
+    // Use capture to catch scroll events on any scrollable parent
+    window.addEventListener("scroll", updateCoords, true);
+    window.addEventListener("resize", updateCoords);
     document.addEventListener("mousedown", handleClick);
     document.addEventListener("keydown", handleKey);
+
     return () => {
+      window.removeEventListener("scroll", updateCoords, true);
+      window.removeEventListener("resize", updateCoords);
       document.removeEventListener("mousedown", handleClick);
       document.removeEventListener("keydown", handleKey);
     };
-  }, [open, close]);
+  }, [open, close, updateCoords]);
 
   const handleSelect = (optValue) => {
-    // Simulate a native event for drop-in compatibility
     onChange({ target: { value: optValue } });
     close();
   };
 
   return (
-    <div ref={ref} className={`relative ${className}`}>
+    <div className={`relative ${className}`}>
       {/* Trigger */}
       <button
+        ref={triggerRef}
         type="button"
         disabled={disabled}
         onClick={() => !disabled && setOpen((o) => !o)}
@@ -64,13 +99,25 @@ export default function CustomSelect({
       >
         <span className="truncate">{selected?.label ?? placeholder}</span>
         <ChevronDown
-          className={`h-3.5 w-3.5 flex-shrink-0 transition-transform duration-200 ${open ? "rotate-180" : ""}`}
+          className={`h-3.5 w-3.5 flex-shrink-0 transition-transform duration-200 ${open ? (coords.isFlipped ? "" : "rotate-180") : ""}`}
         />
       </button>
 
-      {/* Dropdown */}
-      {open && (
-        <div className="absolute left-0 top-[calc(100%+6px)] z-[200] min-w-full overflow-hidden rounded-xl border border-white/[0.1] bg-neutral-900/95 shadow-2xl shadow-black/50 backdrop-blur-md">
+      {/* Portal Dropdown */}
+      {open && createPortal(
+        <div
+          ref={dropdownRef}
+          className="absolute z-[9999] overflow-hidden rounded-xl border border-white/[0.1] bg-neutral-900/95 shadow-2xl shadow-black/50 backdrop-blur-md animate-in fade-in slide-in-from-top-2 duration-150"
+          style={{
+            position: 'absolute',
+            top: coords.top !== undefined ? `${coords.top}px` : 'auto',
+            bottom: coords.bottom !== undefined ? `${coords.bottom}px` : 'auto',
+            left: `${coords.left}px`,
+            width: `${coords.width}px`,
+            maxHeight: '300px',
+            overflowY: 'auto'
+          }}
+        >
           {options.map((opt) => (
             <button
               key={opt.value}
@@ -88,7 +135,8 @@ export default function CustomSelect({
               )}
             </button>
           ))}
-        </div>
+        </div>,
+        document.body
       )}
     </div>
   );

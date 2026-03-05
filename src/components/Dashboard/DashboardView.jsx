@@ -206,7 +206,7 @@ export default function DashboardView() {
       <div className="view-transition flex-1 overflow-y-auto px-10 py-12 md:px-16 lg:px-20 relative">
         <div className="mx-auto max-w-7xl space-y-12">
           {/* Checklist Widget */}
-          {user?.role === 'MEMBER' && !isComplete && (
+          {user?.role === 'MEMBER' && (
             <ChecklistWidget 
               progressState={progressState}
               isComplete={isComplete}
@@ -230,7 +230,7 @@ export default function DashboardView() {
       <div className="mx-auto max-w-7xl space-y-12">
 
         {/* Checklist Widget */}
-        {user?.role === 'MEMBER' && !isComplete && (
+        {user?.role === 'MEMBER' && (
           <ChecklistWidget 
             progressState={progressState}
             isComplete={isComplete}

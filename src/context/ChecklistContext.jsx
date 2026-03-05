@@ -30,19 +30,6 @@ export function ChecklistProvider({ children }) {
   const hasNotStarted = respondedItems < totalItems
 
   const isMandatory = isMember && !isComplete && hasNotStarted && !loading && !profileLoading && !isInitialLoading
-  
-  console.log('ChecklistContext Debug:', {
-    isMember,
-    isComplete,
-    hasNotStarted,
-    respondedItems,
-    totalItems,
-    loading,
-    profileLoading,
-    isInitialLoading,
-    profileRole: profile?.role,
-    isMandatory
-  })
 
   const fetchChecklist = useCallback(async () => {
     if (!isMember) return

@@ -22,7 +22,7 @@ const JobCard = React.memo(function JobCard({ job, index, onClick, isDisabled })
   const colMeta = COLUMN_MAP[job.status]
 
   const handleStatusChange = (e) => {
-    e.stopPropagation()
+    if (e && e.stopPropagation) e.stopPropagation()
     const newStatus = e.target.value
     if (newStatus !== job.status) {
       editJob(job.id, { status: newStatus })

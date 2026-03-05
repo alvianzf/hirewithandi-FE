@@ -29,7 +29,7 @@ export default function Header({ activeView, setActiveView, onAddJob, totalJobs,
   const jobsText = t('jobsTracked', { count: totalJobs, s: totalJobs !== 1 ? 's' : '' })
 
   return (
-    <header className="flex-shrink-0 border-b border-white/[0.08] bg-black/90 backdrop-blur-md">
+    <header className="flex-shrink-0 border-b border-white/[0.08] bg-black/90 backdrop-blur-md relative z-50">
       <div className="flex items-center justify-between gap-3 px-4 py-3 sm:px-6 md:px-8 lg:px-12">
         {/* Logo */}
         <div className="flex items-center gap-2 sm:gap-4 flex-shrink-0">

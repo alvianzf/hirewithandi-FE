@@ -77,8 +77,13 @@ export default function CustomSelect({
     };
   }, [open, close, updateCoords]);
 
-  const handleSelect = (optValue) => {
-    onChange({ target: { value: optValue } });
+  const handleSelect = (e, optValue) => {
+    e.stopPropagation();
+    onChange({ 
+      target: { value: optValue },
+      stopPropagation: () => e.stopPropagation(),
+      preventDefault: () => e.preventDefault(),
+    });
     close();
   };
 
@@ -129,7 +134,7 @@ export default function CustomSelect({
             <button
               key={opt.value}
               type="button"
-              onClick={() => handleSelect(opt.value)}
+              onClick={(e) => handleSelect(e, opt.value)}
               className={`flex w-full items-center justify-between px-4 py-2.5 text-left text-sm transition-colors hover:bg-white/[0.07] ${
                 opt.value === value
                   ? "bg-white/[0.05] font-bold text-yellow-400"

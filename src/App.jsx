@@ -1,5 +1,6 @@
 import React, { useState, Suspense } from 'react'
 import { JobProvider, useJobs } from './context/JobContext'
+import { ChecklistProvider, useChecklist } from './context/ChecklistContext'
 import { I18nProvider } from './context/I18nContext'
 import Header from './components/Layout/Header'
 import { AuthProvider, useAuth } from './context/AuthContext'
@@ -16,11 +17,13 @@ const ProfilePage = React.lazy(() => import('./components/UserProfile/ProfilePag
 const JobModal = React.lazy(() => import('./components/Modal/JobModal'))
 const LoginPage = React.lazy(() => import('./components/Auth/LoginPage'))
 const LandingPage = React.lazy(() => import('./components/Landing/LandingPage'))
+const ChecklistDrawer = React.lazy(() => import('./components/Checklist/ChecklistDrawer'))
 
 function AppContent() {
   const { totalJobs, isInitialLoading: jobsLoading } = useJobs()
   const { user, isDisabled } = useAuth()
   const { isInitialLoading: profileLoading } = useUserProfile()
+  const { isDrawerOpen, setIsDrawerOpen, progressState, isComplete, saveProgress, completeBoardOnboarding, isMandatory } = useChecklist()
   const [activeView, setActiveView] = useState('dashboard')
   const [modalOpen, setModalOpen] = useState(false)
   const [editingJob, setEditingJob] = useState(null)
@@ -120,6 +123,18 @@ function AppContent() {
           isDisabled={isDisabled}
         />
       </Suspense>
+
+      <Suspense fallback={null}>
+        <ChecklistDrawer 
+          isOpen={isDrawerOpen} 
+          onClose={() => setIsDrawerOpen(false)} 
+          progressState={progressState}
+          isComplete={isComplete}
+          onSave={saveProgress}
+          onComplete={completeBoardOnboarding}
+          isMandatory={isMandatory}
+        />
+      </Suspense>
     </div>
   )
 }
@@ -130,9 +145,11 @@ export default function App() {
       <Toaster position="top-right" richColors theme="dark" />
       <AuthProvider>
         <UserProfileProvider>
-          <JobProvider>
-            <AppContent />
-          </JobProvider>
+          <ChecklistProvider>
+            <JobProvider>
+              <AppContent />
+            </JobProvider>
+          </ChecklistProvider>
         </UserProfileProvider>
       </AuthProvider>
     </I18nProvider>

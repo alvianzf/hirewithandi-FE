@@ -52,7 +52,10 @@ export function ChecklistProvider({ children }) {
       const fetchedHasNotStarted = fetchedResponded < fetchedTotalItems
 
       if (!completeStatus && fetchedHasNotStarted) {
-        setIsDrawerOpen(true)
+        if (!sessionStorage.getItem('hwa_checklist_shown')) {
+          setIsDrawerOpen(true)
+          sessionStorage.setItem('hwa_checklist_shown', 'true')
+        }
       }
     } catch (err) {
       console.error('Failed to fetch checklist', err)
@@ -69,13 +72,15 @@ export function ChecklistProvider({ children }) {
       setProgressState({})
       setIsComplete(false)
       setIsDrawerOpen(false)
+      sessionStorage.removeItem('hwa_checklist_shown')
     }
   }, [user, fetchChecklist])
 
   // Automatically enforce drawer open if mandatory
   useEffect(() => {
-    if (isMandatory) {
+    if (isMandatory && !sessionStorage.getItem('hwa_checklist_shown')) {
       setIsDrawerOpen(true)
+      sessionStorage.setItem('hwa_checklist_shown', 'true')
     }
   }, [isMandatory])
 

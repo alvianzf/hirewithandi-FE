@@ -110,6 +110,7 @@ export function ChecklistProvider({ children }) {
 
   const value = {
     progressState,
+    isMember,
     isComplete,
     isDrawerOpen,
     setIsDrawerOpen,

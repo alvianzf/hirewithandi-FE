@@ -15,7 +15,7 @@ const useDebounce = (callback, delay) => {
   }, [callback, delay, timeoutId])
 }
 
-export default function ChecklistDrawer({ isOpen, onClose, progressState, isComplete, onSave, onComplete }) {
+export default function ChecklistDrawer({ isOpen, onClose, progressState, isComplete, onSave, onComplete, isMandatory }) {
   const { t } = useI18n()
   const [localState, setLocalState] = useState({})
   const [activeCategory, setActiveCategory] = useState(CHECKLIST_DATA[0].key)
@@ -67,7 +67,7 @@ export default function ChecklistDrawer({ isOpen, onClose, progressState, isComp
     <>
       <div 
         className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm transition-opacity"
-        onClick={onClose}
+        onClick={!isMandatory ? onClose : undefined}
       />
       
       <div className="fixed inset-y-0 right-0 z-50 flex w-full max-w-2xl flex-col bg-[#111] shadow-2xl transition-transform duration-300">
@@ -81,12 +81,14 @@ export default function ChecklistDrawer({ isOpen, onClose, progressState, isComp
               Complete these {totalItems} essentials to unlock your dashboard and jumpstart your career.
             </p>
           </div>
-          <button 
-            onClick={onClose}
-            className="rounded-full bg-white/[0.05] p-2 text-neutral-400 hover:bg-white/[0.1] hover:text-white transition-colors"
-          >
-            <X className="h-5 w-5" />
-          </button>
+          {!isMandatory && (
+            <button 
+              onClick={onClose}
+              className="rounded-full bg-white/[0.05] p-2 text-neutral-400 hover:bg-white/[0.1] hover:text-white transition-colors"
+            >
+              <X className="h-5 w-5" />
+            </button>
+          )}
         </div>
 
         <div className="border-b border-white/[0.04] bg-neutral-900/40 px-6 py-4">
@@ -209,7 +211,7 @@ export default function ChecklistDrawer({ isOpen, onClose, progressState, isComp
                       {isAllDone ? (
                         <>Complete Onboarding <CheckCircle2 className="h-4 w-4" /></>
                       ) : (
-                        `Finish remaining ${totalItems - doneItems} tasks to unlock dashboard`
+                        `Finish remaining ${totalItems - doneItems} tasks`
                       )}
                     </button>
                   )}

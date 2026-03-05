@@ -1,19 +1,21 @@
-import { useState } from 'react'
+import React, { useState, Suspense } from 'react'
 import { JobProvider, useJobs } from './context/JobContext'
 import { I18nProvider } from './context/I18nContext'
 import Header from './components/Layout/Header'
-import KanbanBoard from './components/Board/KanbanBoard'
-import GanttView from './components/Timeline/TimelineView'
-import TableView from './components/Table/TableView'
-import DashboardView from './components/Dashboard/DashboardView'
-import JobModal from './components/Modal/JobModal'
 import { AuthProvider, useAuth } from './context/AuthContext'
 import { UserProfileProvider, useUserProfile } from './context/UserProfileContext'
-import LoginPage from './components/Auth/LoginPage'
-import LandingPage from './components/Landing/LandingPage'
-import ProfilePage from './components/UserProfile/ProfilePage'
-import NotFoundView from './components/Layout/NotFoundView'
 import { Toaster } from 'sonner'
+import NotFoundView from './components/Layout/NotFoundView'
+
+// Lazy loaded views and pages to chunk bundle size
+const DashboardView = React.lazy(() => import('./components/Dashboard/DashboardView'))
+const KanbanBoard = React.lazy(() => import('./components/Board/KanbanBoard'))
+const GanttView = React.lazy(() => import('./components/Timeline/TimelineView'))
+const TableView = React.lazy(() => import('./components/Table/TableView'))
+const ProfilePage = React.lazy(() => import('./components/UserProfile/ProfilePage'))
+const JobModal = React.lazy(() => import('./components/Modal/JobModal'))
+const LoginPage = React.lazy(() => import('./components/Auth/LoginPage'))
+const LandingPage = React.lazy(() => import('./components/Landing/LandingPage'))
 
 function AppContent() {
   const { totalJobs, isInitialLoading: jobsLoading } = useJobs()
@@ -53,7 +55,9 @@ function AppContent() {
       return (
         <>
           <Toaster position="top-right" richColors theme="dark" />
-          <LandingPage onSignIn={() => setShowLogin(true)} />
+          <Suspense fallback={<div className="fixed inset-0 min-h-screen z-50 flex items-center justify-center bg-neutral-950/90 backdrop-blur-sm"><div className="w-12 h-12 border-4 border-yellow-400 border-t-transparent rounded-full animate-spin" /></div>}>
+            <LandingPage onSignIn={() => setShowLogin(true)} />
+          </Suspense>
         </>
       )
     }
@@ -61,7 +65,9 @@ function AppContent() {
     return (
       <>
         <Toaster position="top-right" richColors theme="dark" />
-        <LoginPage onBack={() => setShowLogin(false)} />
+        <Suspense fallback={<div className="fixed inset-0 min-h-screen z-50 flex items-center justify-center bg-neutral-950/90 backdrop-blur-sm"><div className="w-12 h-12 border-4 border-yellow-400 border-t-transparent rounded-full animate-spin" /></div>}>
+          <LoginPage onBack={() => setShowLogin(false)} />
+        </Suspense>
       </>
     )
   }
@@ -92,25 +98,20 @@ function AppContent() {
         isDisabled={isDisabled}
       />
 
-      {activeView === 'dashboard' && (
-        <DashboardView />
-      )}
-      {activeView === 'board' && (
-        <KanbanBoard onCardClick={handleCardClick} onAddToColumn={handleAddToColumn} />
-      )}
-      {activeView === 'gantt' && (
-        <GanttView onCardClick={handleCardClick} />
-      )}
-      {activeView === 'table' && (
-        <TableView onCardClick={handleCardClick} />
-      )}
-      {activeView === 'profile' && (
-        <ProfilePage />
-      )}
-      {!['dashboard', 'board', 'gantt', 'table', 'profile'].includes(activeView) && (
-        <NotFoundView />
-      )}
+      <Suspense fallback={
+        <div className="flex-1 flex flex-col items-center justify-center">
+          <div className="w-8 h-8 border-4 border-yellow-400 border-t-transparent rounded-full animate-spin" />
+        </div>
+      }>
+        {activeView === 'dashboard' && <DashboardView />}
+        {activeView === 'board' && <KanbanBoard onCardClick={handleCardClick} onAddToColumn={handleAddToColumn} />}
+        {activeView === 'gantt' && <GanttView onCardClick={handleCardClick} />}
+        {activeView === 'table' && <TableView onCardClick={handleCardClick} />}
+        {activeView === 'profile' && <ProfilePage />}
+        {!['dashboard', 'board', 'gantt', 'table', 'profile'].includes(activeView) && <NotFoundView />}
+      </Suspense>
 
+      <Suspense fallback={null}>
         <JobModal
           isOpen={modalOpen}
           onClose={handleCloseModal}
@@ -118,6 +119,7 @@ function AppContent() {
           defaultStatus={defaultStatus}
           isDisabled={isDisabled}
         />
+      </Suspense>
     </div>
   )
 }

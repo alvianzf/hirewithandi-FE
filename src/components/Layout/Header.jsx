@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Briefcase, LayoutGrid, GanttChart, Table2, Plus, X, Menu, Globe, BarChart3, LogOut, User } from 'lucide-react'
+import { Briefcase, LayoutGrid, GanttChart, Table2, Plus, X, Menu, Globe, BarChart3, LogOut, User, ChevronDown } from 'lucide-react'
 import { useI18n } from '../../context/I18nContext'
 import { useAuth } from '../../context/AuthContext'
 import { useUserProfile } from '../../context/UserProfileContext'

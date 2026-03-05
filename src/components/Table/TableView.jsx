@@ -157,7 +157,7 @@ export default function TableView({ onCardClick }) {
                       {job.workType ? (
                         <>
                           {WORK_TYPE_ICONS[job.workType.toLowerCase()] || ''}
-                          {job.workType.toLowerCase() === 'onsite' ? 'On-site' : job.workType.charAt(0).toUpperCase() + job.workType.slice(1).toLowerCase()}
+                          <span>{t(job.workType.toLowerCase())}</span>
                         </>
                       ) : '—'}
                     </span>
@@ -227,7 +227,7 @@ export default function TableView({ onCardClick }) {
                 {job.workType && (
                   <span className="flex items-center gap-1 font-bold text-neutral-300">
                     {WORK_TYPE_ICONS[job.workType.toLowerCase()] || ''}{' '}
-                    {job.workType.toLowerCase() === 'onsite' ? 'On-site' : job.workType.charAt(0).toUpperCase() + job.workType.slice(1).toLowerCase()}
+                    <span>{t(job.workType.toLowerCase())}</span>
                   </span>
                 )}
                 {inCol > 0 && (

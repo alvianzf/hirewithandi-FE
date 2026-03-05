@@ -251,9 +251,7 @@ export default function JobModal({ isOpen, onClose, editingJob, defaultStatus = 
                   } ${isDisabled ? 'cursor-not-allowed opacity-80' : ''}`}
                 >
                   <span className="text-base">{wt.icon}</span>
-                  <span className="font-bold">
-                    {wt.id === 'onsite' ? 'On-site' : wt.id.charAt(0).toUpperCase() + wt.id.slice(1).toLowerCase()}
-                  </span>
+                  <span className="font-bold">{t(wt.id)}</span>
                 </button>
               ))}
             </div>

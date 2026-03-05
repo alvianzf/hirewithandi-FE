@@ -74,7 +74,7 @@ const JobCard = React.memo(function JobCard({ job, index, onClick, isDisabled })
             {job.workType && (
               <span className="inline-flex items-center gap-1.5 text-xs font-bold text-neutral-300">
                 {WORK_TYPE_ICONS[job.workType.toLowerCase()] || ''}
-                {job.workType.toLowerCase() === 'onsite' ? 'On-site' : job.workType.charAt(0).toUpperCase() + job.workType.slice(1).toLowerCase()}
+                <span>{t(job.workType.toLowerCase())}</span>
               </span>
             )}
             {job.location && (job.workType === 'onsite' || job.workType === 'hybrid') && (

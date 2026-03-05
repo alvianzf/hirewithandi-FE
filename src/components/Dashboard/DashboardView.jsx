@@ -218,7 +218,7 @@ export default function DashboardView() {
       <div className="mx-auto max-w-7xl space-y-12">
 
         {/* Checklist Widget */}
-        {user?.role === 'MEMBER' && (
+        {user?.role === 'MEMBER' && !isComplete && (
           <ChecklistWidget 
             progressState={progressState}
             isComplete={isComplete}

@@ -89,7 +89,14 @@ export default function CustomSelect({
         ref={triggerRef}
         type="button"
         disabled={disabled}
-        onClick={() => !disabled && setOpen((o) => !o)}
+        onClick={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          if (!disabled) {
+            if (!open) updateCoords();
+            setOpen((o) => !o);
+          }
+        }}
         className={`flex w-full items-center justify-between gap-2 rounded-xl border border-white/[0.08] px-4 py-2.5 text-sm font-bold transition-colors focus:outline-none focus:ring-2 focus:ring-yellow-400/50 ${
           disabled
             ? "cursor-not-allowed opacity-60"

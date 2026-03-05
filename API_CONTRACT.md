@@ -109,3 +109,24 @@ Language preferences remain localized to the user's browser:
 
 **Key**: `HiredWithAndi_locale`
 **Value**: `string (enum: 'en', 'id', 'id_corp', 'sg')`
+
+---
+
+## 5. Checklist API (`/checklist`)
+
+Manages the self-assessment onboarding checklist state for members.
+
+| Endpoint              | Method | Payload               | Response           | Description                                              |
+| --------------------- | ------ | --------------------- | ------------------ | -------------------------------------------------------- |
+| `/checklist`          | `GET`  | `none`                | `Checklist Object` | Retrieves the current checklist state and completion.    |
+| `/checklist`          | `PUT`  | `{ "state": object }` | `Checklist Object` | Updates the user's checklist answers incrementally.      |
+| `/checklist/complete` | `POST` | `none`                | `Checklist Object` | Marks the overall onboarding process as fully completed. |
+
+### `Checklist` Object Schema
+
+```json
+{
+  "state": "object (key-value mapping of checklist category and item statuses)",
+  "isComplete": "boolean"
+}
+```

@@ -29,6 +29,7 @@ A comprehensive and visually appealing job application tracking system designed 
 - **Bilingual Support (i18n)**: Seamlessly toggle between English and Bahasa Indonesia.
 - **Secure Cloud API Integration**: Seamless integration with a secure backend API ensuring robust session management, email verification, and persistent data storage out of the box.
 - **User Identity & Profile**: Complete authentication system supporting customizable User Profiles with multi-part avatar uploads, bio, and read-only organization tracking.
+- **Onboarding Checklist**: A self-assessment checklist for new members. Users must update all items to at least "In Progress" before unlocking the full dashboard, with the ability to resume the checklist later.
 - **Actionable Superadmin Role**: Native support for global administrative privileges across the stack.
 - **Premium Engaging UI**: Featuring doodle background patterns, clean glassmorphism elements, and smooth modern animations giving it a polished premium feel.
 

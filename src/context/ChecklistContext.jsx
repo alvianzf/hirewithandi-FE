@@ -1,20 +1,22 @@
 import { createContext, useContext, useState, useEffect, useCallback } from 'react'
 import { getMyChecklist, updateMyChecklist, completeMyChecklist } from '../services/checklist'
 import { useAuth } from './AuthContext'
+import { useUserProfile } from './UserProfileContext'
 import { toast } from 'sonner'
 
 const ChecklistContext = createContext(null)
 
 export function ChecklistProvider({ children }) {
   const { user } = useAuth()
+  const { profile, loading: profileLoading, isInitialLoading } = useUserProfile()
   
   const [progressState, setProgressState] = useState({})
   const [isComplete, setIsComplete] = useState(false)
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
   const [loading, setLoading] = useState(false)
 
-  const isMember = user?.role === 'MEMBER'
-  const isMandatory = isMember && !isComplete && !loading
+  const isMember = profile?.role === 'MEMBER'
+  const isMandatory = isMember && !isComplete && !loading && !profileLoading && !isInitialLoading
 
   const fetchChecklist = useCallback(async () => {
     if (!isMember) return

@@ -7,10 +7,44 @@ import {
   Globe, Building2, ArrowLeftRight, Target, AlertTriangle, Award,
   BarChart3, PieChart, Activity
 } from 'lucide-react'
+import { useState, useEffect } from 'react'
+import ChecklistWidget from '../Checklist/ChecklistWidget'
+import ChecklistDrawer from '../Checklist/ChecklistDrawer'
+import { getMyChecklist, updateMyChecklist, completeMyChecklist } from '../../services/checklist'
+import { toast } from 'sonner'
 
 export default function DashboardView() {
   const { allJobs } = useJobs()
   const { t, colLabel } = useI18n()
+
+  // ---- Checklist State ----
+  const [checklistProgress, setChecklistProgress] = useState({})
+  const [isChecklistComplete, setIsChecklistComplete] = useState(false)
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false)
+
+  useEffect(() => {
+    getMyChecklist().then(({ state, isComplete }) => {
+      setChecklistProgress(state || {})
+      setIsChecklistComplete(isComplete || false)
+    }).catch(console.error)
+  }, [])
+
+  const handleSaveChecklist = (newState) => {
+    setChecklistProgress(newState)
+    updateMyChecklist(newState).catch(console.error)
+  }
+
+  const handleCompleteChecklist = async (isAllDone) => {
+    if (!isAllDone) return
+    try {
+      await completeMyChecklist()
+      setIsChecklistComplete(true)
+      toast.success('Onboarding Checklist Completed!')
+      setIsDrawerOpen(false)
+    } catch (err) {
+      toast.error('Failed to complete checklist')
+    }
+  }
 
   // ---- Compute stats ----
   const total = allJobs.length
@@ -206,8 +240,15 @@ export default function DashboardView() {
   }
 
   return (
-    <div className="view-transition flex-1 overflow-y-auto px-10 py-12 md:px-16 lg:px-20">
+    <div className="view-transition flex-1 overflow-y-auto px-10 py-12 md:px-16 lg:px-20 relative">
       <div className="mx-auto max-w-7xl space-y-12">
+
+        {/* Checklist Widget */}
+        <ChecklistWidget 
+          progressState={checklistProgress}
+          isComplete={isChecklistComplete}
+          onOpen={() => setIsDrawerOpen(true)}
+        />
 
         {/* Top KPI cards */}
         <div className="grid grid-cols-2 gap-4 md:gap-6 lg:grid-cols-4 lg:gap-8">
@@ -579,6 +620,15 @@ export default function DashboardView() {
           </div>
         </div>
       </div>
+
+      <ChecklistDrawer 
+        isOpen={isDrawerOpen} 
+        onClose={() => setIsDrawerOpen(false)} 
+        progressState={checklistProgress}
+        isComplete={isChecklistComplete}
+        onSave={handleSaveChecklist}
+        onComplete={handleCompleteChecklist}
+      />
     </div>
   )
 }

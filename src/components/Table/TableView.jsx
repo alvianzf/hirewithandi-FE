@@ -153,8 +153,13 @@ export default function TableView({ onCardClick }) {
                     </div>
                   </td>
                   <td className="px-8 py-5">
-                    <span className="text-[13px] font-medium text-neutral-400">
-                      {job.workType ? `${WORK_TYPE_ICONS[job.workType.toLowerCase()] || ''} ${t(job.workType.toLowerCase())}` : '—'}
+                    <span className="flex items-center gap-1.5 text-[13px] font-bold text-neutral-300">
+                      {job.workType ? (
+                        <>
+                          {WORK_TYPE_ICONS[job.workType.toLowerCase()] || ''}
+                          {job.workType.toLowerCase() === 'onsite' ? 'On-site' : job.workType.charAt(0).toUpperCase() + job.workType.slice(1).toLowerCase()}
+                        </>
+                      ) : '—'}
                     </span>
                   </td>
                   <td className="px-8 py-5">
@@ -220,7 +225,10 @@ export default function TableView({ onCardClick }) {
                   {daysLabel(applied)}
                 </span>
                 {job.workType && (
-                  <span>{WORK_TYPE_ICONS[job.workType.toLowerCase()] || ''} {t(job.workType.toLowerCase())}</span>
+                  <span className="flex items-center gap-1 font-bold text-neutral-300">
+                    {WORK_TYPE_ICONS[job.workType.toLowerCase()] || ''}{' '}
+                    {job.workType.toLowerCase() === 'onsite' ? 'On-site' : job.workType.charAt(0).toUpperCase() + job.workType.slice(1).toLowerCase()}
+                  </span>
                 )}
                 {inCol > 0 && (
                   <span className={`flex items-center gap-1 font-medium ${

@@ -18,7 +18,7 @@ export default function DashboardView() {
   const { allJobs } = useJobs()
   const { t, colLabel } = useI18n()
   const { user } = useAuth()
-  const { progressState, isComplete, setIsDrawerOpen } = useChecklist()
+  const { progressState, isComplete, setIsDrawerOpen, completeBoardOnboarding } = useChecklist()
 
   // ---- Compute stats ----
   const total = allJobs.length
@@ -223,6 +223,7 @@ export default function DashboardView() {
             progressState={progressState}
             isComplete={isComplete}
             onOpen={() => setIsDrawerOpen(true)}
+            onComplete={completeBoardOnboarding}
           />
         )}
 

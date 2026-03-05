@@ -1,7 +1,9 @@
+import { useState } from 'react'
 import { CheckCircle2, AlertCircle, ChevronRight, Lock } from 'lucide-react'
 import { CHECKLIST_DATA } from './Constants'
 
-export default function ChecklistWidget({ progressState, isComplete, onOpen }) {
+export default function ChecklistWidget({ progressState, isComplete, onOpen, onComplete }) {
+  const [isCompleting, setIsCompleting] = useState(false);
   const totalItems = CHECKLIST_DATA.reduce((acc, cat) => acc + cat.items.length, 0)
   
   let doneItems = 0
@@ -69,12 +71,26 @@ export default function ChecklistWidget({ progressState, isComplete, onOpen }) {
           </div>
         </div>
 
-        <div className="flex-shrink-0">
+        <div className="flex-shrink-0 flex flex-col gap-3 w-full md:w-auto">
+          {doneItems === totalItems && !isComplete && (
+            <button
+              onClick={async () => {
+                setIsCompleting(true);
+                await onComplete(true);
+                setIsCompleting(false);
+              }}
+              disabled={isCompleting}
+              className="group flex w-full md:w-auto items-center justify-center gap-2 rounded-xl bg-green-500 hover:bg-green-400 px-6 py-3.5 text-sm font-bold text-white transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {isCompleting ? 'Completing...' : 'Complete Onboarding'}
+              {!isCompleting && <CheckCircle2 className="h-4 w-4 transition-transform group-hover:scale-110" />}
+            </button>
+          )}
           <button
             onClick={onOpen}
             className="group flex w-full md:w-auto items-center justify-center gap-2 rounded-xl bg-yellow-400 px-6 py-3.5 text-sm font-bold text-black transition-all hover:bg-yellow-300"
           >
-            {isComplete ? 'Review Checklist' : 'Continue Checklist'}
+            {isComplete ? 'Review Checklist' : 'Manage Checklist'}
             <ChevronRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
           </button>
         </div>

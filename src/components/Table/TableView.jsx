@@ -4,6 +4,7 @@ import { COLUMNS, COLUMN_MAP } from '../../utils/constants'
 import { formatDate, daysSince, daysLabel } from '../../utils/helpers'
 import { ArrowUpDown, Calendar, Clock, MapPin, Table2 } from 'lucide-react'
 import { useI18n } from '../../context/I18nContext'
+import CustomSelect from '../CustomSelect'
 
 const WORK_TYPE_ICONS = { remote: '🌍', onsite: '🏢', hybrid: '🔄' }
 
@@ -138,20 +139,17 @@ export default function TableView({ onCardClick }) {
                     <span className="text-sm font-medium text-neutral-300">{job.position || '—'}</span>
                   </td>
                   <td className="px-8 py-5">
-                    <div className="relative" onClick={e => e.stopPropagation()}>
-                      <select
+                    <div onClick={e => e.stopPropagation()}>
+                      <CustomSelect
                         value={job.status}
                         onChange={e => handleStatusChange(job, e.target.value)}
-                        className="appearance-none rounded-full border-0 py-1.5 pl-4 pr-8 text-[13px] font-bold focus:outline-none focus:ring-2 focus:ring-yellow-400"
+                        options={COLUMNS.map(c => ({ value: c.id, label: colLabel(c.id) }))}
                         style={{
                           backgroundColor: `${col?.color}15`,
                           color: col?.color,
+                          borderColor: `${col?.color}30`,
                         }}
-                      >
-                        {COLUMNS.map(c => (
-                          <option key={c.id} value={c.id}>{colLabel(c.id)}</option>
-                        ))}
-                      </select>
+                      />
                     </div>
                   </td>
                   <td className="px-8 py-5">

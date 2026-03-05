@@ -1,10 +1,11 @@
 import React from 'react'
 import { Draggable } from '@hello-pangea/dnd'
-import { Calendar, Clock, ExternalLink, MapPin, Globe, Building2, ArrowLeftRight, ChevronDown, Target } from 'lucide-react'
+import { Calendar, Clock, ExternalLink, MapPin, Globe, Building2, ArrowLeftRight, Target } from 'lucide-react'
 import { calculateActiveDays, daysSince, formatDateShort, daysLabel, formatSalary, formatRelativeTime } from '../../utils/helpers'
 import { COLUMNS, COLUMN_MAP, FINAL_STATUSES } from '../../utils/constants'
 import { useI18n } from '../../context/I18nContext'
 import { useJobs } from '../../context/JobContext'
+import CustomSelect from '../CustomSelect'
 
 const WORK_TYPE_ICONS = {
   remote: '🌍',
@@ -138,26 +139,17 @@ const JobCard = React.memo(function JobCard({ job, index, onClick, isDisabled })
               className={`mt-4 transition-all duration-200 ${snapshot.isDragging ? 'opacity-0' : 'group-hover:opacity-100 opacity-0'}`}
               onClick={e => e.stopPropagation()}
             >
-            <div className="relative">
-              <select
+              <CustomSelect
                 value={job.status}
                 onChange={handleStatusChange}
-                className="w-full appearance-none rounded-xl border-0 py-2.5 pl-4 pr-10 text-[13px] font-bold cursor-pointer focus:outline-none focus:ring-2 focus:ring-yellow-400/50 transition-colors"
+                options={COLUMNS.map(c => ({ value: c.id, label: colLabel(c.id) }))}
                 style={{
                   backgroundColor: `${colMeta?.color}15`,
                   color: colMeta?.color,
+                  borderColor: `${colMeta?.color}30`,
                 }}
-              >
-                {COLUMNS.map(c => (
-                  <option key={c.id} value={c.id}>{colLabel(c.id)}</option>
-                ))}
-              </select>
-              <ArrowLeftRight
-                className="pointer-events-none absolute right-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2"
-                style={{ color: colMeta?.color }}
               />
             </div>
-          </div>
           )}
 
         </div>

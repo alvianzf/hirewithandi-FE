@@ -7,6 +7,7 @@ import { COLUMNS, COLUMN_MAP, WORK_TYPES } from '../../utils/constants'
 import { useJobs } from '../../context/JobContext'
 import { useI18n } from '../../context/I18nContext'
 import Swal from 'sweetalert2'
+import CustomSelect from '../CustomSelect'
 
 export default function JobModal({ isOpen, onClose, editingJob, defaultStatus = 'wishlist', isDisabled }) {
   const { addJob, editJob, deleteJob } = useJobs()
@@ -275,24 +276,22 @@ export default function JobModal({ isOpen, onClose, editingJob, defaultStatus = 
           <div className="grid grid-cols-1 gap-5 sm:grid-cols-3">
             <div>
               <label className="mb-2 block text-sm font-medium text-neutral-300">{t('status')}</label>
-              <div className="relative">
-                <select
+              <div className="flex items-center gap-3">
+                <div
+                  className="h-3 w-3 flex-shrink-0 rounded-full"
+                  style={{ backgroundColor: COLUMN_MAP[form.status]?.color }}
+                />
+                <CustomSelect
                   value={form.status}
                   onChange={e => handleChange('status', e.target.value)}
+                  options={COLUMNS.map(col => ({ value: col.id, label: colLabel(col.id) }))}
                   disabled={isDisabled}
-                  className={`w-full appearance-none rounded-xl border-0 pl-10 pr-10 py-3.5 text-sm font-bold focus:outline-none focus:ring-2 focus:ring-yellow-400/50 transition-colors ${isDisabled ? 'cursor-not-allowed opacity-80' : 'cursor-pointer'}`}
+                  className="flex-1"
                   style={{
                     backgroundColor: `${COLUMN_MAP[form.status]?.color}18`,
                     color: COLUMN_MAP[form.status]?.color,
+                    borderColor: `${COLUMN_MAP[form.status]?.color}30`,
                   }}
-                >
-                  {COLUMNS.map(col => (
-                    <option key={col.id} value={col.id}>{colLabel(col.id)}</option>
-                  ))}
-                </select>
-                <div
-                  className="pointer-events-none absolute left-4 top-1/2 h-3 w-3 -translate-y-1/2 rounded-full"
-                  style={{ backgroundColor: COLUMN_MAP[form.status]?.color }}
                 />
               </div>
             </div>

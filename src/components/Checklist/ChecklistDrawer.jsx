@@ -199,21 +199,32 @@ export default function ChecklistDrawer({ isOpen, onClose, progressState, isComp
               ) : (
                 <div className="w-full">
                   {!isComplete && (
-                    <button
-                      onClick={() => onComplete && onComplete(isAllDone)}
-                      disabled={!isAllDone}
-                      className={`w-full flex items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-bold transition-all ${
-                        isAllDone 
-                          ? 'bg-yellow-400 text-black hover:bg-yellow-300' 
-                          : 'bg-neutral-800 text-neutral-500 cursor-not-allowed border border-neutral-700'
-                      }`}
-                    >
-                      {isAllDone ? (
-                        <>Complete Onboarding <CheckCircle2 className="h-4 w-4" /></>
-                      ) : (
-                        `Finish remaining ${totalItems - doneItems} tasks`
+                    <div className="flex flex-col gap-3 w-full">
+                      <button
+                        onClick={() => onComplete && onComplete(isAllDone)}
+                        disabled={!isAllDone}
+                        className={`w-full flex items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-bold transition-all ${
+                          isAllDone 
+                            ? 'bg-yellow-400 text-black hover:bg-yellow-300' 
+                            : 'bg-neutral-800 text-neutral-500 cursor-not-allowed border border-neutral-700'
+                        }`}
+                      >
+                        {isAllDone ? (
+                          <>Complete Onboarding <CheckCircle2 className="h-4 w-4" /></>
+                        ) : (
+                          `Requires ${totalItems - doneItems} more Done to complete`
+                        )}
+                      </button>
+                      
+                      {totalItems - doneItems - inProgressItems === 0 && !isAllDone && (
+                        <button
+                          onClick={onClose}
+                          className="w-full flex items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-bold text-white bg-white/10 hover:bg-white/20 transition-all border border-white/10"
+                        >
+                          Go to Dashboard (Finish later)
+                        </button>
                       )}
-                    </button>
+                    </div>
                   )}
                   {isComplete && (
                     <div className="w-full flex items-center justify-center gap-2 rounded-xl border border-green-500/30 bg-green-500/10 px-4 py-3 text-sm font-bold text-green-400">

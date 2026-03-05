@@ -3,6 +3,7 @@ import { getMyChecklist, updateMyChecklist, completeMyChecklist } from '../servi
 import { useAuth } from './AuthContext'
 import { useUserProfile } from './UserProfileContext'
 import { toast } from 'sonner'
+import { CHECKLIST_DATA } from '../components/Checklist/Constants'
 
 const ChecklistContext = createContext(null)
 
@@ -16,7 +17,19 @@ export function ChecklistProvider({ children }) {
   const [loading, setLoading] = useState(false)
 
   const isMember = profile?.role === 'MEMBER'
-  const isMandatory = isMember && !isComplete && !loading && !profileLoading && !isInitialLoading
+
+  const totalItems = CHECKLIST_DATA.reduce((acc, cat) => acc + cat.items.length, 0)
+  let respondedItems = 0
+  Object.values(progressState || {}).forEach(catState => {
+    Object.values(catState || {}).forEach(status => {
+      if (status === 'DONE' || status === 'IN_PROGRESS') {
+        respondedItems++
+      }
+    })
+  })
+  const hasNotStarted = respondedItems < totalItems
+
+  const isMandatory = isMember && !isComplete && hasNotStarted && !loading && !profileLoading && !isInitialLoading
 
   const fetchChecklist = useCallback(async () => {
     if (!isMember) return
@@ -27,7 +40,18 @@ export function ChecklistProvider({ children }) {
       setProgressState(state || {})
       setIsComplete(completeStatus || false)
       
-      if (!completeStatus) {
+      const fetchedTotalItems = CHECKLIST_DATA.reduce((acc, cat) => acc + cat.items.length, 0)
+      let fetchedResponded = 0
+      Object.values(state || {}).forEach(catState => {
+        Object.values(catState || {}).forEach(status => {
+          if (status === 'DONE' || status === 'IN_PROGRESS') {
+            fetchedResponded++
+          }
+        })
+      })
+      const fetchedHasNotStarted = fetchedResponded < fetchedTotalItems
+
+      if (!completeStatus && fetchedHasNotStarted) {
         setIsDrawerOpen(true)
       }
     } catch (err) {
